@@ -2,7 +2,11 @@
 #include <stdlib.h>
 #include <GL/glew.h>
 #include <GLUT/glut.h>
-#include <OpenGL/OpenGL.h>
+#ifdef WIN32
+	#include <gl/GL.h>
+#else
+	#include <OpenGL/OpenGL.h>
+#endif
 #include <math.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
