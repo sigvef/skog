@@ -1,0 +1,17 @@
+bin/
+lib/
+include/
+
+# vim
+*.sw[a-z]
+
+# windows stuff
+Debug/
+Release/
+Skog.opensdf
+Skog.sdf
+Skog.sln
+Skog.v11.suo
+Skog.vcxproj
+Skog.vcxproj.filters
+Skog.vcxproj.user
