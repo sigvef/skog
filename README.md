@@ -3,6 +3,9 @@ skog
 
 This project depends on OpenGL, GLUT, GLEW and GLM. I suggest you install all of them.
 
+This is a good guide to get you started:
+http://en.wikibooks.org/wiki/OpenGL_Programming
+
 IMPORTANT!
 Personal configs may make the include files appear at different places. So we need a hangout to make sure it's synced
 
