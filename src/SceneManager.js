@@ -14,7 +14,7 @@ SceneManager.prototype.addScene = function(scene){
 
 SceneManager.prototype.initScenes = function(cb){
     var numberOfScenes = 0;
-    for(var scene in this.scenes){numberOfScenes++}
+    for(var scene in this.scenes){numberOfScenes++;}
     function initcb(){
         if(!--numberOfScenes){
             cb();

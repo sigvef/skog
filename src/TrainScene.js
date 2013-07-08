@@ -1,6 +1,6 @@
 function TrainScene(){
     /* starting time of this scene in milliseconds, must be defined */
-    this.startTime = 50;
+    this.startTime = 500;
     /* short name of this scene, must be defined */
     this.NAME = 'train';
 }
@@ -12,7 +12,8 @@ TrainScene.prototype.init = function(cb){
     this.camera = new THREE.PerspectiveCamera(45, 16/9, 0.1, 10000);
     this.scene.add(this.camera);
 
-    console.log("yo trainscene");
+    console.log("TrainScene loading");
+    
 	var texture = new THREE.Texture();
 	var loader = new THREE.ImageLoader();
 	loader.addEventListener('load', function (event) {
@@ -21,6 +22,8 @@ TrainScene.prototype.init = function(cb){
 	});
 	loader.load('res/drone.jpg');
 
+	datScene = this.scene;
+	
 	var loader = new THREE.OBJLoader();
 	loader.addEventListener('load', function (event) {
 		var object = event.content;
@@ -30,28 +33,36 @@ TrainScene.prototype.init = function(cb){
 			}
 		});
 		object.position.y = - 80;
-		this.scene.add(object);
+		console.log(this.scene);
+		datScene.add(object);
 	});
 	loader.load('res/drone.obj');
-    
-    var sphereMaterial = new THREE.MeshLambertMaterial({color: 0xCC0000});
-    this.sphere = new THREE.Mesh(new THREE.SphereGeometry(50, 16, 16), sphereMaterial);
-    this.scene.add(this.sphere);
+	
+	// create a point light
+	var pointLight = new THREE.PointLight(0xFFFFFF);
+
+	// set its position
+	pointLight.position.x = 10;
+	pointLight.position.y = 50;
+	pointLight.position.z = 130;
+
+	// add to the scene
+	this.scene.add(pointLight);
 
     /* call cb when you are done loading! */
     cb();
-}
+};
 
 TrainScene.prototype.reset = function(){
     /* reset all the variables! */
     this.camera.position.z = 300;
-}
+};
 
 TrainScene.prototype.update = function(){
     /* do updatey stuff here */
-}
+};
 
 TrainScene.prototype.render = function(){
     /* do rendery stuff here */
     renderer.render(this.scene, this.camera);
-}
+};
