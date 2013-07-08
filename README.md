@@ -1,22 +1,7 @@
 skog
 ====
 
-This project depends on OpenGL, GLUT, GLEW and GLM. I suggest you install all of them.
+This project uses [http://threejs.org/](Three.js)
 
-This is a good guide to get you started:
-http://en.wikibooks.org/wiki/OpenGL_Programming
-
-IMPORTANT!
-Personal configs may make the include files appear at different places. So we need a hangout to make sure it's synced
-
-For Windows:
-=================
-http://en.wikibooks.org/wiki/OpenGL_Programming/Installation/Windows
-
-For Mac:
-=================
-http://en.wikibooks.org/wiki/OpenGL_Programming/Installation/Mac
-
-For Linux:
-================
-http://en.wikibooks.org/wiki/OpenGL_Programming/Installation/Linux
+We would like to use this model:
+http://www.the3dstudio.com/product_details.aspx?id_product=578770

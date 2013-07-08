@@ -112,7 +112,7 @@ TunnelScene.prototype.render = function(){
     var pickt = thyme * segments;
     var pick = pickt|0;
     var pickNext = (pick + 1) % segments;
-    this.binormal.sub(this.tube.binormals[pickNext], this.tube.binormals[pick]);
+    this.binormal.subVectors(this.tube.binormals[pickNext], this.tube.binormals[pick]);
     this.binormal.multiplyScalar(pickt - pick).add(this.tube.binormals[pick]);
 
     var dir = this.tube.path.getTangentAt(thyme);
