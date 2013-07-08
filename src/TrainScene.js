@@ -20,9 +20,9 @@ TrainScene.prototype.init = function(cb){
 		texture.image = event.content;
 		texture.needsUpdate = true;
 	});
-	loader.load('res/drone.jpg');
+	loader.load('res/wooden train diffuse.jpg');
 
-	datScene = this.scene;
+	that = this;
 	
 	var loader = new THREE.OBJLoader();
 	loader.addEventListener('load', function (event) {
@@ -34,9 +34,9 @@ TrainScene.prototype.init = function(cb){
 		});
 		object.position.y = - 80;
 		console.log(this.scene);
-		datScene.add(object);
+		that.scene.add(object);
 	});
-	loader.load('res/drone.obj');
+	loader.load('res/wooden train.obj');
 	
 	// create a point light
 	var pointLight = new THREE.PointLight(0xFFFFFF);
@@ -60,6 +60,7 @@ TrainScene.prototype.reset = function(){
 
 TrainScene.prototype.update = function(){
     /* do updatey stuff here */
+	
 };
 
 TrainScene.prototype.render = function(){
