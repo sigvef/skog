@@ -47,11 +47,11 @@ function start(){
     dt = 0;
 
     sm = new SceneManager(); 
-    sm.addScene(new ExampleScene());
+    sm.addScene(new WireBallScene());
     sm.addScene(new TunnelScene());
     sm.initScenes(function(){
         music.play();
-        sm.jumpToScene('tunnel');
+        sm.jumpToScene('wireball');
         setTimeout(loop, 0);
     });
 }
