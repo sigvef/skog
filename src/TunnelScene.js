@@ -69,8 +69,9 @@ TunnelScene.prototype.init = function(cb){
     tubeMesh = THREE.SceneUtils.createMultiMaterialObject(geometry, [
             new THREE.MeshLambertMaterial({
                 color: color,
-                opacity: (geometry.debug) ? 0.2 : 0.8,
-                transparent: true
+                opacity: (geometry.debug) ? 0.2 : 1,
+                transparent: true,
+                side: THREE.BackSide
             }),
             new THREE.MeshLambertMaterial({
                 color: 0xf000f0,
