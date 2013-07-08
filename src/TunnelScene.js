@@ -30,10 +30,6 @@ TunnelScene.prototype.init = function(cb){
     this.light = new THREE.PointLight( 0xffffff, 1, 100 );
     this.scene.add(this.light);
 
-    this.cameraHelper = new THREE.CameraHelper(this.camera);
-
-    this.camera.add(this.cameraHelper);
-
     this.targetRotation = 0;
 
     var cos = Math.cos;
@@ -70,16 +66,15 @@ TunnelScene.prototype.init = function(cb){
             new THREE.MeshLambertMaterial({
                 color: color,
                 opacity: (geometry.debug) ? 0.2 : 1,
-                transparent: true,
+                transparent: false,
                 side: THREE.BackSide
             }),
             new THREE.MeshLambertMaterial({
                 color: 0xf000f0,
                 opacity: 1,
-                wireframe: true
+                wireframe: false
             })]);
 
-    if (geometry.debug) tubeMesh.add(geometry.debug);
     this.parent.add(tubeMesh);
     /* call cb when you are done loading! */
     cb();
@@ -122,18 +117,8 @@ TunnelScene.prototype.render = function(){
 
     this.camera.position = pos;
     this.light.position = pos;
-
-    // Camera Orientation 1 - default look at
-    // camera.lookAt(lookAt);
-
-    // Using arclength for stablization in look ahead.
     var lookAt = this.tube.path.getPointAt((thyme + 10/this.tube.path.getLength()) % 1).multiplyScalar(1);
-
-    // Camera Orientation 2 - up orientation via normal
-    this.camera.matrix.lookAt(this.camera.position, lookAt, this.normal);
-    this.camera.rotation.setEulerFromRotationMatrix(this.camera.matrix);
-
-    this.cameraHelper.update();
+    this.camera.lookAt(lookAt);
 
     this.parent.rotation.y += (this.targetRotation - this.parent.rotation.y) * 0.05;
     this.composer.render();
