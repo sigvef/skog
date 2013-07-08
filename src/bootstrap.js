@@ -117,6 +117,12 @@ function resize(){
     }
     renderer.setSize(16*GU, 9*GU);
     renderer.domElement.style.margin = ((window.innerHeight - 9*GU) /2)+"px 0 0 "+((window.innerWidth-16*GU)/2)+"px";
+    RENDERTARGET = new THREE.WebGLRenderTarget( 16*GU, 9*GU, {
+        minFilter: THREE.LinearFilter,
+        magFilter: THREE.LinearFilter,
+        format: THREE.RGBFormat,
+        stencilBuffer: false
+    });
 }
 
 window.onresize = resize;

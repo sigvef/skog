@@ -12,6 +12,14 @@ TunnelScene.prototype.init = function(cb){
     this.camera = new THREE.PerspectiveCamera(45, 16/9, 0.1, 10000);
     this.scene.add(this.camera);
 
+    // postprocessing
+    this.composer = new THREE.EffectComposer( renderer, RENDERTARGET);
+    this.composer.addPass(new THREE.RenderPass(this.scene, this.camera));
+    this.composer.addPass(new THREE.ShaderPass(THREE.BasicShader));
+    var effect = new THREE.ShaderPass( THREE.CopyShader );
+    effect.renderToScreen = true;
+    this.composer.addPass( effect );
+
     this.binormal = new THREE.Vector3();
     this.normal = new THREE.Vector3();
 
@@ -52,8 +60,6 @@ TunnelScene.prototype.init = function(cb){
 
             );
 
-
-
     var extrudePath = new Knot();
     var segments = 400;
     var radiusSegments = 20;
@@ -63,8 +69,9 @@ TunnelScene.prototype.init = function(cb){
     tubeMesh = THREE.SceneUtils.createMultiMaterialObject(geometry, [
             new THREE.MeshLambertMaterial({
                 color: color,
-                opacity: (geometry.debug) ? 0.2 : 0.8,
-                transparent: true
+                opacity: (geometry.debug) ? 0.2 : 1,
+                transparent: true,
+                side: THREE.BackSide
             }),
             new THREE.MeshLambertMaterial({
                 color: 0xf000f0,
@@ -80,6 +87,7 @@ TunnelScene.prototype.init = function(cb){
 
 TunnelScene.prototype.reset = function(){
     /* reset all the variables! */
+
 }
 
 TunnelScene.prototype.update = function(){
@@ -88,7 +96,11 @@ TunnelScene.prototype.update = function(){
 
 TunnelScene.prototype.render = function(){
     /* do rendery stuff here */
-    renderer.render(this.scene, this.camera);
+
+    if(RENDERTARGET != this.composer.renderTarget1){
+        this.composer.renderTarget1 = RENDERTARGET; 
+        this.composer.renderTarget2 = RENDERTARGET.clone(); 
+    }
 
     // Try Animate Camera Along Spline
     var looptime = 1000 * 100;
@@ -104,14 +116,12 @@ TunnelScene.prototype.render = function(){
     this.binormal.subVectors(this.tube.binormals[pickNext], this.tube.binormals[pick]);
     this.binormal.multiplyScalar(pickt - pick).add(this.tube.binormals[pick]);
 
-
     var dir = this.tube.path.getTangentAt(thyme);
 
     this.normal.copy(this.binormal).cross(dir);
 
     this.camera.position = pos;
     this.light.position = pos;
-
 
     // Camera Orientation 1 - default look at
     // camera.lookAt(lookAt);
@@ -126,6 +136,6 @@ TunnelScene.prototype.render = function(){
     this.cameraHelper.update();
 
     this.parent.rotation.y += (this.targetRotation - this.parent.rotation.y) * 0.05;
-    renderer.render(this.scene, this.camera);
+    this.composer.render();
 }
 
