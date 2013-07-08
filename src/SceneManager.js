@@ -20,10 +20,10 @@ SceneManager.prototype.initScenes = function(cb){
             cb();
         }
     }
+    this.sortedScenes = this.sortedScenes.sort(function(a,b){ return a.startTime - b.startTime; });
     for(var scene in this.scenes){
         this.scenes[scene].init(initcb);
     }
-    this.sortedScenes = this.sortedScenes.sort(function(a,b){ return a.startTime - b.startTime; });
 };
 
 SceneManager.prototype.jumpToScene = function(key, dontResetMusic){
