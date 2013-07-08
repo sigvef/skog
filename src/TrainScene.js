@@ -1,6 +1,6 @@
 function TrainScene(){
     /* starting time of this scene in milliseconds, must be defined */
-    this.startTime = 500;
+    this.startTime = 10000;
     /* short name of this scene, must be defined */
     this.NAME = 'train';
 }
@@ -12,8 +12,6 @@ TrainScene.prototype.init = function(cb){
     this.camera = new THREE.PerspectiveCamera(45, 16/9, 0.1, 10000);
     this.scene.add(this.camera);
 
-    console.log("TrainScene loading");
-    
 	var texture = new THREE.Texture();
 	var loader = new THREE.ImageLoader();
 	loader.addEventListener('load', function (event) {
@@ -22,19 +20,18 @@ TrainScene.prototype.init = function(cb){
 	});
 	loader.load('res/wooden train diffuse.jpg');
 
-	that = this;
+	var that = this;
 	
 	var loader = new THREE.OBJLoader();
 	loader.addEventListener('load', function (event) {
-		var object = event.content;
-		object.traverse(function (child) {
+		that.train = event.content;
+		that.train.traverse(function (child) {
 			if (child instanceof THREE.Mesh) {
 				child.material.map = texture;
 			}
 		});
-		object.position.y = - 80;
-		console.log(this.scene);
-		that.scene.add(object);
+		that.train.position.y = - 80;
+		that.scene.add(that.train);
 	});
 	loader.load('res/wooden train.obj');
 	
@@ -59,7 +56,10 @@ TrainScene.prototype.reset = function(){
 };
 
 TrainScene.prototype.update = function(){
-    /* do updatey stuff here */
+	/* do updatey stuff here */
+	this.camera.position.z -= 1;
+	this.camera.position.x += Math.sin(0.001*t);
+	this.camera.lookAt(this.train.position);
 	
 };
 
