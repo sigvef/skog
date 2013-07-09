@@ -14,7 +14,7 @@ function createShaderMaterial(uniforms){
 		"void main() {",
 			"vUv = uvScale * uv;",
 			"vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );",
-			"mvPosition = mvPosition * vec4(1.+sin(time*0.67)*0.01, 1.+cos(time)*0.01, 1.+sin(time*0.9)*0.01, 1.);",
+			"mvPosition = mvPosition + 0.5*vec4(sin(time*0.37), cos(time*0.23), 1., 1.);",
 			"gl_Position = projectionMatrix * mvPosition;",
 		"}",
 	""].join("\n");
@@ -46,7 +46,7 @@ function createShaderMaterial(uniforms){
 			"gl_FragColor = temp;",
 			"float depth = gl_FragCoord.z / gl_FragCoord.w;",
 			"const float LOG2 = 1.442695;",
-			"float fogFactor = exp2( - fogDensity * fogDensity * depth * 3. );",
+			"float fogFactor = exp2( - fogDensity * fogDensity * depth);",
 			"fogFactor = 1.0 - clamp( fogFactor, 0.002, 1.0 );",
 			"gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );",
 		"}",
@@ -59,7 +59,7 @@ function createShaderMaterial(uniforms){
 		uniforms: uniforms,
 		vertexShader: vertexShader,
 		fragmentShader: fragmentShader,
-        side: THREE.BackSide
+        side: THREE.BackSide,
 	} );
 
 	return material;
