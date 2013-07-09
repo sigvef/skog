@@ -16,6 +16,7 @@ Elements we want:
 
 Effects we want:
 * Ascii style glitchyness (also, the music turns 8-bit when the visuals turn into ascii)
+* TV style noise/crackling/jitter (as a transition to/from the ascii effect)
 * ???
 
 The music:
