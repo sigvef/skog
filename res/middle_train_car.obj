@@ -1,6 +1,6 @@
 # Blender v2.67 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib middle_locomotive.mtl
+mtllib middle_train_car.mtl
 o wooden_train
 v -0.683300 5.927104 -22.689499
 v -1.073800 5.927203 -23.365898
