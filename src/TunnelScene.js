@@ -18,7 +18,6 @@ TunnelScene.prototype.init = function(cb){
     this.texture.repeat.set(200,2);
 
     // postprocessing
-    /*
     this.composer = new THREE.EffectComposer( renderer, RENDERTARGET);
 
     this.composer.addPass( new THREE.RenderPass(this.scene, this.camera));
@@ -30,7 +29,6 @@ TunnelScene.prototype.init = function(cb){
     var effect = new THREE.ShaderPass(THREE.CopyShader);
     effect.renderToScreen = true;
     this.composer.addPass(effect);
-    */
 
 
     this.binormal = new THREE.Vector3();
@@ -86,7 +84,7 @@ TunnelScene.prototype.init = function(cb){
         fogDensity: { type: "f", value: 0.23 },
         fogColor: { type: "v3", value: new THREE.Vector3( 0, 0, 0 ) },
         time: { type: "f", value: 1.0 },
-        resolution: { type: "v2", value: new THREE.Vector2() },
+        resolution: { type: "v2", value: new THREE.Vector2(16*GU, 9*GU) },
         uvScale: { type: "v2", value: new THREE.Vector2( 100.0, 1.0 ) },
         texture1: { type: "t", value: THREE.ImageUtils.loadTexture( "res/dirt.jpg" ) },
         texture2: { type: "t", value: THREE.ImageUtils.loadTexture( "res/lavatile.jpg" ) }
@@ -160,7 +158,7 @@ TunnelScene.prototype.update = function(){
 
     this.debugball.position = lookAt.multiplyScalar(0.5).add(pos).multiplyScalar(0.66666);
 
-    this.parent.rotation.y += (this.targetRotation - this.parent.rotation.y) * 0.05;
+    this.parent.rotation.y += (this.targetRotation - this.parent.rotation.y) * 5;
 
     //this.fov = this.fov / 1.000001;
 }
@@ -168,7 +166,6 @@ TunnelScene.prototype.update = function(){
 TunnelScene.prototype.render = function(){
     /* do rendery stuff here */
 
-    /*
     if(RENDERTARGET != this.composer.renderTarget1){
         this.composer.renderTarget1 = RENDERTARGET; 
         this.composer.renderTarget2 = RENDERTARGET.clone(); 
@@ -176,7 +173,6 @@ TunnelScene.prototype.render = function(){
         this.uniforms.resolution.value.y = 9*GU;
         this.composer.reset();
     }
-    */
 
     //this.composer.render();
     renderer.render(this.scene, this.camera);
