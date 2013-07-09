@@ -12,44 +12,62 @@ MountainScene.prototype.init = function(cb){
     this.camera = new THREE.PerspectiveCamera(45, 16/9, 0.1, 10000);
     this.scene.add(this.camera);
 
-    var worldWidth = 192, worldDepth = 192,
-    worldHalfWidth = worldWidth / 2, worldHalfDepth = worldDepth / 2;
+    this.initMountain();
 
-    this.mapData = this.generateHeight(worldWidth, worldDepth);
-
-    var geometry = new THREE.PlaneGeometry(4000, 4000, worldWidth - 1, worldDepth - 1);
+    var geometry = new THREE.PlaneGeometry(16000, 16000, 128, 128);
     geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
 
-    for (var i=0, l=geometry.vertices.length; i<l; i++) {
-        geometry.vertices[i].y = this.mapData[i] * 10;
-    }
+    this.ground = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: 0x55ddff}));
+    this.scene.add(this.ground);
 
-    texture = new THREE.Texture(this.generateTexture(this.mapData, worldWidth, worldDepth), new THREE.UVMapping(), THREE.ClampToEdgeWrapping, THREE.ClampToEdgeWrapping);
-    texture.needsUpdate = true;
-
-    mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map: texture}));
-    this.scene.add(mesh);
-
-    this.camera.position.y = this.mapData[worldHalfWidth + worldHalfDepth * worldWidth] * 10 + 2500;
-
-    a = this.mapData;
+    this.ground.position.y = 50;
 
 
     /* call cb when you are done loading! */
     cb();
 }
 
+MountainScene.prototype.initMountain = function() {
+    var worldWidth = 192,
+        worldDepth = 192,
+        worldHalfWidth = worldWidth / 2,
+        worldHalfDepth = worldDepth / 2;
+
+    this.mapData = this.generateHeight(worldWidth, worldDepth);
+
+    var geometry = new THREE.PlaneGeometry(8000, 8000, worldWidth - 1, worldDepth - 1);
+    geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
+
+    for (var i=0, l=geometry.vertices.length; i<l; i++) {
+        geometry.vertices[i].y = this.mapData[i] * 10;
+    }
+
+    texture = new THREE.Texture(
+        this.generateTexture(this.mapData, worldWidth, worldDepth),
+        new THREE.UVMapping(),
+        THREE.ClampToEdgeWrapping,
+        THREE.ClampToEdgeWrapping
+    );
+    texture.needsUpdate = true;
+
+    mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map: texture}));
+    this.scene.add(mesh);
+}
+
 MountainScene.prototype.reset = function(){
     /* reset all the variables! */
 
-    this.camera.position.z = 4000;
-    this.camera.rotation.x = -.7;
+    this.camera.position.y = 4000;
 }
 
 MountainScene.prototype.update = function(){
-    /* do updatey stuff here */
-    //this.camera.position.x += 1;
-    //this.camera.rotation.y -= .01;
+    this.camera.position.x = 4500*Math.sin(t/1000);
+    this.camera.position.z = 4500*Math.cos(t/1000);
+
+    var toOrigo = new THREE.Vector3(0,this.camera.position.y,0).sub(this.camera.position);
+    var sideways = toOrigo.cross(new THREE.Vector3(0,1,0));
+
+    this.camera.lookAt(sideways);
 }
 
 MountainScene.prototype.render = function(){
@@ -73,7 +91,7 @@ MountainScene.prototype.generateHeight = function(width, height) {
             var x = i % width, y = ~~ (i / width);
             var radius = Math.sqrt(Math.pow(x-width/2, 2) + Math.pow(y-height/2, 2));
             var heightRatio = Math.max(1-radius/width*2, 0);
-            data[i] += Math.abs(perlin.noise(x / quality, y / quality, z) * quality * Math.pow(heightRatio,3) * 5);
+            data[i] += Math.abs(perlin.noise(x / quality, y / quality, z) * quality * Math.pow(heightRatio,2) * 7);
         }
         quality *= 5;
     }
