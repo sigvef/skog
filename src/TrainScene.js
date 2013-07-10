@@ -3,28 +3,20 @@ function TrainScene(){
     this.startTime = 0;
     /* short name of this scene, must be defined */
     this.NAME = 'train';
-    
-	// Rotate an object around an arbitrary axis in object space
-	this.rotateAroundObjectAxis = function (object, axis, radians) {
-	    rotObjectMatrix = new THREE.Matrix4();
-	    rotObjectMatrix.makeRotationAxis(axis.normalize(), radians);
-	    object.matrix.multiply(rotObjectMatrix);      // post-multiply
-	    object.rotation.setEulerFromRotationMatrix(object.matrix);
-	};
 	
 	this.parts = [
-          {loaded:false, name:'front_left_wheel0',	offset: new THREE.Vector3(0,0,15)},
-          {loaded:false, name:'front_left_wheel1',	offset: new THREE.Vector3(0,0,12)},
-          {loaded:false, name:'front_right_wheel0',	offset: new THREE.Vector3(0,0,11)},
-          {loaded:false, name:'front_right_wheel1',	offset: new THREE.Vector3(0,0,18)},
-          {loaded:false, name:'middle_left_wheel0',	offset: new THREE.Vector3(0,0,19)},
-          {loaded:false, name:'middle_left_wheel1',	offset: new THREE.Vector3(0,0,14)},
-          {loaded:false, name:'middle_right_wheel0',offset: new THREE.Vector3(0,0,13)},
-          {loaded:false, name:'middle_right_wheel1',offset: new THREE.Vector3(0,0,17)},
-          {loaded:false, name:'rear_left_wheel0',	offset: new THREE.Vector3(0,0,18)},
-          {loaded:false, name:'rear_left_wheel1',	offset: new THREE.Vector3(0,0,12)},
-          {loaded:false, name:'rear_right_wheel0',	offset: new THREE.Vector3(0,0,18)},
-          {loaded:false, name:'rear_right_wheel1',	offset: new THREE.Vector3(0,0,15)},
+          {loaded:false, name:'front_left_wheel0', type:'wheel',   offset: new THREE.Vector3(-19.15,5,0)},
+          {loaded:false, name:'front_left_wheel1', type:'wheel',   offset: new THREE.Vector3(-12.7, 5,0)},
+          {loaded:false, name:'front_right_wheel0', type:'wheel',  offset: new THREE.Vector3(-19.15,5,0)},
+          {loaded:false, name:'front_right_wheel1', type:'wheel',  offset: new THREE.Vector3(-12.7, 5,0)},
+          {loaded:false, name:'middle_left_wheel0',	type:'wheel',  offset: new THREE.Vector3(-1.5,  5,0)},
+          {loaded:false, name:'middle_left_wheel1',	type:'wheel',  offset: new THREE.Vector3(5,     5,0)},
+          {loaded:false, name:'middle_right_wheel0', type:'wheel', offset: new THREE.Vector3(-1.1,  5,0)},
+          {loaded:false, name:'middle_right_wheel1', type:'wheel', offset: new THREE.Vector3(5.4,   5,0)},
+          {loaded:false, name:'rear_left_wheel0', type:'wheel',    offset: new THREE.Vector3(16.6,  5,0)},
+          {loaded:false, name:'rear_left_wheel1', type:'wheel',    offset: new THREE.Vector3(23.1,  5,0)},
+          {loaded:false, name:'rear_right_wheel0', type:'wheel',   offset: new THREE.Vector3(16.6,  5,0)},
+          {loaded:false, name:'rear_right_wheel1', type:'wheel',   offset: new THREE.Vector3(23.1,  5,0)},
           {loaded:false, name:'chimney'},
           {loaded:false, name:'cube0'},
           {loaded:false, name:'cube1'},
@@ -47,7 +39,7 @@ function TrainScene(){
           {loaded:false, name:'roof2'},
           {loaded:false, name:'roof3'},
           {loaded:false, name:'upper_plate'},
-    ];
+	];
 	
 	this.zAxis = new THREE.Vector3(0,0,1);
 }
@@ -84,17 +76,33 @@ TrainScene.prototype.init = function(cb){
 	var loadObject = function (objPath, name) {
 		var loader = new THREE.OBJLoader();
 		loader.addEventListener('load', function (event) {
-			that.objects[name] = event.content;
-			that.objects[name].traverse(function (child) {
+			var object = event.content;
+			object.traverse(function (child) {
 				if (child instanceof THREE.Mesh) {
 					child.material.map = texture;
 				}
 			});
-			that.scene.add(that.objects[name]);
 			var everythingIsLoaded = true;
 			for (var i = 0; i < that.parts.length; i++) {
 				if (that.parts[i].name === name) {
 					that.parts[i].loaded = true;
+					if (that.parts[i].type === 'wheel') {
+						var offset = that.parts[i].offset;
+						var pivot = new THREE.Object3D();
+						pivot.position.x = -offset.x;
+						pivot.position.y = -offset.y;
+						pivot.position.z = -offset.z;
+						object.position.x += offset.x;
+						object.position.y += offset.y;
+						object.position.z += offset.z;
+						pivot.add(object);
+						//that.parts[i].parent = pivot;
+						that.objects[name] = pivot;
+						that.scene.add(pivot);
+					} else {
+						that.objects[name] = object;
+						that.scene.add(object);
+					}
 				}
 				if (!that.parts[i].loaded) {
 					everythingIsLoaded = false;
@@ -118,18 +126,18 @@ TrainScene.prototype.init = function(cb){
 TrainScene.prototype.reset = function(){
     /* reset all the variables! */
     this.camera.position.x = 0;
-    this.camera.position.z = 100;
+    this.camera.position.z = 80;
     
 };
 
 TrainScene.prototype.update = function(){
 	/* do updatey stuff here */
-	this.camera.position.y += 0.01;
-	this.camera.position.z -= 0.03;
+	//this.camera.position.y += 0.01;
+	//this.camera.position.z -= 0.03;
 	
 	for (var i = 0; i < 12; i++) {
 		var object = this.objects[this.parts[i].name];
-		this.rotateAroundObjectAxis(object, this.zAxis, -0.02*Math.PI);
+		object.rotation.z -= 0.06*Math.PI;
 	}
 	
 };
