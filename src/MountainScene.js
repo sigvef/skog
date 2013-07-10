@@ -9,7 +9,7 @@ MountainScene.prototype.init = function(cb){
     /* do loady stuff here */
 
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(45, 16/9, 0.1, 10000);
+    this.camera = new THREE.PerspectiveCamera(45, 16/9, 10, 50000);
     this.scene.add(this.camera);
 
     this.initMountain();
@@ -58,7 +58,7 @@ MountainScene.prototype.init = function(cb){
         var a = Math.random() * (2.0942) + (-1.0471);
         angle[i] = new THREE.Vector2(Math.cos(a), Math.sin(a));
     }
-    this.uniforms.diretion = {type: "v2v", value: angle};
+    this.uniforms.direction = {type: "v2v", value: angle};
 
     var xm = createWaterShaderMaterial(this.uniforms);
 
