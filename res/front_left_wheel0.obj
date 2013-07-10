@@ -1,6 +1,6 @@
 # Blender v2.67 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib front_wheel.mtl
+mtllib front_left_wheel0.mtl
 o wooden_train01
 v 19.092300 -5.014003 18.852600
 v 20.813200 -5.640403 18.852699
