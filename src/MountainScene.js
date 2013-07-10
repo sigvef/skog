@@ -37,7 +37,7 @@ MountainScene.prototype.init = function(cb){
         },
         waterHeight: {
             type: "f",
-            value: 0.1
+            value: 1.0
         },
         amplitude: {
             type: "fv1",
