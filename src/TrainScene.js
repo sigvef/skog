@@ -3,6 +3,53 @@ function TrainScene(){
     this.startTime = 0;
     /* short name of this scene, must be defined */
     this.NAME = 'train';
+    
+	// Rotate an object around an arbitrary axis in object space
+	this.rotateAroundObjectAxis = function (object, axis, radians) {
+	    rotObjectMatrix = new THREE.Matrix4();
+	    rotObjectMatrix.makeRotationAxis(axis.normalize(), radians);
+	    object.matrix.multiply(rotObjectMatrix);      // post-multiply
+	    object.rotation.setEulerFromRotationMatrix(object.matrix);
+	};
+	
+	this.parts = [
+          {loaded:false, name:'front_left_wheel0',	offset: new THREE.Vector3(0,0,15)},
+          {loaded:false, name:'front_left_wheel1',	offset: new THREE.Vector3(0,0,12)},
+          {loaded:false, name:'front_right_wheel0',	offset: new THREE.Vector3(0,0,11)},
+          {loaded:false, name:'front_right_wheel1',	offset: new THREE.Vector3(0,0,18)},
+          {loaded:false, name:'middle_left_wheel0',	offset: new THREE.Vector3(0,0,19)},
+          {loaded:false, name:'middle_left_wheel1',	offset: new THREE.Vector3(0,0,14)},
+          {loaded:false, name:'middle_right_wheel0',offset: new THREE.Vector3(0,0,13)},
+          {loaded:false, name:'middle_right_wheel1',offset: new THREE.Vector3(0,0,17)},
+          {loaded:false, name:'rear_left_wheel0',	offset: new THREE.Vector3(0,0,18)},
+          {loaded:false, name:'rear_left_wheel1',	offset: new THREE.Vector3(0,0,12)},
+          {loaded:false, name:'rear_right_wheel0',	offset: new THREE.Vector3(0,0,18)},
+          {loaded:false, name:'rear_right_wheel1',	offset: new THREE.Vector3(0,0,15)},
+          {loaded:false, name:'chimney'},
+          {loaded:false, name:'cube0'},
+          {loaded:false, name:'cube1'},
+          {loaded:false, name:'cube2'},
+          {loaded:false, name:'cube3'},
+          {loaded:false, name:'front_body'},
+          {loaded:false, name:'front_bullet'},
+          {loaded:false, name:'front_plate'},
+          {loaded:false, name:'lower_plate'},
+          {loaded:false, name:'middle_body'},
+          {loaded:false, name:'middle_plate'},
+          {loaded:false, name:'pole0'},
+          {loaded:false, name:'pole1'},
+          {loaded:false, name:'pole2'},
+          {loaded:false, name:'pole3'},
+          {loaded:false, name:'pole4'},
+          {loaded:false, name:'pole5'},
+          {loaded:false, name:'rear_body'},
+          {loaded:false, name:'roof1'},
+          {loaded:false, name:'roof2'},
+          {loaded:false, name:'roof3'},
+          {loaded:false, name:'upper_plate'},
+    ];
+	
+	this.zAxis = new THREE.Vector3(0,0,1);
 }
 
 TrainScene.prototype.init = function(cb){
@@ -14,9 +61,17 @@ TrainScene.prototype.init = function(cb){
 
     this.objects = [];
     var that = this;
+    
+    // create a point light
+    var pointLight = new THREE.PointLight(0xFFFFFF);
+    // set its position
+    pointLight.position.x = 10;
+    pointLight.position.y = 50;
+    pointLight.position.z = 130;
+    // add to the scene
+    this.scene.add(pointLight);
 	
     var resourceFolderPath = 'res/';
-    
     var defaultTexturePath = resourceFolderPath + 'wooden train diffuse.jpg';
     var texture = new THREE.Texture();
     var loader = new THREE.ImageLoader();
@@ -27,7 +82,6 @@ TrainScene.prototype.init = function(cb){
     loader.load(defaultTexturePath);
     
 	var loadObject = function (objPath, name) {
-
 		var loader = new THREE.OBJLoader();
 		loader.addEventListener('load', function (event) {
 			that.objects[name] = event.content;
@@ -37,66 +91,28 @@ TrainScene.prototype.init = function(cb){
 				}
 			});
 			that.scene.add(that.objects[name]);
+			var everythingIsLoaded = true;
+			for (var i = 0; i < that.parts.length; i++) {
+				if (that.parts[i].name === name) {
+					that.parts[i].loaded = true;
+				}
+				if (!that.parts[i].loaded) {
+					everythingIsLoaded = false;
+				}
+			}
+			if (everythingIsLoaded) {
+				console.log("all objects are loaded");
+				cb();	//done with the loading
+			}
 		});
 		loader.load(objPath);
 	};
 	
-	parts = [
-	              'chimney',
-	              'cube0',
-	              'cube1',
-	              'cube2',
-	              'cube3',
-	              'front_body',
-	              'front_bullet',
-	              'front_plate',
-	              'front_left_wheel0',
-	              'front_left_wheel1',
-	              'front_right_wheel0',
-	              'front_right_wheel1',
-	              'lower_plate',
-	              'middle_body',
-	              'middle_plate',
-	              'middle_left_wheel0',
-	              'middle_left_wheel1',
-	              'middle_right_wheel0',
-	              'middle_right_wheel1',
-	              'pole0',
-	              'pole1',
-	              'pole2',
-	              'pole3',
-	              'pole4',
-	              'pole5',
-	              'rear_body',
-	              'rear_left_wheel0',
-	              'rear_left_wheel1',
-	              'rear_right_wheel0',
-	              'rear_right_wheel1',
-	              'roof0',
-	              'roof1',
-	              'roof2',
-	              'roof3',
-	              'upper_plate'
-    ];
-	for (var i = 0; i < parts.length; i++) {
-		var partName = parts[i];
+	for (var i = 0; i < this.parts.length; i++) {
+		var partName = this.parts[i].name;
 		var objPath = resourceFolderPath + partName + '.obj';
 		loadObject(objPath, partName);
 	}
-	
-	// create a point light
-	var pointLight = new THREE.PointLight(0xFFFFFF);
-
-	// set its position
-	pointLight.position.x = 10;
-	pointLight.position.y = 50;
-	pointLight.position.z = 130;
-
-	// add to the scene
-	this.scene.add(pointLight);
-
-    /* call cb when you are done loading! */
-    cb();
 };
 
 TrainScene.prototype.reset = function(){
@@ -109,11 +125,13 @@ TrainScene.prototype.reset = function(){
 TrainScene.prototype.update = function(){
 	/* do updatey stuff here */
 	this.camera.position.y += 0.01;
-	this.camera.position.z -= 0.1;
+	this.camera.position.z -= 0.03;
 	
-	if (this.loaded) {
-		this.camera.lookAt(this.objects['upper_plate'].position);
+	for (var i = 0; i < 12; i++) {
+		var object = this.objects[this.parts[i].name];
+		this.rotateAroundObjectAxis(object, this.zAxis, -0.02*Math.PI);
 	}
+	
 };
 
 TrainScene.prototype.render = function(){
