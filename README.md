@@ -11,6 +11,7 @@ Elements we want:
 * (Perhaps a bridge over the water?)
 * A tunnel that goes through the mountain
 * Smoke for the train
+* Text (e.g. "Ninjadev is bach!" and shoutouts)
 * ???
 
 Effects we want:
