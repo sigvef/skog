@@ -14,14 +14,61 @@ MountainScene.prototype.init = function(cb){
 
     this.initMountain();
 
+    this.setupLights();
+
+
+    this.uniforms = {
+        time: {
+            type: "f",
+            value: 0.1
+        },
+        time2: {
+            type: "f",
+            value: 0.1
+        },
+        //envMap: {type: "t", value: 1, texture: textureCube},
+        texture2: {
+            type: "t",
+            value: THREE.ImageUtils.loadTexture("res/water.jpg")
+        },
+        eyePos: {
+            type: "v3",
+            value: new THREE.Vector3(300, 50, 4)
+        },
+        waterHeight: {
+            type: "f",
+            value: 0.1
+        },
+        amplitude: {
+            type: "fv1",
+            value: [.5, .25, .17, .125, .1, .083, .714, .063]
+        },
+        wavelength: {
+            type: "fv1",
+            value: [25.133, 12.566, 8.378, 6.283, 5.027, 4.189, 3.590, 3.142]
+        },
+        speed: {
+            type: "fv1",
+            value: [1.2, 2.0, 2.8, 3.6, 4.4, 5.2, 6.0, 6.8]
+        }
+    };
+
+    var angle = [];
+    for(var i=0; i<8; i++) {
+        var a = Math.random() * (2.0942) + (-1.0471);
+        angle[i] = new THREE.Vector2(Math.cos(a), Math.sin(a));
+    }
+    this.uniforms.diretion = {type: "v2v", value: angle};
+
+    var xm = createWaterShaderMaterial(this.uniforms);
+
     var geometry = new THREE.PlaneGeometry(16000, 16000, 128, 128);
-    geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
+    var mesh = new THREE.Mesh(geometry, xm);
+    mesh.doubleSided = true;
+    mesh.rotation.x = -1.570796;
+    this.scene.add(mesh);
 
-    this.ground = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: 0x55ddff}));
-    this.scene.add(this.ground);
-
-    this.ground.position.y = 50;
-
+    mesh.position.y = 50;
 
     /* call cb when you are done loading! */
     cb();
@@ -61,13 +108,17 @@ MountainScene.prototype.reset = function(){
 }
 
 MountainScene.prototype.update = function(){
-    this.camera.position.x = 4500*Math.sin(t/1000);
-    this.camera.position.z = 4500*Math.cos(t/1000);
+    this.camera.position.x = 4500*Math.sin(t/5000);
+    this.camera.position.z = 4500*Math.cos(t/5000);
 
     var toOrigo = new THREE.Vector3(0,this.camera.position.y,0).sub(this.camera.position);
     var sideways = toOrigo.cross(new THREE.Vector3(0,1,0));
 
     this.camera.lookAt(sideways);
+
+    this.uniforms.time.value = t/1000;
+    this.uniforms.time2.value = t/1000;
+    this.uniforms.eyePos.value = this.camera.position;
 }
 
 MountainScene.prototype.render = function(){
@@ -75,6 +126,14 @@ MountainScene.prototype.render = function(){
     renderer.render(this.scene, this.camera);
 
 }
+
+MountainScene.prototype.setupLights = function() {
+    var light = new THREE.DirectionalLight(0xdefbff, 1.75);
+    light.position.set(50, 200, 100);
+    light.position.multiplyScalar(1.3);
+    this.scene.add(light);
+}
+
 MountainScene.prototype.generateHeight = function(width, height) {
 
     var size = width * height, data = new Float32Array(size);
