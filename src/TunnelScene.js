@@ -10,7 +10,8 @@ TunnelScene.prototype.init = function(cb){
 
     this.scene = new THREE.Scene();
 
-    this.fov = 80;
+    this.fov = 100; //also set in reset
+
     this.camera = new THREE.PerspectiveCamera(this.fov, 16/9, 0.1, 10000); this.scene.add(this.camera);
 
     this.texture = THREE.ImageUtils.loadTexture('res/dirt.jpg');
@@ -81,7 +82,7 @@ TunnelScene.prototype.init = function(cb){
     var color = 0xffffff;
     this.uniforms = {
 
-        fogDensity: { type: "f", value: 0.23 },
+        fogDensity: { type: "f", value: 100000 },
         fogColor: { type: "v3", value: new THREE.Vector3( 0, 0, 0 ) },
         time: { type: "f", value: 1.0 },
         resolution: { type: "v2", value: new THREE.Vector2(16*GU, 9*GU) },
@@ -118,6 +119,7 @@ TunnelScene.prototype.init = function(cb){
 TunnelScene.prototype.reset = function(){
     /* reset all the variables! */
     this.firstSet = true;
+    this.fov = 172;
 }
 
 TunnelScene.prototype.update = function(){
@@ -159,8 +161,14 @@ TunnelScene.prototype.update = function(){
     this.debugball.position = lookAt.multiplyScalar(0.5).add(pos).multiplyScalar(0.66666);
 
     this.parent.rotation.y += (this.targetRotation - this.parent.rotation.y) * 5;
-
-    //this.fov = this.fov / 1.000001;
+    a = this.camera;
+    if(this.fov > 80){
+        this.fov = 80 + (this.fov - 80) / 1.05;
+    }else{
+        this.fov = 80;
+    }
+    this.camera.fov = this.fov;
+    this.camera.updateProjectionMatrix();
 }
 
 TunnelScene.prototype.render = function(){

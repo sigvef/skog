@@ -46,7 +46,7 @@ function createShaderMaterial(uniforms){
 			"gl_FragColor = temp;",
 			"float depth = gl_FragCoord.z / gl_FragCoord.w;",
 			"const float LOG2 = 1.442695;",
-			"float fogFactor = exp2( - fogDensity * fogDensity * depth);",
+			"float fogFactor = exp2( - fogDensity * fogDensity * depth/2. - 1.4);",
 			"fogFactor = 1.0 - clamp( fogFactor, 0.002, 1.0 );",
 			"gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );",
 		"}",
