@@ -25,8 +25,14 @@ The music:
 * The first beat starts at approximately t = 870
 
 The plot (roughly):
+* Travelling in tunnel under water
+* Camera breaks through the water surface from below
 * Overview of the terrain
 * Train is being built
+  * At first we only see front_body
+  * Then middle_body and then rear_body fall down into place
+  * Then the wheels arrive from the sides (first front, then middle and then rear)
+  * Then the remaining parts (pole, cube etc) fall down from the top and are placed correctly on the train
 * (Bridge is being built)
 * Train moves over the bridge and approaches the tunnel
 * Train moves through the tunnel
