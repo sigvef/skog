@@ -26,9 +26,10 @@ The music:
 
 The plot (roughly):
 * Travelling in tunnel under water
-* Camera breaks through the water surface from below
+  * Introduction text
+* Camera breaks through the water surface from below, causing a splash
 * Overview of the terrain
-* Train is being built
+* The train is being built
   * At first we only see front_body
   * Then middle_body and then rear_body fall down into place
   * Then the wheels arrive from the sides (first front, then middle and then rear)
@@ -36,4 +37,6 @@ The plot (roughly):
 * (Bridge is being built)
 * Train moves over the bridge and approaches the tunnel
 * Train moves through the tunnel
+  * We don't actually see the train. We see everything from the train's point of view.
 * Train exits the tunnel
+* On the last "choo" the camera zooms in on the smoke and everything fades to white
