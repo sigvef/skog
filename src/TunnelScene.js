@@ -15,7 +15,16 @@ TunnelScene.prototype.init = function(cb){
         color: 0xffffff,
         transparent: true 
     }));
-    var tilescale = 400;
+    this.presents = new THREE.Mesh(new THREE.CubeGeometry(1607/scale,0.0001,267/scale), new THREE.MeshLambertMaterial({
+        map: THREE.ImageUtils.loadTexture('res/PRESENTS.png'),
+        color: 0xffffff,
+        transparent: true 
+    }));
+    this.ademocalled = new THREE.Mesh(new THREE.CubeGeometry(1607/scale,0.0001,267/scale), new THREE.MeshLambertMaterial({
+        map: THREE.ImageUtils.loadTexture('res/ADEMOCALLED.png'),
+        color: 0xffffff,
+        transparent: true 
+    }));
     this.title = new THREE.Mesh(new THREE.CubeGeometry(2000/scale,0.0001,700/scale), new THREE.MeshLambertMaterial({
         map: THREE.ImageUtils.loadTexture('res/TITLE.png'),
         color: 0xffffff,
@@ -30,6 +39,8 @@ TunnelScene.prototype.init = function(cb){
     this.parent = new THREE.Object3D();
     this.scene.add(this.parent);
     this.parent.add(this.ninjadev);
+    this.parent.add(this.presents);
+    this.parent.add(this.ademocalled);
     this.parent.add(this.title);
     this.light = new THREE.PointLight( 0xffffff, 0.2, 100 );
     this.directionalLight = new THREE.PointLight( 0xffffff, 1 );
@@ -84,9 +95,12 @@ TunnelScene.prototype.reset = function(){
     this.fov = 172;
     this.targetRotation = 0;
     this.parent.rotation.set(0,0,0);
-    //this.ninjadev.position.set(4.9, 37.5, -7);
     this.ninjadev.position.set(9.9, 43.5, -11);
     this.ninjadev.rotation.set(5, 6, 3.3);
+    this.presents.position.set(-5, 19, 10);
+    this.presents.rotation.set(5, 6, 3.3);
+    this.ademocalled.position.set(-19.3, 17.2, 6);
+    this.ademocalled.rotation.set(4.83, 3.29, 1.72);
     this.title.position.set(-17, 2, -13);
     this.title.rotation.set(5, 6, 2.7);
 }
@@ -97,9 +111,13 @@ TunnelScene.prototype.update = function(){
     //this.directionalLight.intensity = 0.5 + 0.5 * (length-((lightoffset + t) % length)) / length;
     this.uniforms.fogDensity.value = 0.8 + 0.02*(1 + Math.sin((length-((lightoffset + t) % length)) / length * 2 * Math.PI));
 
+    /*
+    */
+
 
     var looptime = 10000 * 20;
     var offset =  10000;
+
     var thyme = ((offset + t) % looptime) / looptime;
 
     var pos = this.tube.path.getPointAt(thyme);
@@ -129,16 +147,21 @@ TunnelScene.prototype.update = function(){
     }else{
         this.fov = 80;
     }
+    this.fov = 80;
     this.camera.fov = this.fov;
     this.camera.updateProjectionMatrix();
 
     var target = lookAt.multiplyScalar(1/3).add(pos).multiplyScalar(3/4);
-    if(t > 12600 && t < 13200){
+    if(t > 12600 && t < 12700){
         this.title.position = target.add(this.title.position).multiplyScalar(0.5);
-    }else if(t > 13200){
+    }else if(t > 12700){
         this.title.position = target;
     }
 
+    if(t > 18761){
+        var faraway = 10000;
+        this.title.position.set(faraway,faraway,faraway);
+    }
 
 }
 
