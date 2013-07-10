@@ -1,6 +1,6 @@
 function TrainScene(){
     /* starting time of this scene in milliseconds, must be defined */
-    this.startTime = 10000;
+    this.startTime = 0;
     /* short name of this scene, must be defined */
     this.NAME = 'train';
 }
@@ -12,28 +12,68 @@ TrainScene.prototype.init = function(cb){
     this.camera = new THREE.PerspectiveCamera(45, 16/9, 0.1, 10000);
     this.scene.add(this.camera);
 
-	var texture = new THREE.Texture();
-	var loader = new THREE.ImageLoader();
-	loader.addEventListener('load', function (event) {
-		texture.image = event.content;
-		texture.needsUpdate = true;
-	});
-	loader.load('res/wooden train diffuse.jpg');
-
-	var that = this;
+    this.objects = [];
+    var that = this;
 	
-	var loader = new THREE.OBJLoader();
-	loader.addEventListener('load', function (event) {
-		that.train = event.content;
-		that.train.traverse(function (child) {
-			if (child instanceof THREE.Mesh) {
-				child.material.map = texture;
-			}
+    var resourceFolderPath = 'res/';
+    
+    var defaultTexturePath = resourceFolderPath + 'wooden train diffuse.jpg';
+    var texture = new THREE.Texture();
+    var loader = new THREE.ImageLoader();
+    loader.addEventListener('load', function (event) {
+    	texture.image = event.content;
+    	texture.needsUpdate = true;
+    });
+    loader.load(defaultTexturePath);
+    
+	var loadObject = function (objPath, name) {
+
+		var loader = new THREE.OBJLoader();
+		loader.addEventListener('load', function (event) {
+			that.objects[name] = event.content;
+			that.objects[name].traverse(function (child) {
+				if (child instanceof THREE.Mesh) {
+					child.material.map = texture;
+				}
+			});
+			that.scene.add(that.objects[name]);
 		});
-		that.train.position.y = - 80;
-		that.scene.add(that.train);
-	});
-	loader.load('res/wooden train.obj');
+		loader.load(objPath);
+	};
+	
+	parts = [
+	              'chimney',
+	              'cube0',
+	              'cube1',
+	              'cube2',
+	              'cube3',
+	              'front_body',
+	              'front_bullet',
+	              'front_plate',
+	              'front_wheel',
+	              'lower_plate',
+	              'middle_body',
+	              'middle_plate',
+	              'middle_wheel',
+	              'pole0',
+	              'pole1',
+	              'pole2',
+	              'pole3',
+	              'pole4',
+	              'pole5',
+	              'rear_body',
+	              'rear_wheel',
+	              'roof0',
+	              'roof1',
+	              'roof2',
+	              'roof3',
+	              'upper_plate'
+    ];
+	for (var i = 0; i < parts.length; i++) {
+		var partName = parts[i];
+		var objPath = resourceFolderPath + partName + '.obj';
+		loadObject(objPath, partName);
+	}
 	
 	// create a point light
 	var pointLight = new THREE.PointLight(0xFFFFFF);
@@ -52,15 +92,19 @@ TrainScene.prototype.init = function(cb){
 
 TrainScene.prototype.reset = function(){
     /* reset all the variables! */
-    this.camera.position.z = 300;
+    this.camera.position.x = 0;
+    this.camera.position.z = 100;
+    
 };
 
 TrainScene.prototype.update = function(){
 	/* do updatey stuff here */
-	this.camera.position.z -= 1;
-	this.camera.position.x += Math.sin(0.001*t);
-	this.camera.lookAt(this.train.position);
+	this.camera.position.y += 0.01;
+	this.camera.position.z -= 0.1;
 	
+	if (this.loaded) {
+		this.camera.lookAt(this.objects['upper_plate'].position);
+	}
 };
 
 TrainScene.prototype.render = function(){

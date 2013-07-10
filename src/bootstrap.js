@@ -49,10 +49,10 @@ function start(){
     sm = new SceneManager(); 
     sm.addScene(new ExampleScene());
     sm.addScene(new TrainScene());
-    sm.addScene(new TunnelScene());
+    //sm.addScene(new TunnelScene());
     sm.initScenes(function(){
         music.play();
-        sm.jumpToScene('tunnel');
+        sm.jumpToScene('train');
         setTimeout(loop, 0);
     });
 }
