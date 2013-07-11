@@ -53,7 +53,7 @@ function start(){
     sm.initScenes(function(){
         sm.warmup();
         music.play();
-        sm.jumpToScene('tunnel');
+        sm.jumpToScene('example');
         setTimeout(loop, 0);
     });
 }
