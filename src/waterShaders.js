@@ -59,7 +59,7 @@ function createWaterShaderMaterial(uniforms) {
         "}",
 
         "void main() {",
-            "vUv = vec2( 3.0, 1.0 ) * uv;",
+            "vUv = vec2( 1.0, 1.0 ) * uv;",
             "vec4 pos = vec4(position, 1.0);",
             "pos.z = waterHeight * waveHeight(pos.x, pos.y);",
             "vPosition = pos.xyz / pos.w;",
