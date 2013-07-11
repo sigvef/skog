@@ -63,7 +63,6 @@ MountainScene.prototype.init = function(cb){
 
     var geometry = new THREE.PlaneGeometry(26000, 26000, 128, 128);
     var mesh = new THREE.Mesh(geometry, xm);
-    mesh.doubleSided = true;
     mesh.rotation.x = -1.570796;
     this.scene.add(mesh);
 
