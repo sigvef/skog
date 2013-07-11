@@ -48,6 +48,7 @@ function start(){
 
     sm = new SceneManager(); 
     sm.addScene(new ExampleScene());
+    sm.addScene(new MountainScene());
     sm.addScene(new TunnelScene());
     sm.initScenes(function(){
         music.play();
