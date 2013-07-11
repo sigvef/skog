@@ -154,6 +154,16 @@ var trainParts = [ {
 {
 	loaded : false,
 	activeAnimation : -1,
+	name : 'hook0'
+},
+{
+	loaded : false,
+	activeAnimation : -1,
+	name : 'hook1'
+},
+{
+	loaded : false,
+	activeAnimation : -1,
 	name : 'lower_plate'
 },
 {
