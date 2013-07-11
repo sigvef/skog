@@ -111,9 +111,9 @@ TrainScene.prototype.update = function(){
 				var y = smoothstep(animation.fromPos.y, animation.toPos.y, animationProgress);
 				var z = smoothstep(animation.fromPos.z, animation.toPos.z, animationProgress);
 				
-				object.position.x = x;
-				object.position.y = y;
-				object.position.z = z;
+				object.position.x = x - part.offset.x;
+				object.position.y = y - part.offset.y;
+				object.position.z = z - part.offset.z;
 				
 				//if animation is done, go to next animation for this object if available
 				if (t > animation.end && ++part.activeAnimation === part.animations.length) {
