@@ -99,7 +99,7 @@ function bootstrap(){
     });
 
     renderer = new THREE.WebGLRenderer({ maxLights: 10,antialias:true}); 
-    renderer.setClearColor(0xffffff, 1);
+    renderer.setClearColor(0x000000, 1);
     renderer.sortObjects = false;
     resize();
     document.body.appendChild(renderer.domElement);
