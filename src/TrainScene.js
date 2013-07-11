@@ -5,43 +5,182 @@ function TrainScene(){
     this.NAME = 'train';
 	
 	this.parts = [
-          {loaded:false, name:'front_left_wheel0', type:'wheel',   offset: new THREE.Vector3(-19.15,5,0)},
-          {loaded:false, name:'front_left_wheel1', type:'wheel',   offset: new THREE.Vector3(-12.7, 5,0)},
-          {loaded:false, name:'front_right_wheel0', type:'wheel',  offset: new THREE.Vector3(-19.15,5,0)},
-          {loaded:false, name:'front_right_wheel1', type:'wheel',  offset: new THREE.Vector3(-12.7, 5,0)},
-          {loaded:false, name:'middle_left_wheel0',	type:'wheel',  offset: new THREE.Vector3(-1.1,  5,0)},
-          {loaded:false, name:'middle_left_wheel1',	type:'wheel',  offset: new THREE.Vector3(5.4,   5,0)},
-          {loaded:false, name:'middle_right_wheel0', type:'wheel', offset: new THREE.Vector3(-1.1,  5,0)},
-          {loaded:false, name:'middle_right_wheel1', type:'wheel', offset: new THREE.Vector3(5.4,   5,0)},
-          {loaded:false, name:'rear_left_wheel0', type:'wheel',    offset: new THREE.Vector3(16.6,  5,0)},
-          {loaded:false, name:'rear_left_wheel1', type:'wheel',    offset: new THREE.Vector3(23.1,  5,0)},
-          {loaded:false, name:'rear_right_wheel0', type:'wheel',   offset: new THREE.Vector3(16.6,  5,0)},
-          {loaded:false, name:'rear_right_wheel1', type:'wheel',   offset: new THREE.Vector3(23.1,  5,0)},
-          {loaded:false, name:'chimney'},
-          {loaded:false, name:'cube0'},
-          {loaded:false, name:'cube1'},
-          {loaded:false, name:'cube2'},
-          {loaded:false, name:'cube3'},
-          {loaded:false, name:'front_body'},
-          {loaded:false, name:'front_bullet'},
-          {loaded:false, name:'front_plate'},
-          {loaded:false, name:'lower_plate'},
-          {loaded:false, name:'middle_body'},
-          {loaded:false, name:'middle_plate'},
-          {loaded:false, name:'pole0'},
-          {loaded:false, name:'pole1'},
-          {loaded:false, name:'pole2'},
-          {loaded:false, name:'pole3'},
-          {loaded:false, name:'pole4'},
-          {loaded:false, name:'pole5'},
-          {loaded:false, name:'rear_body'},
-          {loaded:false, name:'roof1'},
-          {loaded:false, name:'roof2'},
-          {loaded:false, name:'roof3'},
-          {loaded:false, name:'upper_plate'},
-	];
-	
-	this.zAxis = new THREE.Vector3(0,0,1);
+          {
+        	  name:'front_left_wheel0',
+        	  loaded:false,
+        	  type:'wheel',
+        	  offset: new THREE.Vector3(-19.15,5,0),
+        	  activeAnimation: 0,
+        	  animation: [
+	              {
+	            	  start: 0,
+	            	  end: 2000,
+	            	  fromPos: {
+	            		  x: 0,
+	            		  y: 0,
+	            		  z: 20
+	            	  },
+	            	  toPos: {
+	            		  x: 0,
+	            		  y: 0,
+	            		  z: 0
+	            	  }
+	              },
+              ]
+          },
+          {
+        	  name:'front_left_wheel1',
+        	  loaded:false,
+        	  type:'wheel',
+        	  offset: new THREE.Vector3(-12.7,5,0)
+          },
+          {
+        	  name:'front_right_wheel0',
+        	  loaded:false,
+        	  type:'wheel',
+        	  offset: new THREE.Vector3(-19.15,5,0)
+          },
+          {
+        	  name:'front_right_wheel1',
+        	  loaded:false,
+        	  type:'wheel',
+        	  offset: new THREE.Vector3(-12.7,5,0)
+          },
+          {
+        	  name:'middle_left_wheel0',
+        	  loaded:false,
+        	  type:'wheel',
+        	  offset: new THREE.Vector3(-1.1,5,0)
+          },
+          {
+        	  name:'middle_left_wheel1',
+        	  loaded:false,
+        	  type:'wheel',
+        	  offset: new THREE.Vector3(5.4,5,0)
+          },
+          {
+        	  name:'middle_right_wheel0',
+        	  loaded:false,
+        	  type:'wheel',
+        	  offset: new THREE.Vector3(-1.1,5,0)
+          },
+          {
+        	  name:'middle_right_wheel1',
+        	  loaded:false,
+        	  type:'wheel',
+        	  offset: new THREE.Vector3(5.4,5,0)
+          },
+          {
+        	  name:'rear_left_wheel0',
+        	  loaded:false,
+        	  type:'wheel',
+        	  offset: new THREE.Vector3(16.6,5,0)
+          },
+          {
+        	  loaded:false,
+        	  name:'rear_left_wheel1',
+        	  type:'wheel',
+        	  offset: new THREE.Vector3(23.1,5,0)
+          },
+          {
+        	  loaded:false,
+        	  name:'rear_right_wheel0',
+        	  type:'wheel',   offset: new THREE.Vector3(16.6,  5,0)},
+          {
+              loaded: false,
+              name: 'rear_right_wheel1',
+              type: 'wheel',
+              offset: new THREE.Vector3(23.1, 5, 0)
+          },
+          {
+              loaded: false,
+              name: 'chimney'
+          },
+          {
+              loaded: false,
+              name: 'cube0'
+          },
+          {
+              loaded: false,
+              name: 'cube1'
+          },
+          {
+              loaded: false,
+              name: 'cube2'
+          },
+          {
+              loaded: false,
+              name: 'cube3'
+          },
+          {
+              loaded: false,
+              name: 'front_body'
+          },
+          {
+              loaded: false,
+              name: 'front_bullet'
+          },
+          {
+              loaded: false,
+              name: 'front_plate'
+          },
+          {
+              loaded: false,
+              name: 'lower_plate'
+          },
+          {
+              loaded: false,
+              name: 'middle_body'
+          },
+          {
+              loaded: false,
+              name: 'middle_plate'
+          },
+          {
+              loaded: false,
+              name: 'pole0'
+          },
+          {
+              loaded: false,
+              name: 'pole1'
+          },
+          {
+              loaded: false,
+              name: 'pole2'
+          },
+          {
+              loaded: false,
+              name: 'pole3'
+          },
+          {
+              loaded: false,
+              name: 'pole4'
+          },
+          {
+              loaded: false,
+              name: 'pole5'
+          },
+          {
+              loaded: false,
+              name: 'rear_body'
+          },
+          {
+              loaded: false,
+              name: 'roof1'
+          },
+          {
+              loaded: false,
+              name: 'roof2'
+          },
+          {
+              loaded: false,
+              name: 'roof3'
+          },
+          {
+              loaded: false,
+              name: 'upper_plate'
+          }
+      ];
 }
 
 TrainScene.prototype.init = function(cb){
@@ -130,13 +269,22 @@ TrainScene.prototype.reset = function(){
 };
 
 TrainScene.prototype.update = function(){
-	/* do updatey stuff here */
 	//this.camera.position.y += 0.01;
 	this.camera.lookAt(this.objects['roof1'].position);
 	
-	for (var i = 0; i < 12; i++) {
+	for (var i = 0; i < this.parts.length; i++) {
 		var object = this.objects[this.parts[i].name];
-		object.rotation.z -= 0.06*Math.PI;
+		var part = this.parts[i];
+		if (part.type === 'wheel') {
+			object.rotation.z -= 0.06*Math.PI;
+		}
+		if (part.activeAnimation >= 0) {
+			var animation = part.animations[part.activeAnimation];
+			
+			if (++part.activeAnimation === part.animations.length) {
+				part.activeAnimation = -1;
+			}
+		}
 	}
 	
 };
