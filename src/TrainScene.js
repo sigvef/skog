@@ -20,7 +20,7 @@ TrainScene.prototype.init = function(cb){
     // set its position
     pointLight.position.x = 10;
     pointLight.position.y = 50;
-    pointLight.position.z = -130;
+    pointLight.position.z = 130;
     // add to the scene
     this.scene.add(pointLight);
 	
@@ -91,14 +91,12 @@ TrainScene.prototype.init = function(cb){
 
 TrainScene.prototype.reset = function(){
     /* reset all the variables! */
-    this.camera.position.y = 10;
-    this.camera.position.z = -50;
-    
+    this.camera.position.y = 5;
+    this.camera.position.z = 80;
 };
 
 TrainScene.prototype.update = function(){
 	//this.camera.position.y += 0.01;
-	this.camera.lookAt(this.objects['roof1'].position);
 	
 	for (var i = 0; i < trainParts.length; i++) {
 		var object = this.objects[trainParts[i].name];

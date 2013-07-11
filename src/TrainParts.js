@@ -251,7 +251,7 @@ var trainParts = [{
     type: 'wheel',
     animations: [{
         start: 0,
-        end: 11000,
+        end: 9000,
         fromPos: {
             x: 0,
             y: 0,
@@ -263,8 +263,8 @@ var trainParts = [{
             z: -100
         }
     }, {
-        start: 11000,
-        end: 13000,
+        start: 9000,
+        end: 11000,
         fromPos: {
             x: 0,
             y: 0,
@@ -282,7 +282,7 @@ var trainParts = [{
     type: 'wheel',
     animations: [{
         start: 0,
-        end: 11250,
+        end: 9250,
         fromPos: {
             x: 0,
             y: 0,
@@ -294,8 +294,8 @@ var trainParts = [{
             z: -100
         }
     }, {
-        start: 11250,
-        end: 13250,
+        start: 9250,
+        end: 11250,
         fromPos: {
             x: 0,
             y: 0,
@@ -313,7 +313,7 @@ var trainParts = [{
     type: 'wheel',
     animations: [{
         start: 0,
-        end: 10000,
+        end: 8000,
         fromPos: {
             x: 0,
             y: 0,
@@ -325,8 +325,8 @@ var trainParts = [{
             z: 100
         }
     }, {
-        start: 10000,
-        end: 12000,
+        start: 8000,
+        end: 10000,
         fromPos: {
             x: 0,
             y: 0,
@@ -344,7 +344,7 @@ var trainParts = [{
     type: 'wheel',
     animations: [{
         start: 0,
-        end: 10250,
+        end: 8250,
         fromPos: {
             x: 0,
             y: 0,
@@ -356,8 +356,8 @@ var trainParts = [{
             z: 100
         }
     }, {
-        start: 10250,
-        end: 12250,
+        start: 8250,
+        end: 10250,
         fromPos: {
             x: 0,
             y: 0,
@@ -371,9 +371,63 @@ var trainParts = [{
     }, ],
     offset: new THREE.Vector3(23.1, 5, 0)
 }, {
-    name: 'chimney'
+    name: 'chimney',
+    animations: [{
+        start: 0,
+        end: 16250,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        }
+    }, {
+        start: 16250,
+        end: 18250,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 0,
+            z: 0
+        }
+    }]
 }, {
-    name: 'cube0'
+    name: 'cube0',
+    animations: [{
+        start: 0,
+        end: 15500,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        }
+    }, {
+        start: 15500,
+        end: 17500,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 0,
+            z: 0
+        }
+    }]
 }, {
     name: 'cube1',
     animations: [{
@@ -491,9 +545,63 @@ var trainParts = [{
         }
     }, ]
 }, {
-    name: 'front_bullet'
+    name: 'front_bullet',
+    animations: [{
+        start: 0,
+        end: 15750,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        }
+    }, {
+        start: 15750,
+        end: 17750,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 0,
+            z: 0
+        }
+    }]
 }, {
-    name: 'front_plate'
+    name: 'front_plate',
+    animations: [{
+        start: 0,
+        end: 15250,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        }
+    }, {
+        start: 15250,
+        end: 17250,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 0,
+            z: 0
+        }
+    }]
 }, {
     name: 'hook0',
     animations: [{
@@ -553,7 +661,34 @@ var trainParts = [{
         }
     }, ]
 }, {
-    name: 'lower_plate'
+    name: 'lower_plate',
+    animations: [{
+        start: 0,
+        end: 14500,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        }
+    }, {
+        start: 14500,
+        end: 16500,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 0,
+            z: 0
+        }
+    }]
 }, {
     name: 'middle_body',
     animations: [{
@@ -584,12 +719,10 @@ var trainParts = [{
         }
     }, ]
 }, {
-    name: 'middle_plate'
-}, {
-    name: 'pole0',
+    name: 'middle_plate',
     animations: [{
         start: 0,
-        end: 13250,
+        end: 14750,
         fromPos: {
             x: 0,
             y: 100,
@@ -601,8 +734,37 @@ var trainParts = [{
             z: 0
         }
     }, {
-        start: 13250,
-        end: 15250,
+        start: 14750,
+        end: 16750,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 0,
+            z: 0
+        }
+    }]
+}, {
+    name: 'pole0',
+    animations: [{
+        start: 0,
+        end: 11250,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        }
+    }, {
+        start: 11250,
+        end: 13250,
         fromPos: {
             x: 0,
             y: 100,
@@ -618,7 +780,7 @@ var trainParts = [{
     name: 'pole1',
     animations: [{
         start: 0,
-        end: 13000,
+        end: 11000,
         fromPos: {
             x: 0,
             y: 100,
@@ -630,8 +792,8 @@ var trainParts = [{
             z: 0
         }
     }, {
-        start: 13000,
-        end: 15000,
+        start: 11000,
+        end: 13000,
         fromPos: {
             x: 0,
             y: 100,
@@ -647,7 +809,7 @@ var trainParts = [{
     name: 'pole2',
     animations: [{
         start: 0,
-        end: 12750,
+        end: 10750,
         fromPos: {
             x: 0,
             y: 100,
@@ -659,8 +821,8 @@ var trainParts = [{
             z: 0
         }
     }, {
-        start: 12750,
-        end: 14750,
+        start: 10750,
+        end: 12750,
         fromPos: {
             x: 0,
             y: 100,
@@ -676,7 +838,7 @@ var trainParts = [{
     name: 'pole3',
     animations: [{
         start: 0,
-        end: 12500,
+        end: 10500,
         fromPos: {
             x: 0,
             y: 100,
@@ -688,8 +850,8 @@ var trainParts = [{
             z: 0
         }
     }, {
-        start: 12500,
-        end: 14500,
+        start: 10500,
+        end: 12500,
         fromPos: {
             x: 0,
             y: 100,
@@ -705,7 +867,7 @@ var trainParts = [{
     name: 'pole4',
     animations: [{
         start: 0,
-        end: 12250,
+        end: 10250,
         fromPos: {
             x: 0,
             y: 100,
@@ -717,8 +879,8 @@ var trainParts = [{
             z: 0
         }
     }, {
-        start: 12250,
-        end: 14250,
+        start: 10250,
+        end: 12250,
         fromPos: {
             x: 0,
             y: 100,
@@ -734,7 +896,7 @@ var trainParts = [{
     name: 'pole5',
     animations: [{
         start: 0,
-        end: 12000,
+        end: 10000,
         fromPos: {
             x: 0,
             y: 100,
@@ -746,8 +908,8 @@ var trainParts = [{
             z: 0
         }
     }, {
-        start: 12000,
-        end: 14000,
+        start: 10000,
+        end: 12000,
         fromPos: {
             x: 0,
             y: 100,
@@ -789,11 +951,148 @@ var trainParts = [{
         }
     }, ]
 }, {
-    name: 'roof1'
+	name: 'roof0',
+    animations: [{
+        start: 0,
+        end: 16000,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        }
+    }, {
+        start: 16000,
+        end: 18000,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 0,
+            z: 0
+        }
+    }]
 }, {
-    name: 'roof2'
+    name: 'roof1',
+    animations: [{
+        start: 0,
+        end: 15125,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        }
+    }, {
+        start: 15125,
+        end: 17125,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 0,
+            z: 0
+        }
+    }]
 }, {
-    name: 'roof3'
+    name: 'roof2',
+    animations: [{
+        start: 0,
+        end: 15375,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        }
+    }, {
+        start: 15375,
+        end: 17375,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 0,
+            z: 0
+        }
+    }]
 }, {
-    name: 'upper_plate'
+    name: 'roof3',
+    animations: [{
+        start: 0,
+        end: 15625,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        }
+    }, {
+        start: 15625,
+        end: 17625,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 0,
+            z: 0
+        }
+    }]
+}, {
+    name: 'upper_plate',
+    animations: [{
+        start: 0,
+        end: 15000,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        }
+    }, {
+        start: 15000,
+        end: 17000,
+        fromPos: {
+            x: 0,
+            y: 100,
+            z: 0
+        },
+        toPos: {
+            x: 0,
+            y: 0,
+            z: 0
+        }
+    }]
 }];
