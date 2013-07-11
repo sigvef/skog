@@ -47,6 +47,12 @@ TrainScene.prototype.init = function(cb){
 			for (var i = 0; i < trainParts.length; i++) {
 				if (trainParts[i].name === name) {
 					trainParts[i].loaded = true;
+					if (trainParts[i].animations && trainParts[i].animations.length > 0) {
+						trainParts[i].activeAnimation = 0;
+					}
+					if (typeof trainParts[i].offset === 'undefined') {
+						trainParts[i].offset = new THREE.Vector3(0, 0, 0);
+					}
 					if (trainParts[i].type === 'wheel') {
 						var offset = trainParts[i].offset;
 						var pivot = new THREE.Object3D();
@@ -85,8 +91,8 @@ TrainScene.prototype.init = function(cb){
 
 TrainScene.prototype.reset = function(){
     /* reset all the variables! */
-    this.camera.position.x = 0;
-    this.camera.position.z = -20;
+    this.camera.position.y = 10;
+    this.camera.position.z = -50;
     
 };
 
@@ -103,9 +109,10 @@ TrainScene.prototype.update = function(){
 		if (part.activeAnimation >= 0) {
 			var animation = part.animations[part.activeAnimation];
 			if (t >= animation.start) {
-				var length = animation.end - animation.start;
-				var animationProgress = Math.min((t - animation.start) / length, 1); //number between 0 and 1
-				
+				var animationLength = animation.end - animation.start;
+
+				//number between 0 and 1
+				var animationProgress = Math.min((t - this.startTime - animation.start) / animationLength, 1);
 				
 				var x = smoothstep(animation.fromPos.x, animation.toPos.x, animationProgress);
 				var y = smoothstep(animation.fromPos.y, animation.toPos.y, animationProgress);
@@ -117,7 +124,7 @@ TrainScene.prototype.update = function(){
 				
 				//if animation is done, go to next animation for this object if available
 				if (t > animation.end && ++part.activeAnimation === part.animations.length) {
-					console.log("an animation has ended at " + t);
+					console.log("an animation for " + part.name + " has ended at " + t);
 					part.activeAnimation = -1;
 				}
 			}
