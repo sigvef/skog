@@ -25,11 +25,19 @@ TunnelScene.prototype.init = function(cb){
         color: 0xffffff,
         transparent: true 
     }));
-    this.title = new THREE.Mesh(new THREE.CubeGeometry(2000/scale,0.0001,700/scale), new THREE.MeshLambertMaterial({
-        map: THREE.ImageUtils.loadTexture('res/TITLE.png'),
-        color: 0xffffff,
-        transparent: true 
-    }));
+    this.title = new Image();
+    this.title.src = 'res/TITLE.png';
+    this.title.style.opacity = 0;
+    this.title.style.position = 'absolute';
+    this.title.style.zIndex = 99999999999;
+
+    var w = 2000/16*GU*0.1;
+    var h = 700/16*GU*0.1;
+    this.title.style.width =  w + 'px';
+    this.title.style.height = h + 'px';
+    this.title.style.left = renderer.domElement.offsetLeft + 8*GU - w/2 + 'px';
+    this.title.style.top = renderer.domElement.offsetTop + 4.5*GU - h/2 + 'px';
+    document.body.appendChild(this.title);
     a = this.camera = new THREE.PerspectiveCamera(this.fov, 16/9, 0.1, 10000); this.scene.add(this.camera);
     this.texture = THREE.ImageUtils.loadTexture('res/dirt.jpg');
     this.texture.wrapS = this.texture.wrapT = THREE.RepeatWrapping;
@@ -41,7 +49,7 @@ TunnelScene.prototype.init = function(cb){
     this.parent.add(this.ninjadev);
     this.parent.add(this.presents);
     this.parent.add(this.ademocalled);
-    this.parent.add(this.title);
+    this.scene.add(this.title);
     this.light = new THREE.PointLight( 0xffffff, 0.2, 100 );
     this.directionalLight = new THREE.PointLight( 0xffffff, 1 );
     this.scene.add(this.ambi);
@@ -91,6 +99,7 @@ TunnelScene.prototype.init = function(cb){
 
 TunnelScene.prototype.reset = function(){
     /* reset all the variables! */
+    this.title.style.opacity = 0;
     this.firstSet = true;
     this.fov = 172;
     this.targetRotation = 0;
@@ -101,8 +110,10 @@ TunnelScene.prototype.reset = function(){
     this.presents.rotation.set(5, 6, 3.3);
     this.ademocalled.position.set(-19.3, 17.2, 6);
     this.ademocalled.rotation.set(4.83, 3.29, 1.72);
+    /*
     this.title.position.set(-17, 2, -13);
-    this.title.rotation.set(5, 6, 2.7);
+    this.title.rotation.set(Math.PI,0,0);
+    */
 }
 
 TunnelScene.prototype.update = function(){
@@ -141,31 +152,39 @@ TunnelScene.prototype.update = function(){
     this.directionalLight.position = pos;
     this.camera.lookAt(lookAt);
     this.parent.rotation.y += (this.targetRotation - this.parent.rotation.y) * 5;
-    a = this.camera;
-    if(this.fov > 80){
-        this.fov = 80 + (this.fov - 80) / 1.02;
-    }else{
-        this.fov = 80;
+    if(t < 10000){
+        if(this.fov > 80){
+            this.fov = 80 + (this.fov - 80) / 1.02;
+        }else{
+            this.fov = 80;
+        }
     }
-    this.fov = 80;
-    this.camera.fov = this.fov;
-    this.camera.updateProjectionMatrix();
+
+    var w = 2000/16*GU*0.1;
+    var h = 700/16*GU*0.1;
+    this.title.style.width =  w + 'px';
+    this.title.style.height = h + 'px';
+    this.title.style.left = renderer.domElement.offsetLeft + 8*GU - w/2 + 'px';
+    this.title.style.top = renderer.domElement.offsetTop + 4.5*GU - h/2 + 'px';
 
     var target = lookAt.multiplyScalar(1/3).add(pos).multiplyScalar(3/4);
-    if(t > 12600 && t < 12700){
-        this.title.position = target.add(this.title.position).multiplyScalar(0.5);
-    }else if(t > 12700){
-        this.title.position = target;
+    if(t > 9000 && t < 9500){
+        this.title.style.opacity =  (t - 9000) / 500;
+    }else if(t > 9500){
+        this.title.style.opacity = 1;
     }
-
-    if(t > 18761){
-        var faraway = 10000;
-        this.title.position.set(faraway,faraway,faraway);
+    if(t > 14000){
+        this.title.style.opacity =  (1000 - (t - 14000)) / 1000; 
+    }if(t > 15000){
+        this.title.style.opacity = 0;
+        this.fov *= 1.009;
     }
 
 }
 
 TunnelScene.prototype.render = function(){
+    this.camera.fov = this.fov;
+    this.camera.updateProjectionMatrix();
     renderer.render(this.scene, this.camera);
 }
 

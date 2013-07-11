@@ -1,6 +1,6 @@
 function MountainScene(){
     /* starting time of this scene in milliseconds, must be defined */
-    this.startTime = 1;
+    this.startTime = 16700;
     /* short name of this scene, must be defined */
     this.NAME = 'mountain';
 }

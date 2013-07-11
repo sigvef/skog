@@ -51,6 +51,7 @@ function start(){
     sm.addScene(new MountainScene());
     sm.addScene(new TunnelScene());
     sm.initScenes(function(){
+        sm.warmup();
         music.play();
         sm.jumpToScene('tunnel');
         setTimeout(loop, 0);
@@ -116,6 +117,8 @@ function resize(){
         GU = (window.innerWidth/16);
     }
     renderer.setSize(16*GU, 9*GU);
+    renderer.domElement.style.zIndex = 10;
+    renderer.domElement.style.position = 'absolute';
     renderer.domElement.style.margin = ((window.innerHeight - 9*GU) /2)+"px 0 0 "+((window.innerWidth-16*GU)/2)+"px";
     RENDERTARGET = new THREE.WebGLRenderTarget( 16*GU, 9*GU, {
         minFilter: THREE.LinearFilter,
