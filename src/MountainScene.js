@@ -134,7 +134,6 @@ MountainScene.prototype.initMountain = function() {
             imageData.data[i*4 + 3] = 255;
         }
         ctx.putImageData(imageData, 0, 0);
-        document.body.appendChild(canvas);
         var tex = new THREE.Texture(canvas);
         tex.needsUpdate = true;
         return tex;
