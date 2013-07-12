@@ -2,13 +2,13 @@ function Tree() {
     var combined = new THREE.Geometry();
     var matrix = new THREE.Matrix4();
 
-    var topGeometry = new THREE.CylinderGeometry(0, 35, 70, 8, 8, false);
+    var topGeometry = new THREE.CylinderGeometry(0, 35, 70, 6, 6, false);
     topGeometry.applyMatrix(matrix.makeTranslation(0, 115, 0));
 
-    var middleGeometry = new THREE.CylinderGeometry(15, 45, 60, 8, 8, false);
+    var middleGeometry = new THREE.CylinderGeometry(15, 45, 60, 6, 6, false);
     middleGeometry.applyMatrix(matrix.makeTranslation(0, 55, 0));
 
-    var bottomGeometry = new THREE.CylinderGeometry(10, 10, 55, 4, 4, true);
+    var bottomGeometry = new THREE.CylinderGeometry(10, 10, 55, 3, 3, true);
 
     THREE.GeometryUtils.merge(topGeometry, middleGeometry);
 

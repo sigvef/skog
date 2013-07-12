@@ -13,7 +13,7 @@ MountainScene.prototype.init = function(cb){
     /* do loady stuff here */
 
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(25, 16/9, 10, 50000);
+    this.camera = new THREE.PerspectiveCamera(45, 16/9, 10, 50000);
     this.scene.add(this.camera);
 
     this.initMountain();
@@ -112,12 +112,19 @@ MountainScene.prototype.initTrees = function() {
     var tree = new Tree();
     this.trees = [];
     Math.seedrandom("the-forest");
-    for (var i=0; i<400; i++) {
-        this.trees[i] = tree.clone();
-        this.trees[i].position.x = Math.random()*5000-2500;
-        this.trees[i].position.z = Math.random()*5000-2500;
-        this.trees[i].position.y = this.getYValue(this.trees[i].position.x, this.trees[i].position.z);
-        this.scene.add(this.trees[i]);
+    var treesPlaced = 0;
+    while (treesPlaced < 500) {
+        var pos = {
+            x: Math.random()*6000-3000,
+            z: Math.random()*6000-3000
+        };
+        pos.y = this.getYValue(pos.x, pos.z);
+        if (pos.y < 400 && pos.y > 50) {
+            this.trees[treesPlaced] = tree.clone();
+            this.trees[treesPlaced].position = pos;
+            this.scene.add(this.trees[treesPlaced]);
+            treesPlaced++;
+        }
     }
 }
 
@@ -128,10 +135,10 @@ MountainScene.prototype.reset = function(){
 }
 
 MountainScene.prototype.update = function(){
-    this.camera.position.x = 3000*Math.sin(t/18000);
-    this.camera.position.z = 3000*Math.cos(t/18000);
+    this.camera.position.x = 5000*Math.sin(t/18000);
+    this.camera.position.z = 5000*Math.cos(t/18000);
 
-    this.camera.position.y = 50*Math.sin(t/2500)+400;
+    this.camera.position.y = 500*Math.sin(t/2500)+1500;
 
     //var toOrigo = new THREE.Vector3(0,this.camera.position.y,0).sub(this.camera.position);
     //var sideways = toOrigo.cross(new THREE.Vector3(0,1,0));
