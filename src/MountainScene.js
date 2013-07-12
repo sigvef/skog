@@ -83,7 +83,7 @@ MountainScene.prototype.init = function(cb){
     var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
     skyBox.position.y = 6000;
     this.scene.add( skyBox );
-    this.scene.fog = new THREE.Fog(0x888888, 4000, 10000 );
+    this.scene.fog = new THREE.Fog(0x888888, 6000, 16000 );
     /* call cb when you are done loading! */
     cb();
 }
@@ -122,9 +122,8 @@ MountainScene.prototype.reset = function(){
 }
 
 MountainScene.prototype.update = function(){
-    this.camera.position.x = 0*3500*Math.sin(t/5000);
-    this.camera.position.z = 0*3500*Math.cos(t/5000);
-    this.camera.position.z = 4; 
+    this.camera.position.x = 3500*Math.sin(t/5000);
+    this.camera.position.z = 3500*Math.cos(t/5000);
 
     this.camera.position.y = 800*Math.sin(t/2500)+1000;
 
