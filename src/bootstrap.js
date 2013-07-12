@@ -47,14 +47,12 @@ function start(){
     dt = 0;
 
     sm = new SceneManager();
-    //sm.addScene(new ExampleScene());
     sm.addScene(new TunnelScene());
-    sm.addScene(new TunnelSceneWithNoise());
     sm.addScene(new MountainScene());
     sm.initScenes(function(){
         sm.warmup();
         music.play();
-        sm.jumpToScene('tunnelnoise');
+        sm.jumpToScene('tunnel');
         setTimeout(loop, 0);
     });
 }
