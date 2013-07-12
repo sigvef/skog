@@ -1,3 +1,4 @@
 .jsdtscope
 .project
 org.eclipse.*
+.*
