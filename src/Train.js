@@ -98,7 +98,7 @@ Train.prototype.update = function(){
 				}
 			}
 		} else if (part.type === 'wheel') {
-			object.rotation.z -= 0.06*Math.PI;
+			object.rotation.z -= 0.1*Math.PI;
 		}
 	}
 };

@@ -73,11 +73,12 @@ MountainScene.prototype.init = function(cb){
     this.train = new Train();
     this.train.startTime = this.startTime;
     this.train.init(function() {
-    	that.train.grouped.position.x = 850;
-    	that.train.grouped.position.y = 110;
-    	that.train.grouped.position.z = 2750;
-    	that.train.grouped.rotation.y = 0.4;
-    	//that.train.grouped.rotation.y = twyk('y');
+    	that.train.grouped.scale.x = 10;
+    	that.train.grouped.scale.y = 10;
+    	that.train.grouped.scale.z = 10;
+    	//that.train.grouped.position.x = 850;
+    	that.train.grouped.position.y = 1085;
+    	//that.train.grouped.position.z = 2750;
     	
     	that.scene.add(that.train.grouped);
         that.rail = new Rail();
@@ -129,10 +130,14 @@ MountainScene.prototype.reset = function(){
 MountainScene.prototype.update = function(){
 
 this.train.update();
-    this.camera.position.x = this.train.grouped.position.x + 0.03 * 3500*Math.sin(t/5000);
-    this.camera.position.y = 0.035 * 800*Math.sin(t/2500)+150;
-    this.camera.position.z = this.train.grouped.position.z + 0.03 * 3500*Math.cos(t/5000);
+    this.camera.position.x = this.train.grouped.position.x + 0.2 * 2650*Math.sin(t*0.0002);
+    this.camera.position.y = 0.04 * 800*Math.sin(t/2500)+1100;
+    this.camera.position.z = this.train.grouped.position.z + 0.2 * 2650*Math.sin(t*0.0002);
 
+	this.train.grouped.position.x = 2485*Math.sin(t*0.0002);
+	this.train.grouped.position.z = 2485*Math.cos(t*0.0002);
+	this.train.grouped.rotation.y += 0.004;
+	
     //var toOrigo = new THREE.Vector3(0,this.camera.position.y,0).sub(this.camera.position);
     //var sideways = toOrigo.cross(new THREE.Vector3(0,1,0));
     //this.camera.lookAt(sideways);
