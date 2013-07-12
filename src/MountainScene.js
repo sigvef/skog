@@ -66,8 +66,24 @@ MountainScene.prototype.init = function(cb){
     mesh.rotation.x = -1.570796;
     this.scene.add(mesh);
 
-    mesh.position.y = 20;
 
+    mesh.position.y = 50;
+    var imagePrefix = "res/miramar_";
+    var directions  = ["ft", "bk", "up", "dn", "rt", "lf"];
+    var imageSuffix = ".jpg";
+    var skyGeometry = new THREE.CubeGeometry( 16000, 16000, 16000 );   
+
+    var materialArray = [];
+    for (var i = 0; i < 6; i++)
+        materialArray.push( new THREE.MeshBasicMaterial({
+            map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
+            side: THREE.BackSide
+        }));
+    var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+    var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
+    skyBox.position.y = 6000;
+    this.scene.add( skyBox );
+    this.scene.fog = new THREE.Fog(0x888888, 4000, 10000 );
     /* call cb when you are done loading! */
     cb();
 }
@@ -102,12 +118,13 @@ MountainScene.prototype.initMountain = function() {
 MountainScene.prototype.reset = function(){
     /* reset all the variables! */
 
-    this.camera.position.y = 400;
+    this.camera.position.y = 1000;
 }
 
 MountainScene.prototype.update = function(){
-    this.camera.position.x = 3500*Math.sin(t/5000);
-    this.camera.position.z = 3500*Math.cos(t/5000);
+    this.camera.position.x = 0*3500*Math.sin(t/5000);
+    this.camera.position.z = 0*3500*Math.cos(t/5000);
+    this.camera.position.z = 4; 
 
     this.camera.position.y = 800*Math.sin(t/2500)+1000;
 
