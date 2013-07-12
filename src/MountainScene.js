@@ -88,7 +88,7 @@ MountainScene.prototype.init = function(cb){
     });
 
     this.arms = new Arms(20);
-    arms.init(function() {
+    this.arms.init(function() {
         that.arms.grouped.position = new THREE.Vector3(0, 1000, 0);
         that.scene.add(that.arms.grouped);
     });
