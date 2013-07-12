@@ -131,7 +131,6 @@ MountainScene.prototype.render = function(){
     /* do rendery stuff here */
     //renderer.render(this.scene, this.camera);
     this.composer.render();
-
 }
 
 MountainScene.prototype.setupLights = function() {

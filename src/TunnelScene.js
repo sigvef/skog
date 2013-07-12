@@ -195,7 +195,7 @@ TunnelScene.prototype.update = function(){
 TunnelScene.prototype.render = function(){
     this.camera.fov = this.fov;
     this.camera.updateProjectionMatrix();
-    renderer.render(this.scene, this.camera);
-    //this.composer.render(1);
+    //renderer.render(this.scene, this.camera);
+    this.composer.render(1);
 }
 
