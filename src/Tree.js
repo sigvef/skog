@@ -12,9 +12,16 @@ function Tree() {
 
     THREE.GeometryUtils.merge(topGeometry, middleGeometry);
 
-    var greenTexture = THREE.ImageUtils.loadTexture('res/grasstile_c.jpg');
+    var repeat = 30;
+    var grassMap = THREE.ImageUtils.loadTexture('res/grasstile_c.jpg');
 
-    this.topPart = new THREE.Mesh(topGeometry, new THREE.MeshLambertMaterial({map: greenTexture}));
+    grassMap.wrapS = grassMap.wrapT = THREE.RepeatWrapping;
+    grassMap.repeat.set(repeat,repeat);
+    grassMap.anisotropy = 16;
+
+    this.topPart = new THREE.Mesh(topGeometry, new THREE.MeshLambertMaterial({
+        map: grassMap
+    }));
     this.bottomPart = new THREE.Mesh(bottomGeometry, new THREE.MeshLambertMaterial({color: 0x884400}));
     
     this.tree = new THREE.Object3D();

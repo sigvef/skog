@@ -116,7 +116,7 @@ MountainScene.prototype.initTrees = function() {
     while (treesPlaced < 500) {
         var pos = {
             x: Math.random()*6000-3000,
-            y: Math.random()*1000+3000,
+            y: Math.random()*1000+9000,
             z: Math.random()*6000-3000
         };
         yPos = this.getYValue(pos.x, pos.z);
@@ -126,6 +126,7 @@ MountainScene.prototype.initTrees = function() {
             this.trees[treesPlaced].position = pos;
             this.trees[treesPlaced].startYPos = this.trees[treesPlaced].position.y;
             this.trees[treesPlaced].finalYPos = yPos;
+            this.trees[treesPlaced].delay = Math.random()*600+600;
 
             this.scene.add(this.trees[treesPlaced]);
             treesPlaced++;
@@ -140,14 +141,14 @@ MountainScene.prototype.reset = function(){
 }
 
 MountainScene.prototype.update = function(){
-    if (t < this.startTime + 5000) {
-        var camTime = (t - this.startTime)/5000;
+    if (t < this.startTime + 4300) {
+        var camTime = (t - this.startTime)/4300;
         this.camera.position.x = smoothstep(13000, 2500, camTime);
         this.camera.position.z = smoothstep(13000, 2500, camTime);
-    } else {
+    } /*else {
         this.camera.position.x = 4300*Math.sin(t/3000);
         this.camera.position.z = 4300*Math.cos(t/3000);
-    }
+    }*/
 
     this.camera.lookAt(new THREE.Vector3(0,500,0));
 
@@ -155,10 +156,17 @@ MountainScene.prototype.update = function(){
     this.uniforms.time2.value = t/1500;
     this.uniforms.eyePos.value = this.camera.position;
 
-    if (t < this.startTime + 3000) {
-        var treeAnimationTime = (t - this.startTime)/3000;
+    if (t < this.startTime + 4300) {
         for (var i=0; i < this.trees.length; i++) {
-            this.trees[i].position.y = smoothstep(this.trees[i].startYPos, this.trees[i].finalYPos, treeAnimationTime);
+            if (t > this.startTime + this.trees[i].delay) {
+                var treeAnimationTime = (t - this.startTime - this.trees[i].delay)/(4300-this.trees[i].delay);
+                this.trees[i].position.y = smoothstep(10000, this.trees[i].finalYPos, treeAnimationTime);
+            }
+        }
+    } else {
+        for (var i=0; i < this.trees.length; i++) {
+            var moveFactor = (i%2) ? 10 : -10;
+            this.trees[i].position.y = moveFactor * Math.sin( (t-this.startTime-4300) / 250*Math.PI ) + this.trees[i].finalYPos;
         }
     }
 }
