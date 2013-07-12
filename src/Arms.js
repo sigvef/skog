@@ -10,16 +10,15 @@ Arms.prototype.init = function(cb){
     var resourceFolderPath = 'res/';
     var defaultTexturePath = resourceFolderPath + 'tileable_human_skin_texture_zoom.jpg';
 
-
     // Begin hasGoneTooFar loader
     this.title = new Image();
     this.title.src = 'res/It has gone too far.png';
-    this.title.style.opacity = 0;
+    this.title.style.opacity = 1;
     this.title.style.position = 'absolute';
     this.title.style.zIndex = 99999999999;
     
-    var w = 2000/16*GU*0.1;
-    var h = 700/16*GU*0.1;
+    var w = 2048/16*GU*0.1;
+    var h = 2048/16*GU*0.1;
     this.title.style.width =  w + 'px';
     this.title.style.height = h + 'px';
     this.title.style.left = renderer.domElement.offsetLeft + 8*GU - w/2 + 'px';
