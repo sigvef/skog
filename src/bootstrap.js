@@ -50,10 +50,11 @@ function start(){
     sm.addScene(new ExampleScene());
     sm.addScene(new MountainScene());
     sm.addScene(new TunnelScene());
+    sm.addScene(new TunnelSceneWithNoise());
     sm.initScenes(function(){
         sm.warmup();
         music.play();
-        sm.jumpToScene('example');
+        sm.jumpToScene('tunnelnoise');
         setTimeout(loop, 0);
     });
 }
