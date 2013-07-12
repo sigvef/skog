@@ -98,14 +98,12 @@ MountainScene.prototype.initWater = function() {
     this.scene.add(mesh);
 
 
-    /* call cb when you are done loading! */
     this.composer = new THREE.EffectComposer(renderer, RENDERTARGET);
     this.composer.addPass( new THREE.RenderPass(this.scene, this.camera));
     var effect = new THREE.ShaderPass(AsciiShader);
     effect.renderToScreen = true;
     this.composer.addPass(effect);
     mesh.position.y = 50;
-    cb();
 }
 
 MountainScene.prototype.initMountain = function() {
