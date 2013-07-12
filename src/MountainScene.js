@@ -23,23 +23,8 @@ MountainScene.prototype.init = function(cb){
     this.initTrees();
 
     this.setupLights();
-
-    var imagePrefix = "res/miramar_";
-    var directions  = ["ft", "bk", "up", "dn", "rt", "lf"];
-    var imageSuffix = ".jpg";
-    var skyGeometry = new THREE.CubeGeometry( 26000, 26000, 26000 );   
-
-    var materialArray = [];
-    for (var i = 0; i < 6; i++)
-        materialArray.push( new THREE.MeshBasicMaterial({
-            map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
-            side: THREE.BackSide
-        }));
-    var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
-    var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
-    skyBox.position.y = 6000;
-    this.scene.add( skyBox );
-    this.scene.fog = new THREE.Fog(0x888888, 6000, 26000 );
+    
+    this.initSkyBox();
 
     /* call cb when you are done loading! */
     this.initTrainAndRails(function() {
@@ -348,4 +333,20 @@ MountainScene.prototype.getYValue = function(x,z) {
     var height = this.mapData[ dataIndex ] * 10; // geometry is scaled by this value 
 
     return height;
+};
+
+MountainScene.prototype.initSkyBox = function() {
+    var imagePath = "res/red_floral.jpg";
+    var skyGeometry = new THREE.CubeGeometry( 26000, 26000, 26000 );   
+    var materialArray = [];
+    for (var i = 0; i < 6; i++) {
+    	materialArray.push( new THREE.MeshBasicMaterial({
+    		map: THREE.ImageUtils.loadTexture(imagePath),
+    		side: THREE.BackSide
+    	}));
+    }
+    var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
+    var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
+    skyBox.position.y = 12000;
+    this.scene.add(skyBox);
 };
