@@ -12,15 +12,19 @@ Arms.prototype.init = function(cb){
 
 
     // Begin hasGoneTooFar loader
-    var scale = 400;
-    this.hasScienceGoneTooFar = new THREE.Mesh(new THREE.CubeGeometry(1024/scale,0.0010,1024/scale), new THREE.MeshLambertMaterial({
-        map: THREE.ImageUtils.loadTexture('res/It has gone too far.png'),
-        color: 0xffffff,
-        transparent: true 
-    }));
-    //this.hasScienceGoneTooFar.scale.set(10, 10, 10);
-    this.grouped.add(this.hasScienceGoneTooFar);
-    hasScienceGoneTooFar = this.hasScienceGoneTooFar;
+    this.title = new Image();
+    this.title.src = 'res/It has gone too far.png';
+    this.title.style.opacity = 0;
+    this.title.style.position = 'absolute';
+    this.title.style.zIndex = 99999999999;
+    
+    var w = 2000/16*GU*0.1;
+    var h = 700/16*GU*0.1;
+    this.title.style.width =  w + 'px';
+    this.title.style.height = h + 'px';
+    this.title.style.left = renderer.domElement.offsetLeft + 8*GU - w/2 + 'px';
+    this.title.style.top = renderer.domElement.offsetTop + 4.5*GU - h/2 + 'px';
+    document.body.appendChild(this.title);
 
     // Texture loader
     var texture = new THREE.Texture();
