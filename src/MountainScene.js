@@ -24,6 +24,23 @@ MountainScene.prototype.init = function(cb){
 
     this.setupLights();
 
+    var imagePrefix = "res/miramar_";
+    var directions  = ["ft", "bk", "up", "dn", "rt", "lf"];
+    var imageSuffix = ".jpg";
+    var skyGeometry = new THREE.CubeGeometry( 26000, 26000, 26000 );   
+
+    var materialArray = [];
+    for (var i = 0; i < 6; i++)
+        materialArray.push( new THREE.MeshBasicMaterial({
+            map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
+            side: THREE.BackSide
+        }));
+    var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+    var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
+    skyBox.position.y = 6000;
+    this.scene.add( skyBox );
+    this.scene.fog = new THREE.Fog(0x888888, 6000, 26000 );
+
     /* call cb when you are done loading! */
     cb();
 }
@@ -42,7 +59,7 @@ MountainScene.prototype.initWater = function() {
         //envMap: {type: "t", value: 1, texture: textureCube},
         texture2: {
             type: "t",
-            value: THREE.ImageUtils.loadTexture("res/water_blue.jpg")
+            value: THREE.ImageUtils.loadTexture("res/water.jpg")
         },
         eyePos: {
             type: "v3",
@@ -77,12 +94,11 @@ MountainScene.prototype.initWater = function() {
 
     var geometry = new THREE.PlaneGeometry(26000, 26000, 128, 128);
     var mesh = new THREE.Mesh(geometry, xm);
-    mesh.doubleSided = true;
     mesh.rotation.x = -1.570796;
     this.scene.add(mesh);
 
-    mesh.position.y = 20;
 
+    mesh.position.y = 50;
 }
 
 MountainScene.prototype.initMountain = function() {
@@ -120,7 +136,7 @@ MountainScene.prototype.initTrees = function() {
             z: Math.random()*6000-3000
         };
         yPos = this.getYValue(pos.x, pos.z);
-        if (yPos < 400 && yPos > 50) {
+        if (yPos < 400 && yPos > 60) {
             this.trees[treesPlaced] = tree.clone();
 
             this.trees[treesPlaced].position = pos;
@@ -137,7 +153,7 @@ MountainScene.prototype.initTrees = function() {
 MountainScene.prototype.reset = function(){
     /* reset all the variables! */
 
-    this.camera.position.y = 40;
+    this.camera.position.y = 70;
 }
 
 MountainScene.prototype.update = function(){

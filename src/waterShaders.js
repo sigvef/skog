@@ -6,7 +6,7 @@ function createWaterShaderMaterial(uniforms) {
     console.log(uniforms);
 
     var vertexShaders = [
-        "const float pi = 3.14159;",
+        "const float pi = 3.141592;",
         "const int numWaves = 8;",
         "uniform float waterHeight;",
         "uniform float time;",
@@ -59,7 +59,7 @@ function createWaterShaderMaterial(uniforms) {
         "}",
 
         "void main() {",
-            "vUv = vec2( 1.0, 1.0 ) * uv;",
+            "vUv = vec2( 2.0, 2.0 ) * uv;",
             "vec4 pos = vec4(position, 1.0);",
             "pos.z = waterHeight * waveHeight(pos.x, pos.y);",
             "vPosition = pos.xyz / pos.w;",
