@@ -3,6 +3,10 @@ function MountainScene(){
     this.startTime = 1;
     /* short name of this scene, must be defined */
     this.NAME = 'mountain';
+
+    this.segments = 192;
+    this.halfSegments = 96;
+    this.size = 8000;
 }
 
 MountainScene.prototype.init = function(cb){
@@ -15,6 +19,8 @@ MountainScene.prototype.init = function(cb){
     this.initMountain();
 
     this.initWater();
+
+    this.initTrees();
 
     this.setupLights();
 
@@ -80,14 +86,10 @@ MountainScene.prototype.initWater = function() {
 }
 
 MountainScene.prototype.initMountain = function() {
-    var worldWidth = 192,
-        worldDepth = 192,
-        worldHalfWidth = worldWidth / 2,
-        worldHalfDepth = worldDepth / 2;
 
-    this.mapData = this.generateHeight(worldWidth, worldDepth);
+    this.mapData = this.generateHeight(this.segments, this.segments);
 
-    var geometry = new THREE.PlaneGeometry(8000, 8000, worldWidth - 1, worldDepth - 1);
+    var geometry = new THREE.PlaneGeometry(this.size, this.size, this.segments - 1, this.segments - 1);
     geometry.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
 
     for (var i=0, l=geometry.vertices.length; i<l; i++) {
@@ -95,7 +97,7 @@ MountainScene.prototype.initMountain = function() {
     }
 
     texture = new THREE.Texture(
-        this.generateTexture(this.mapData, worldWidth, worldDepth),
+        this.generateTexture(this.mapData, this.segments, this.segments),
         new THREE.UVMapping(),
         THREE.ClampToEdgeWrapping,
         THREE.ClampToEdgeWrapping
@@ -106,6 +108,19 @@ MountainScene.prototype.initMountain = function() {
     this.scene.add(this.mountainMesh);
 }
 
+MountainScene.prototype.initTrees = function() {
+    var tree = new Tree();
+    this.trees = [];
+    Math.seedrandom("the-forest");
+    for (var i=0; i<50; i++) {
+        this.trees[i] = tree.clone();
+        this.trees[i].position.x = Math.random()*4000-2000;
+        this.trees[i].position.z = Math.random()*4000-2000;
+        this.trees[i].position.y = this.getYValue(this.trees[i].position.x, this.trees[i].position.z);
+        this.scene.add(this.trees[i]);
+    }
+}
+
 MountainScene.prototype.reset = function(){
     /* reset all the variables! */
 
@@ -113,10 +128,10 @@ MountainScene.prototype.reset = function(){
 }
 
 MountainScene.prototype.update = function(){
-    this.camera.position.x = 5500*Math.sin(t/5000);
-    this.camera.position.z = 5500*Math.cos(t/5000);
+    this.camera.position.x = 4500*Math.sin(t/5000);
+    this.camera.position.z = 4500*Math.cos(t/5000);
 
-    this.camera.position.y = 1500*Math.sin(t/2500)+1800;
+    this.camera.position.y = 500*Math.sin(t/2500)+800;
 
     //var toOrigo = new THREE.Vector3(0,this.camera.position.y,0).sub(this.camera.position);
     //var sideways = toOrigo.cross(new THREE.Vector3(0,1,0));
@@ -231,4 +246,22 @@ MountainScene.prototype.generateTexture = function(data, width, height) {
     context.putImageData(image, 0, 0);
 
     return canvasScaled;
+}
+MountainScene.prototype.getYValue = function(x,z) {
+    if ( z > this.size/2
+        || z < -this.size/2
+        || x > this.size/2
+        || x < -this.size/2) {
+        return false;
+    }
+
+    var factor = this.size / this.segments;
+
+    var scaled_x = ( x / factor ) | 0;
+    var scaled_z = ( z / factor ) | 0;
+
+    var dataIndex = ( this.segments/2 + scaled_x ) + this.segments * ( this.segments/2 + scaled_z);
+    var height = this.mapData[ dataIndex ] * 10; // geometry is scaled by this value 
+
+    return height;
 }
