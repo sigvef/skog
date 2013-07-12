@@ -53,7 +53,7 @@ function start(){
     sm.initScenes(function(){
         sm.warmup();
         music.play();
-        sm.jumpToScene('mountain');
+        sm.jumpToScene('tunnel');
         setTimeout(loop, 0);
     });
 }
