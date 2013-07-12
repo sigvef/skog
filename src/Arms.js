@@ -20,7 +20,7 @@ ArmsScene.prototype.init = function(cb){
 
     // Begin Arms
     var resourceFolderPath = 'res/';
-    var defaultTexturePath = resourceFolderPath + 'arm low poly.png';
+    var defaultTexturePath = resourceFolderPath + 'tileable_human_skin_texture_zoom.jpg';
 
     // Texture loader
     var texture = new THREE.Texture();
@@ -93,10 +93,8 @@ ArmsScene.prototype.reset = function(){
     this.camera.position.z = 100;
 }
 
-ArmsScene.prototype.update = function(){
-    //this.camera.lookAt(this.leftArm.position);
-    //console.log(this.leftArm);
-    /* do updatey stuff here */
+ArmsScene.prototype.update = function(position){
+    //this.grouped.position = position.clone();
 }
 
 ArmsScene.prototype.render = function(){
