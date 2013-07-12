@@ -274,13 +274,14 @@ MountainScene.prototype.updateCamera = function() {
         );
         this.camera.fov = smoothstep(
             45,
-            25,
+            15,
             panTime
         );
         this.camera.updateProjectionMatrix();
     } else if (t < this.startTime + 6000) {
         // Blur effects
     } else if (t < this.startTime + 30000) {
+        this.camera.fov = 45;
         this.camera.position = new THREE.Vector3(400, 880, 3200);
         this.camera.lookAt(this.train.grouped.position);
     }
