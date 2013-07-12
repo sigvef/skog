@@ -2,7 +2,7 @@ function TunnelScene(){
     /* starting time of this scene in milliseconds, must be defined */
     this.startTime = 0;
     /* short name of this scene, must be defined */
-    this.NAME = 'tunnel';
+    this.NAME = 'tunnelnoise';
 }
 
 TunnelScene.prototype.init = function(cb){
@@ -93,6 +93,15 @@ TunnelScene.prototype.init = function(cb){
     );
 
     this.parent.add(tubeMesh);
+
+    this.composer = new THREE.EffectComposer(renderer, RENDERTARGET);
+    this.composer.addPass(new THREE.RenderPass(this.scene, this.camera));
+
+    this.noiseEffect = new THREE.ShaderPass(THREE.NoiseShader);
+    this.noiseEffect.renderToScreen = true;
+
+    this.composer.addPass(this.noiseEffect);
+
     this.reset();
     cb();
 }
@@ -180,10 +189,19 @@ TunnelScene.prototype.update = function(){
         this.fov *= 1.009;
     }
 
+    this.noiseEffect.uniforms.width.value = (16*GU)/4;
+    this.noiseEffect.uniforms.time.value = t/1000 % 1000;
+    this.noiseEffect.uniforms.height.value = (9*GU)/4;
+    //this is how much noise there should be
+    this.noiseEffect.uniforms.amount.value = Math.max(0.1, Math.min(0.4, Math.sin(t/1000)-0.4));
+
 }
 
 TunnelScene.prototype.render = function(){
     this.camera.fov = this.fov;
     this.camera.updateProjectionMatrix();
     renderer.render(this.scene, this.camera);
+    
+    this.composer.render();
 }
+
