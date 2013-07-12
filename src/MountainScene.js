@@ -70,14 +70,30 @@ MountainScene.prototype.init = function(cb){
 
     mesh.position.y = 50;
     
+    this.rails = [];
     var that = this;
     this.train = new Train();
     this.train.init(function() {
-    	that.train.grouped.position.y = 200;
+    	that.train.grouped.position.x = 850;
+    	that.train.grouped.position.y = 150;
+    	that.train.grouped.position.z = 2750;
+    	
     	that.scene.add(that.train.grouped);
-    	/* call cb when you are done loading! */
-    	cb();
+        that.rail = new Rail();
+        that.rail.init(function() {
+        	for (var i = 0; i < 63; i++) {
+        		that.rails[i] = that.rail.object.clone();
+        		that.rails[i].position.y = 1000;
+        		that.rails[i].position.x = 2500*Math.sin(i*0.1);
+        		that.rails[i].position.z = 2500*Math.cos(i*0.1);
+        		that.rails[i].rotation.y = 0.1*i + 1.58;
+        	    that.scene.add(that.rails[i]);
+        	}
+        	cb();
+        });
     });
+    
+
 
 };
 
@@ -109,22 +125,18 @@ MountainScene.prototype.initMountain = function() {
 };
 
 MountainScene.prototype.reset = function(){
-    /* reset all the variables! */
-
-    this.camera.position.y = 4000;
+	this.camera.position.y = 150;
 };
 
 MountainScene.prototype.update = function(){
 	this.train.update();
-    this.camera.position.x = 4500*Math.sin(t/5000);
-    this.camera.position.z = 4500*Math.cos(t/5000);
-    this.camera.position = this.train.grouped.position;
+    this.camera.position.x = this.train.grouped.position.x + 0.03 * 3500*Math.sin(t/5000);
+    this.camera.position.z = this.train.grouped.position.z + 0.03 * 3500*Math.cos(t/5000);
 
     var toOrigo = new THREE.Vector3(0,this.camera.position.y,0).sub(this.camera.position);
     var sideways = toOrigo.cross(new THREE.Vector3(0,1,0));
 
-    this.camera.lookAt(sideways);
-    
+    this.camera.lookAt(this.train.grouped.position);
 
     this.uniforms.time.value = t/1000;
     this.uniforms.time2.value = t/1000;
@@ -148,7 +160,7 @@ MountainScene.prototype.generateHeight = function(width, height) {
 
     var size = width * height, data = new Float32Array(size);
 
-    Math.seedrandom(".thegreatmountain");
+    Math.seedrandom("0");
     var perlin = new ImprovedNoise(), quality = 1, z = Math.random() * 100;
 
     for (var i=0; i < size; i++) {
