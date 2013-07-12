@@ -141,7 +141,7 @@ MountainScene.prototype.initMountain = function() {
         var imageData = ctx.getImageData(0,0,s,s);
         for(var i=0; i<m.length;i++){
             var height = m[i];
-            if(height > 0) console.log(height);
+            //if(height > 0) console.log(height);
             imageData.data[i*4 + 0] = height;
             imageData.data[i*4 + 1] = height;
             imageData.data[i*4 + 2] = height;
