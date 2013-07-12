@@ -136,14 +136,18 @@ MountainScene.prototype.initTrees = function() {
 MountainScene.prototype.reset = function(){
     /* reset all the variables! */
 
-    this.camera.position.y = 400;
+    this.camera.position.y = 40;
 }
 
 MountainScene.prototype.update = function(){
-    this.camera.position.x = 5000*Math.sin(t/18000);
-    this.camera.position.z = 5000*Math.cos(t/18000);
-
-    this.camera.position.y = 500*Math.sin(t/2500)+1500;
+    if (t < this.startTime + 5000) {
+        var camTime = (t - this.startTime)/5000;
+        this.camera.position.x = smoothstep(13000, 2500, camTime);
+        this.camera.position.z = smoothstep(13000, 2500, camTime);
+    } else {
+        this.camera.position.x = 4300*Math.sin(t/3000);
+        this.camera.position.z = 4300*Math.cos(t/3000);
+    }
 
     this.camera.lookAt(new THREE.Vector3(0,500,0));
 
