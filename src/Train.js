@@ -48,6 +48,12 @@ Train.prototype.init = function(cb){
 						pivot.add(object);
 						that.objects[name] = pivot;
 					}
+					if (typeof trainParts[i].initPos !== 'undefined') {
+						console.log(trainParts[i].initPos);
+						that.objects[name].position.x += trainParts[i].initPos.x;
+						that.objects[name].position.y += trainParts[i].initPos.y;
+						that.objects[name].position.z += trainParts[i].initPos.z;
+					}
 					that.grouped.add(that.objects[name]);
 				}
 				if (!trainParts[i].loaded) {
