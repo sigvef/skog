@@ -10,6 +10,18 @@ Arms.prototype.init = function(cb){
     var resourceFolderPath = 'res/';
     var defaultTexturePath = resourceFolderPath + 'tileable_human_skin_texture_zoom.jpg';
 
+
+    // Begin hasGoneTooFar loader
+    var scale = 400;
+    this.hasScienceGoneTooFar = new THREE.Mesh(new THREE.CubeGeometry(1024/scale,0.0010,1024/scale), new THREE.MeshLambertMaterial({
+        map: THREE.ImageUtils.loadTexture('res/It has gone too far.png'),
+        color: 0xffffff,
+        transparent: true 
+    }));
+    //this.hasScienceGoneTooFar.scale.set(10, 10, 10);
+    this.grouped.add(this.hasScienceGoneTooFar);
+    hasScienceGoneTooFar = this.hasScienceGoneTooFar;
+
     // Texture loader
     var texture = new THREE.Texture();
     var loader = new THREE.ImageLoader();
@@ -62,7 +74,17 @@ Arms.prototype.init = function(cb){
     objLoader.load( objPath );
 }
 
-Arms.prototype.update = function(yRotate){
+Arms.prototype.update = function(trainY, yRotate){
+    this.grouped.position.y = trainY - 130;
+
+    // Update the label
+    //this.hasScienceGoneTooFar.position.set(new THREE.Vector3(2700*Math.sin(t*0.0002), trainY - 130, 2700*Math.cos(t*0.0002)));
+
+    // Update the armGroup position
+    this.grouped.position.x = 2700*Math.sin(t*0.0002);
+    this.grouped.position.z = 2700*Math.cos(t*0.0002);
+
+    // Rotate the arms
     this.leftArm.rotation.y = yRotate + Math.PI/8 * Math.sin(t/50);
     this.rightArm.rotation.y = yRotate + Math.PI - Math.PI/8 * Math.sin(t/50);
 }
