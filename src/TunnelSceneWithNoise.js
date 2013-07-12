@@ -1,16 +1,13 @@
-function TunnelScene(){
+function TunnelSceneWithNoise(){
     /* starting time of this scene in milliseconds, must be defined */
     this.startTime = 0;
     /* short name of this scene, must be defined */
-    this.NAME = 'tunnel';
+    this.NAME = 'tunnelnoise';
 }
 
-TunnelScene.prototype.init = function(cb){
+TunnelSceneWithNoise.prototype.init = function(cb){
     this.scene = new THREE.Scene();
     this.fov = 0; //also set in reset
-
-
-
     var that = this;
     var scale = 400;
     this.ninjadev = new THREE.Mesh(new THREE.CubeGeometry(1607/scale,0.0001,267/scale), new THREE.MeshLambertMaterial({
@@ -59,10 +56,9 @@ TunnelScene.prototype.init = function(cb){
     this.scene.add(this.light);
     this.scene.add(this.directionalLight);
     this.targetRotation = 0;
-
-
     var cos = Math.cos;
     var sin = Math.sin;
+
     var Knot = THREE.Curve.create(
         function(s) {
             this.scale = (s === undefined) ? 40 : s;
@@ -97,16 +93,20 @@ TunnelScene.prototype.init = function(cb){
     );
 
     this.parent.add(tubeMesh);
-    this.reset();
+
     this.composer = new THREE.EffectComposer(renderer, RENDERTARGET);
-    this.composer.addPass( new THREE.RenderPass(this.scene, this.camera));
-    var effect = new THREE.ShaderPass(AsciiShader);
-    effect.renderToScreen = true;
-    this.composer.addPass(effect);
+    this.composer.addPass(new THREE.RenderPass(this.scene, this.camera));
+
+    this.noiseEffect = new THREE.ShaderPass(THREE.NoiseShader);
+    this.noiseEffect.renderToScreen = true;
+
+    this.composer.addPass(this.noiseEffect);
+
+    this.reset();
     cb();
 }
 
-TunnelScene.prototype.reset = function(){
+TunnelSceneWithNoise.prototype.reset = function(){
     /* reset all the variables! */
     this.title.style.opacity = 0;
     this.firstSet = true;
@@ -125,12 +125,11 @@ TunnelScene.prototype.reset = function(){
     */
 }
 
-TunnelScene.prototype.update = function(){
+TunnelSceneWithNoise.prototype.update = function(){
     var length = 500;
     var lightoffset = 190;
     //this.directionalLight.intensity = 0.5 + 0.5 * (length-((lightoffset + t) % length)) / length;
     this.uniforms.fogDensity.value = 0.8 + 0.02*(1 + Math.sin((length-((lightoffset + t) % length)) / length * 2 * Math.PI));
-
 
     /*
     */
@@ -190,10 +189,19 @@ TunnelScene.prototype.update = function(){
         this.fov *= 1.009;
     }
 
+    this.noiseEffect.uniforms.width.value = (16*GU)/4;
+    this.noiseEffect.uniforms.time.value = t/1000 % 1000;
+    this.noiseEffect.uniforms.height.value = (9*GU)/4;
+    //this is how much noise there should be
+    this.noiseEffect.uniforms.amount.value = Math.max(0.1, Math.min(0.4, Math.sin(t/1000)-0.4));
+
 }
 
-TunnelScene.prototype.render = function(){
+TunnelSceneWithNoise.prototype.render = function(){
     this.camera.fov = this.fov;
     this.camera.updateProjectionMatrix();
-    renderer.render(this.scene, this.camera)
+    renderer.render(this.scene, this.camera);
+    
+    this.composer.render();
 }
+

@@ -23,27 +23,35 @@ MountainScene.prototype.init = function(cb){
     this.initTrees();
 
     this.setupLights();
-
-    var imagePrefix = "res/miramar_";
-    var directions  = ["ft", "bk", "up", "dn", "rt", "lf"];
-    var imageSuffix = ".jpg";
-    var skyGeometry = new THREE.CubeGeometry( 26000, 26000, 26000 );   
-
-    var materialArray = [];
-    for (var i = 0; i < 6; i++)
-        materialArray.push( new THREE.MeshBasicMaterial({
-            map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
-            side: THREE.BackSide
-        }));
-    var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
-    var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
-    skyBox.position.y = 6000;
-    this.scene.add( skyBox );
-    this.scene.fog = new THREE.Fog(0x888888, 6000, 26000 );
+    
+    this.initSkyBox();
 
     /* call cb when you are done loading! */
-    cb();
-}
+    this.initTrainAndRails(function() {
+    	cb();
+    });
+};
+
+MountainScene.prototype.initTrainAndRails = function(cb) {
+    this.rails = [];
+    var that = this;
+    this.train = new Train();
+    this.train.startTime = this.startTime + 5000;
+    this.train.init(function() {
+    	that.train.grouped.scale.x = 10;
+    	that.train.grouped.scale.y = 10;
+    	that.train.grouped.scale.z = 10;
+    	that.train.grouped.position.y = 885;
+    	that.scene.add(that.train.grouped);
+    	
+        that.rails = new Rails();
+        that.rails.startTime = that.startTime + 10000;
+        that.rails.init(function() {
+        	that.scene.add(that.rails.grouped);
+        	cb();
+        });
+    });
+};
 
 MountainScene.prototype.initWater = function() {
 
@@ -97,14 +105,15 @@ MountainScene.prototype.initWater = function() {
     mesh.rotation.x = -1.570796;
     this.scene.add(mesh);
 
-
     this.composer = new THREE.EffectComposer(renderer, RENDERTARGET);
     this.composer.addPass( new THREE.RenderPass(this.scene, this.camera));
     var effect = new THREE.ShaderPass(AsciiShader);
     effect.renderToScreen = true;
     this.composer.addPass(effect);
     mesh.position.y = 50;
-}
+    
+
+};
 
 MountainScene.prototype.initMountain = function() {
 
@@ -127,7 +136,7 @@ MountainScene.prototype.initMountain = function() {
 
     this.mountainMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map: texture}));
     this.scene.add(this.mountainMesh);
-}
+};
 
 MountainScene.prototype.initTrees = function() {
     var tree = new Tree();
@@ -153,15 +162,27 @@ MountainScene.prototype.initTrees = function() {
             treesPlaced++;
         }
     }
-}
+};
 
 MountainScene.prototype.reset = function(){
-    /* reset all the variables! */
-
-    this.camera.position.y = 70;
-}
+    this.camera.position.y = 150;
+};
 
 MountainScene.prototype.update = function(){
+	this.train.update();
+	this.rails.update();
+    this.camera.position.x = this.train.grouped.position.x + 0.6 * 2650*Math.sin(t*0.0002 + 2);
+    this.camera.position.y = 0.09 * 800*Math.sin(t/2500)+1100;
+    this.camera.position.z = this.train.grouped.position.z + 0.6 * 2650*Math.sin(t*0.0002 + 2);
+
+	this.train.grouped.position.x = 2485*Math.sin(t*0.0002);
+	this.train.grouped.position.z = 2485*Math.cos(t*0.0002);
+	this.train.grouped.rotation.y += 0.004;
+	
+    //var toOrigo = new THREE.Vector3(0,this.camera.position.y,0).sub(this.camera.position);
+    //var sideways = toOrigo.cross(new THREE.Vector3(0,1,0));
+    //this.camera.lookAt(sideways);
+
     if (t < this.startTime + 4300) {
         var camTime = (t - this.startTime)/4300;
         this.camera.position.x = smoothstep(13000, 2500, camTime);
@@ -171,7 +192,11 @@ MountainScene.prototype.update = function(){
         this.camera.position.z = 4300*Math.cos(t/3000);
     }*/
 
-    this.camera.lookAt(new THREE.Vector3(0,500,0));
+
+    //this.camera.lookAt(this.train.grouped.position);
+    //this.camera.lookAt(this.rails.rails[30].position);
+    this.camera.lookAt(new THREE.Vector3(0,800,0));
+
 
     this.uniforms.time.value = t/1500;
     this.uniforms.time2.value = t/1500;
@@ -190,7 +215,7 @@ MountainScene.prototype.update = function(){
             this.trees[i].position.y = moveFactor * Math.sin( (t-this.startTime-4300) / 250*Math.PI ) + this.trees[i].finalYPos;
         }
     }
-}
+};
 
 MountainScene.prototype.render = function(){
     /* do rendery stuff here */
@@ -203,7 +228,7 @@ MountainScene.prototype.setupLights = function() {
     light.position.set(50, 200, 100);
     light.position.multiplyScalar(1.3);
     this.scene.add(light);
-}
+};
 
 MountainScene.prototype.generateHeight = function(width, height) {
 
@@ -213,7 +238,7 @@ MountainScene.prototype.generateHeight = function(width, height) {
     var perlin = new ImprovedNoise(), quality = 1, z = Math.random() * 100;
 
     for (var i=0; i < size; i++) {
-        data[i] = 0
+        data[i] = 0;
     }
 
     for (var j=0; j<4; j++) {
@@ -227,7 +252,7 @@ MountainScene.prototype.generateHeight = function(width, height) {
     }
 
     return data;
-}
+};
 
 MountainScene.prototype.generateTexture = function(data, width, height) {
 
@@ -294,7 +319,8 @@ MountainScene.prototype.generateTexture = function(data, width, height) {
     context.putImageData(image, 0, 0);
 
     return canvasScaled;
-}
+};
+
 MountainScene.prototype.getYValue = function(x,z) {
     if ( z > this.size/2
         || z < -this.size/2
@@ -312,4 +338,20 @@ MountainScene.prototype.getYValue = function(x,z) {
     var height = this.mapData[ dataIndex ] * 10; // geometry is scaled by this value 
 
     return height;
-}
+};
+
+MountainScene.prototype.initSkyBox = function() {
+    var imagePath = "res/red_floral.jpg";
+    var skyGeometry = new THREE.CubeGeometry( 26000, 26000, 26000 );   
+    var materialArray = [];
+    for (var i = 0; i < 6; i++) {
+    	materialArray.push( new THREE.MeshBasicMaterial({
+    		map: THREE.ImageUtils.loadTexture(imagePath),
+    		side: THREE.BackSide
+    	}));
+    }
+    var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
+    var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
+    skyBox.position.y = 12000;
+    this.scene.add(skyBox);
+};
