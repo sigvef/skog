@@ -83,7 +83,7 @@ MountainScene.prototype.init = function(cb){
     var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
     skyBox.position.y = 6000;
     this.scene.add( skyBox );
-    this.scene.fog = new THREE.Fog( new THREE.Color(0x666666), 0.00025 );
+    this.scene.fog = new THREE.Fog(0x888888, 4000, 10000 );
     /* call cb when you are done loading! */
     cb();
 }
