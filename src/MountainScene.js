@@ -70,6 +70,22 @@ MountainScene.prototype.init = function(cb){
 
     mesh.position.y = 50;
 
+    var imagePrefix = "res/miramar_";
+    var directions  = ["rt", "lf", "up", "dn", "ft", "bk"];
+    var imageSuffix = ".jpg";
+    var skyGeometry = new THREE.CubeGeometry( 16000, 16000, 16000 );   
+
+    var materialArray = [];
+    for (var i = 0; i < 6; i++)
+        materialArray.push( new THREE.MeshBasicMaterial({
+            map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
+            side: THREE.BackSide
+        }));
+    var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+    var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
+    skyBox.position.y = 6000;
+    this.scene.add( skyBox );
+
     /* call cb when you are done loading! */
     cb();
 }
