@@ -77,18 +77,12 @@ MountainScene.prototype.init = function(cb){
     	that.train.grouped.scale.y = 10;
     	that.train.grouped.scale.z = 10;
     	that.train.grouped.position.y = 885;
-    	
     	that.scene.add(that.train.grouped);
-        that.rail = new Rail();
-        that.rail.init(function() {
-        	for (var i = 0; i < 63; i++) {
-        		that.rails[i] = that.rail.object.clone();
-        		that.rails[i].position.y = 800;
-        		that.rails[i].position.x = 2700*Math.sin(i*0.1);
-        		that.rails[i].position.z = 2700*Math.cos(i*0.1);
-        		that.rails[i].rotation.y = 0.1*i + Math.PI * 0.5;
-        	    that.scene.add(that.rails[i]);
-        	}
+    	
+        that.rails = new Rails();
+        that.rails.startTime = that.startTime;
+        that.rails.init(function() {
+        	that.scene.add(that.rails.grouped);
         	cb();
         });
     });
@@ -126,11 +120,11 @@ MountainScene.prototype.reset = function(){
 };
 
 MountainScene.prototype.update = function(){
-
-this.train.update();
-    this.camera.position.x = this.train.grouped.position.x + 0.2 * 2650*Math.sin(t*0.0002);
-    this.camera.position.y = 0.04 * 800*Math.sin(t/2500)+1100;
-    this.camera.position.z = this.train.grouped.position.z + 0.2 * 2650*Math.sin(t*0.0002);
+	this.train.update();
+	this.rails.update();
+    this.camera.position.x = this.train.grouped.position.x + 0.6 * 2650*Math.sin(t*0.0002 + 2);
+    this.camera.position.y = 0.09 * 800*Math.sin(t/2500)+1100;
+    this.camera.position.z = this.train.grouped.position.z + 0.6 * 2650*Math.sin(t*0.0002 + 2);
 
 	this.train.grouped.position.x = 2485*Math.sin(t*0.0002);
 	this.train.grouped.position.z = 2485*Math.cos(t*0.0002);
@@ -141,9 +135,9 @@ this.train.update();
     //this.camera.lookAt(sideways);
 
 
-    this.camera.lookAt(this.train.grouped.position);
-    //this.camera.lookAt(this.rails[0].position);
-    //this.camera.lookAt(new THREE.Vector3(0,500,0));
+    //this.camera.lookAt(this.train.grouped.position);
+    //this.camera.lookAt(this.rails.rails[30].position);
+    this.camera.lookAt(new THREE.Vector3(0,800,0));
 
 
     this.uniforms.time.value = t/1500;
