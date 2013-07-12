@@ -1,6 +1,6 @@
 FRAME_LENGTH = 20;
 DIRTY = true;
-t = 0;
+_t = t = 0;
 window.requestAnimFrame = (function(){
     return  window.requestAnimationFrame       || 
     window.webkitRequestAnimationFrame || 
@@ -22,11 +22,12 @@ window.makeFullscreen = function(elem) {
 };
 
 function loop(){
-    t = music.currentTime*1000;
-    dt += (t-old_time);
+    _t = music.currentTime*1000;
+    dt += (_t-old_time);
     old_time = music.currentTime*1000;
     while(dt >= FRAME_LENGTH){
         sm.update();
+        t += 20;
         dt-= FRAME_LENGTH;
         DIRTY = true;
     }
