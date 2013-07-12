@@ -13,7 +13,7 @@ MountainScene.prototype.init = function(cb){
     /* do loady stuff here */
 
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(45, 16/9, 10, 50000);
+    this.camera = new THREE.PerspectiveCamera(45, 16/9, 1, 50000);
     this.scene.add(this.camera);
 
     c = this.camera;
@@ -25,23 +25,8 @@ MountainScene.prototype.init = function(cb){
     this.initTrees();
 
     this.setupLights();
-
-    var imagePrefix = "res/miramar_";
-    var directions  = ["ft", "bk", "up", "dn", "rt", "lf"];
-    var imageSuffix = ".jpg";
-    var skyGeometry = new THREE.CubeGeometry( 26000, 26000, 26000 );   
-
-    var materialArray = [];
-    for (var i = 0; i < 6; i++)
-        materialArray.push( new THREE.MeshBasicMaterial({
-            map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
-            side: THREE.BackSide
-        }));
-    var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
-    var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
-    skyBox.position.y = 6000;
-    this.scene.add( skyBox );
-    this.scene.fog = new THREE.Fog(0x888888, 6000, 26000 );
+    
+    this.initSkyBox();
 
     /* call cb when you are done loading! */
     this.initTrainAndRails(function() {
@@ -122,6 +107,11 @@ MountainScene.prototype.initWater = function() {
     mesh.rotation.x = -1.570796;
     this.scene.add(mesh);
 
+    this.composer = new THREE.EffectComposer(renderer, RENDERTARGET);
+    this.composer.addPass( new THREE.RenderPass(this.scene, this.camera));
+    var effect = new THREE.ShaderPass(AsciiShader);
+    effect.renderToScreen = true;
+    this.composer.addPass(effect);
     mesh.position.y = 50;
     
 
@@ -146,7 +136,34 @@ MountainScene.prototype.initMountain = function() {
     );
     texture.needsUpdate = true;
 
-    this.mountainMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map: texture}));
+    this.heightMap = (function(m,s){
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        canvas.height = canvas.width = s;
+        var imageData = ctx.getImageData(0,0,s,s);
+        for(var i=0; i<m.length;i++){
+            var height = m[i];
+            //if(height > 0) console.log(height);
+            imageData.data[i*4 + 0] = height;
+            imageData.data[i*4 + 1] = height;
+            imageData.data[i*4 + 2] = height;
+            imageData.data[i*4 + 3] = 255;
+        }
+        ctx.putImageData(imageData, 0, 0);
+        var tex = new THREE.Texture(canvas);
+        tex.needsUpdate = true;
+        return tex;
+    })(this.mapData, this.segments);
+
+
+    this.mountainuniforms = {
+        time: {type:'f', value: 0},
+        gravel: {type: 't', value: THREE.ImageUtils.loadTexture('res/gravel.jpg')},
+        grass: {type: 't', value: THREE.ImageUtils.loadTexture('res/floral.jpg')},
+        snow: {type: 't', value: THREE.ImageUtils.loadTexture('res/snow.jpg')},
+        height: {type: 't', value: this.heightMap}
+    };
+    this.mountainMesh = new THREE.Mesh(geometry, createMountainShaderMaterial(this.mountainuniforms));
     this.scene.add(this.mountainMesh);
 };
 
@@ -272,8 +289,8 @@ MountainScene.prototype.updateCamera = function() {
 MountainScene.prototype.render = function(){
     /* do rendery stuff here */
     renderer.render(this.scene, this.camera);
-
-};
+    //this.composer.render();
+}
 
 MountainScene.prototype.setupLights = function() {
     var light = new THREE.DirectionalLight(0xdefbff, 1.75);
@@ -390,4 +407,20 @@ MountainScene.prototype.getYValue = function(x,z) {
     var height = this.mapData[ dataIndex ] * 10; // geometry is scaled by this value 
 
     return height;
+};
+
+MountainScene.prototype.initSkyBox = function() {
+    var imagePath = "res/red_floral.jpg";
+    var skyGeometry = new THREE.CubeGeometry( 26000, 26000, 26000 );   
+    var materialArray = [];
+    for (var i = 0; i < 6; i++) {
+    	materialArray.push( new THREE.MeshBasicMaterial({
+    		map: THREE.ImageUtils.loadTexture(imagePath),
+    		side: THREE.BackSide
+    	}));
+    }
+    var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
+    var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
+    skyBox.position.y = 12000;
+    this.scene.add(skyBox);
 };
