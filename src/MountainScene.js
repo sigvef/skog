@@ -16,6 +16,8 @@ MountainScene.prototype.init = function(cb){
     this.camera = new THREE.PerspectiveCamera(45, 16/9, 10, 50000);
     this.scene.add(this.camera);
 
+    c = this.camera;
+
     this.initMountain();
 
     this.initWater();
@@ -51,16 +53,16 @@ MountainScene.prototype.initTrainAndRails = function(cb) {
     this.rails = [];
     var that = this;
     this.train = new Train();
-    this.train.startTime = this.startTime + 5000;
+    this.train.startTime = this.startTime + 10000;
     this.train.init(function() {
     	that.train.grouped.scale.x = 10;
     	that.train.grouped.scale.y = 10;
     	that.train.grouped.scale.z = 10;
-    	that.train.grouped.position.y = 885;
+    	that.train.grouped.position.y = 6000;
     	that.scene.add(that.train.grouped);
     	
         that.rails = new Rails();
-        that.rails.startTime = that.startTime + 10000;
+        that.rails.startTime = that.startTime + 4500;
         that.rails.init(function() {
         	that.scene.add(that.rails.grouped);
         	cb();
@@ -175,57 +177,92 @@ MountainScene.prototype.initTrees = function() {
 };
 
 MountainScene.prototype.reset = function(){
-    this.camera.position.y = 150;
+    this.camera.position.y = 70;
 };
 
 MountainScene.prototype.update = function(){
 	this.train.update();
 	this.rails.update();
-    this.camera.position.x = this.train.grouped.position.x + 0.6 * 2650*Math.sin(t*0.0002 + 2);
-    this.camera.position.y = 0.09 * 800*Math.sin(t/2500)+1100;
-    this.camera.position.z = this.train.grouped.position.z + 0.6 * 2650*Math.sin(t*0.0002 + 2);
 
-	this.train.grouped.position.x = 2485*Math.sin(t*0.0002);
-	this.train.grouped.position.z = 2485*Math.cos(t*0.0002);
-	this.train.grouped.rotation.y += 0.004;
-	
-    //var toOrigo = new THREE.Vector3(0,this.camera.position.y,0).sub(this.camera.position);
-    //var sideways = toOrigo.cross(new THREE.Vector3(0,1,0));
-    //this.camera.lookAt(sideways);
+    this.updateCamera();
 
-    if (t < this.startTime + 4300) {
-        var camTime = (t - this.startTime)/4300;
-        this.camera.position.x = smoothstep(13000, 2500, camTime);
-        this.camera.position.z = smoothstep(13000, 2500, camTime);
-    } /*else {
-        this.camera.position.x = 4300*Math.sin(t/3000);
-        this.camera.position.z = 4300*Math.cos(t/3000);
-    }*/
+    //this.camera.position.x = this.train.grouped.position.x + 0.6 * 2650*Math.sin(t*0.0002 + 2);
+    //this.camera.position.y = 0.09 * 800*Math.sin(t/2500)+1100;
+    //this.camera.position.z = this.train.grouped.position.z + 0.6 * 2650*Math.sin(t*0.0002 + 2);
+
+    if (t > this.startTime + 7300) {
+        this.train.grouped.position.x = 2485*Math.sin(t*0.0002);
+        this.train.grouped.position.y = 885;
+        this.train.grouped.position.z = 2485*Math.cos(t*0.0002);
+    }
+    this.train.grouped.rotation.y += 0.004;
+
 
 
     //this.camera.lookAt(this.train.grouped.position);
     //this.camera.lookAt(this.rails.rails[30].position);
-    this.camera.lookAt(new THREE.Vector3(0,800,0));
 
 
     this.uniforms.time.value = t/1500;
     this.uniforms.time2.value = t/1500;
     this.uniforms.eyePos.value = this.camera.position;
 
-    if (t < this.startTime + 4300) {
+    if (t < this.startTime + 4000) {
         for (var i=0; i < this.trees.length; i++) {
             if (t > this.startTime + this.trees[i].delay) {
-                var treeAnimationTime = (t - this.startTime - this.trees[i].delay)/(4300-this.trees[i].delay);
+                var treeAnimationTime = (t - this.startTime - this.trees[i].delay)/(4000-this.trees[i].delay);
                 this.trees[i].position.y = smoothstep(10000, this.trees[i].finalYPos, treeAnimationTime);
             }
         }
     } else {
         for (var i=0; i < this.trees.length; i++) {
             var moveFactor = (i%2) ? 10 : -10;
-            this.trees[i].position.y = moveFactor * Math.sin( (t-this.startTime-4300) / 250*Math.PI ) + this.trees[i].finalYPos;
+            this.trees[i].position.y = moveFactor * Math.sin( (t-this.startTime-4000) / 250*Math.PI ) + this.trees[i].finalYPos;
         }
     }
 };
+
+MountainScene.prototype.updateCamera = function() {
+    if (t < this.startTime + 4000) {
+        var camTime = (t - this.startTime)/4000;
+        this.camera.position.x = smoothstep(13000, 2500, camTime);
+        this.camera.position.z = smoothstep(13000, 2500, camTime);
+
+        this.camera.lookAt(new THREE.Vector3(0,800,0));
+    } else if (t < this.startTime + 5500) {
+        if (this.camera.oldRotation === undefined) {
+            this.camera.oldRotation = this.camera.rotation.clone();
+        }
+        var newPos = new THREE.Vector3(
+            0, 800, 2700
+        );
+        var dummy = new THREE.Camera();
+        dummy.position = this.camera.position;
+        dummy.lookAt(newPos);
+        var panTime = (t - this.startTime - 4000)/1500;
+        this.camera.rotation.x = smoothstep(
+            this.camera.oldRotation.x,
+            dummy.rotation.x,
+            panTime
+        );
+        this.camera.rotation.y = smoothstep(
+            this.camera.oldRotation.y,
+            dummy.rotation.y,
+            panTime
+        );
+        this.camera.rotation.z = smoothstep(
+            this.camera.oldRotation.z,
+            dummy.rotation.z,
+            panTime
+        );
+        this.camera.fov = smoothstep(
+            45,
+            25,
+            panTime
+        );
+        this.camera.updateProjectionMatrix();
+    }
+}
 
 MountainScene.prototype.render = function(){
     /* do rendery stuff here */
