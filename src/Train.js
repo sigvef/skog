@@ -1,5 +1,5 @@
 function Train(){
-	this.startTime = 0;
+	this.startTime = 0;	//set this startTime correctly
 }
 
 Train.prototype.init = function(cb){

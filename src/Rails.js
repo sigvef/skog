@@ -33,20 +33,42 @@ Rails.prototype.init = function(cb){
     		that.rails[i].position.z = 2700*Math.cos(i*0.1);
     		that.rails[i].rotation.y = 0.1*i + Math.PI * 0.5;
     		var relativeStartY = 5000;
-    		that.rails[i].animations = [
-	            {
-	    	        start: 0,
-	    	        end: i*300,
-	    	        fromY: y + relativeStartY,
-	    	        toY: y + relativeStartY
-	            },
-	            {
-	            	start: i*300,
-	            	end: i*300 + 1000,
-	            	fromY: y + relativeStartY,
-	            	toY: y
-	            },
-	        ];
+    		var secondAnimationSequenceStartsAt = 20000;
+    		if (i > 0) {
+    			that.rails[i].animations = [
+                    {
+                    	start: 0,
+                    	end: secondAnimationSequenceStartsAt + i*300,
+                    	fromY: y + relativeStartY,
+                    	toY: y + relativeStartY
+                    },
+                    {
+                    	start: secondAnimationSequenceStartsAt + i*300,
+                    	end: secondAnimationSequenceStartsAt + i*300 + 1000,
+                    	fromY: y + relativeStartY,
+                    	toY: y
+                    },
+                ];
+    		}
+    		else {
+    			console.log(that.rails[i].position.x);
+    			console.log(that.rails[i].position.y);
+    			console.log(that.rails[i].position.z);
+    			that.rails[i].animations = [
+                    {
+                    	start: 0,
+                    	end: 300,
+                    	fromY: y + relativeStartY,
+                    	toY: y + relativeStartY
+                    },
+                    {
+                    	start: 300,
+                    	end: 300 + 1000,
+                    	fromY: y + relativeStartY,
+                    	toY: y
+                    },
+                ];
+    		}
     		that.rails[i].activeAnimation = 0;
     	    that.grouped.add(that.rails[i]);
     	}
