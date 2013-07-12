@@ -66,8 +66,8 @@ MountainScene.prototype.init = function(cb){
     mesh.rotation.x = -1.570796;
     this.scene.add(mesh);
 
-    mesh.position.y = 20;
 
+    mesh.position.y = 50;
     var imagePrefix = "res/miramar_";
     var directions  = ["ft", "bk", "up", "dn", "rt", "lf"];
     var imageSuffix = ".jpg";
@@ -83,7 +83,7 @@ MountainScene.prototype.init = function(cb){
     var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
     skyBox.position.y = 6000;
     this.scene.add( skyBox );
-    //this.scene.fog = new THREE.Fog(0x888888, 6000, 16000 );
+    this.scene.fog = new THREE.Fog(0x888888, 4000, 10000 );
     /* call cb when you are done loading! */
     cb();
 }
@@ -118,7 +118,7 @@ MountainScene.prototype.initMountain = function() {
 MountainScene.prototype.reset = function(){
     /* reset all the variables! */
 
-    this.camera.position.y = 400;
+    this.camera.position.y = 1000;
 }
 
 MountainScene.prototype.update = function(){
