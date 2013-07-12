@@ -53,7 +53,7 @@ MountainScene.prototype.initTrainAndRails = function(cb) {
     this.rails = [];
     var that = this;
     this.train = new Train();
-    this.train.startTime = this.startTime + 10000;
+    this.train.startTime = this.startTime + 6000;
     this.train.init(function() {
     	that.train.grouped.scale.x = 10;
     	that.train.grouped.scale.y = 10;
@@ -261,6 +261,11 @@ MountainScene.prototype.updateCamera = function() {
             panTime
         );
         this.camera.updateProjectionMatrix();
+    } else if (t < this.startTime + 6000) {
+        // Blur effects
+    } else if (t < this.startTime + 30000) {
+        this.camera.position = new THREE.Vector3(400, 880, 3200);
+        this.camera.lookAt(this.train.grouped.position);
     }
 }
 
