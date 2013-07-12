@@ -105,6 +105,11 @@ MountainScene.prototype.initWater = function() {
     mesh.rotation.x = -1.570796;
     this.scene.add(mesh);
 
+    this.composer = new THREE.EffectComposer(renderer, RENDERTARGET);
+    this.composer.addPass( new THREE.RenderPass(this.scene, this.camera));
+    var effect = new THREE.ShaderPass(AsciiShader);
+    effect.renderToScreen = true;
+    this.composer.addPass(effect);
     mesh.position.y = 50;
     
 
@@ -214,9 +219,9 @@ MountainScene.prototype.update = function(){
 
 MountainScene.prototype.render = function(){
     /* do rendery stuff here */
-    renderer.render(this.scene, this.camera);
-
-};
+    //renderer.render(this.scene, this.camera);
+    this.composer.render();
+}
 
 MountainScene.prototype.setupLights = function() {
     var light = new THREE.DirectionalLight(0xdefbff, 1.75);
