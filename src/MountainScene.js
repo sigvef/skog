@@ -116,12 +116,17 @@ MountainScene.prototype.initTrees = function() {
     while (treesPlaced < 500) {
         var pos = {
             x: Math.random()*6000-3000,
+            y: Math.random()*1000+3000,
             z: Math.random()*6000-3000
         };
-        pos.y = this.getYValue(pos.x, pos.z);
-        if (pos.y < 400 && pos.y > 50) {
+        yPos = this.getYValue(pos.x, pos.z);
+        if (yPos < 400 && yPos > 50) {
             this.trees[treesPlaced] = tree.clone();
+
             this.trees[treesPlaced].position = pos;
+            this.trees[treesPlaced].startYPos = this.trees[treesPlaced].position.y;
+            this.trees[treesPlaced].finalYPos = yPos;
+
             this.scene.add(this.trees[treesPlaced]);
             treesPlaced++;
         }
@@ -140,15 +145,18 @@ MountainScene.prototype.update = function(){
 
     this.camera.position.y = 500*Math.sin(t/2500)+1500;
 
-    //var toOrigo = new THREE.Vector3(0,this.camera.position.y,0).sub(this.camera.position);
-    //var sideways = toOrigo.cross(new THREE.Vector3(0,1,0));
-    //this.camera.lookAt(sideways);
-
     this.camera.lookAt(new THREE.Vector3(0,500,0));
 
     this.uniforms.time.value = t/1500;
     this.uniforms.time2.value = t/1500;
     this.uniforms.eyePos.value = this.camera.position;
+
+    if (t < this.startTime + 3000) {
+        var treeAnimationTime = (t - this.startTime)/3000;
+        for (var i=0; i < this.trees.length; i++) {
+            this.trees[i].position.y = smoothstep(this.trees[i].startYPos, this.trees[i].finalYPos, treeAnimationTime);
+        }
+    }
 }
 
 MountainScene.prototype.render = function(){
