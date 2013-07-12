@@ -251,7 +251,7 @@ var trainParts = [{
     type: 'wheel',
     animations: [{
         start: 0,
-        end: 9000,
+        end: 8000,
         fromPos: {
             x: 0,
             y: 0,
@@ -263,8 +263,8 @@ var trainParts = [{
             z: -100
         }
     }, {
-        start: 9000,
-        end: 11000,
+        start: 8000,
+        end: 10000,
         fromPos: {
             x: 0,
             y: 0,
@@ -282,7 +282,7 @@ var trainParts = [{
     type: 'wheel',
     animations: [{
         start: 0,
-        end: 9250,
+        end: 8250,
         fromPos: {
             x: 0,
             y: 0,
@@ -294,8 +294,8 @@ var trainParts = [{
             z: -100
         }
     }, {
-        start: 9250,
-        end: 11250,
+        start: 8250,
+        end: 10250,
         fromPos: {
             x: 0,
             y: 0,
@@ -313,7 +313,7 @@ var trainParts = [{
     type: 'wheel',
     animations: [{
         start: 0,
-        end: 8000,
+        end: 9000,
         fromPos: {
             x: 0,
             y: 0,
@@ -325,8 +325,8 @@ var trainParts = [{
             z: 100
         }
     }, {
-        start: 8000,
-        end: 10000,
+        start: 9000,
+        end: 11000,
         fromPos: {
             x: 0,
             y: 0,
@@ -344,7 +344,7 @@ var trainParts = [{
     type: 'wheel',
     animations: [{
         start: 0,
-        end: 8250,
+        end: 9250,
         fromPos: {
             x: 0,
             y: 0,
@@ -356,8 +356,8 @@ var trainParts = [{
             z: 100
         }
     }, {
-        start: 8250,
-        end: 10250,
+        start: 9250,
+        end: 11250,
         fromPos: {
             x: 0,
             y: 0,

@@ -97,6 +97,7 @@ TrainScene.prototype.reset = function(){
 
 TrainScene.prototype.update = function(){
 	//this.camera.position.y += 0.01;
+	var relativeT = t - this.startTime;
 	
 	for (var i = 0; i < trainParts.length; i++) {
 		var object = this.objects[trainParts[i].name];
@@ -106,11 +107,11 @@ TrainScene.prototype.update = function(){
 		}
 		if (part.activeAnimation >= 0) {
 			var animation = part.animations[part.activeAnimation];
-			if (t >= animation.start) {
+			if (relativeT >= animation.start) {
 				var animationLength = animation.end - animation.start;
 
 				//number between 0 and 1
-				var animationProgress = Math.min((t - this.startTime - animation.start) / animationLength, 1);
+				var animationProgress = Math.min((relativeT - animation.start) / animationLength, 1);
 				
 				var x = smoothstep(animation.fromPos.x, animation.toPos.x, animationProgress);
 				var y = smoothstep(animation.fromPos.y, animation.toPos.y, animationProgress);
