@@ -1,6 +1,6 @@
 function MountainScene(){
     /* starting time of this scene in milliseconds, must be defined */
-    this.startTime = 1;
+    this.startTime = 16700;
     /* short name of this scene, must be defined */
     this.NAME = 'mountain';
 }
@@ -15,7 +15,6 @@ MountainScene.prototype.init = function(cb){
     this.initMountain();
 
     this.setupLights();
-
 
     this.uniforms = {
         time: {
@@ -37,7 +36,7 @@ MountainScene.prototype.init = function(cb){
         },
         waterHeight: {
             type: "f",
-            value: 1.0
+            value: 0.2
         },
         amplitude: {
             type: "fv1",
@@ -62,17 +61,17 @@ MountainScene.prototype.init = function(cb){
 
     var xm = createWaterShaderMaterial(this.uniforms);
 
-    var geometry = new THREE.PlaneGeometry(16000, 16000, 128, 128);
+    var geometry = new THREE.PlaneGeometry(26000, 26000, 128, 128);
     var mesh = new THREE.Mesh(geometry, xm);
-    mesh.doubleSided = true;
     mesh.rotation.x = -1.570796;
     this.scene.add(mesh);
 
-    mesh.position.y = 50;
+    mesh.position.y = 20;
     
     this.rails = [];
     var that = this;
     this.train = new Train();
+    this.train.startTime = this.startTime;
     this.train.init(function() {
     	that.train.grouped.position.x = 850;
     	that.train.grouped.position.y = 150;
@@ -92,9 +91,6 @@ MountainScene.prototype.init = function(cb){
         	cb();
         });
     });
-    
-
-
 };
 
 MountainScene.prototype.initMountain = function() {
@@ -120,26 +116,34 @@ MountainScene.prototype.initMountain = function() {
     );
     texture.needsUpdate = true;
 
-    mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map: texture}));
-    this.scene.add(mesh);
+    this.mountainMesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map: texture}));
+    this.scene.add(this.mountainMesh);
 };
 
 MountainScene.prototype.reset = function(){
-	this.camera.position.y = 150;
+    this.camera.position.y = 150;
 };
 
 MountainScene.prototype.update = function(){
-	this.train.update();
+
+this.train.update();
     this.camera.position.x = this.train.grouped.position.x + 0.03 * 3500*Math.sin(t/5000);
     this.camera.position.z = this.train.grouped.position.z + 0.03 * 3500*Math.cos(t/5000);
 
-    var toOrigo = new THREE.Vector3(0,this.camera.position.y,0).sub(this.camera.position);
-    var sideways = toOrigo.cross(new THREE.Vector3(0,1,0));
+    this.camera.position.y = 0.035 * 800*Math.sin(t/2500)+150;
+
+    //var toOrigo = new THREE.Vector3(0,this.camera.position.y,0).sub(this.camera.position);
+    //var sideways = toOrigo.cross(new THREE.Vector3(0,1,0));
+    //this.camera.lookAt(sideways);
+
 
     this.camera.lookAt(this.train.grouped.position);
 
-    this.uniforms.time.value = t/1000;
-    this.uniforms.time2.value = t/1000;
+    //this.camera.lookAt(new THREE.Vector3(0,500,0));
+
+
+    this.uniforms.time.value = t/1500;
+    this.uniforms.time2.value = t/1500;
     this.uniforms.eyePos.value = this.camera.position;
 };
 
@@ -172,7 +176,7 @@ MountainScene.prototype.generateHeight = function(width, height) {
             var x = i % width, y = ~~ (i / width);
             var radius = Math.sqrt(Math.pow(x-width/2, 2) + Math.pow(y-height/2, 2));
             var heightRatio = Math.max(1-radius/width*2, 0);
-            data[i] += Math.abs(perlin.noise(x / quality, y / quality, z) * quality * Math.pow(heightRatio,2) * 7);
+            data[i] += Math.abs(perlin.noise(x / quality, y / quality, z) * quality * Math.pow(heightRatio,2) * 5);
         }
         quality *= 5;
     }

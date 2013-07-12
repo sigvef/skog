@@ -92,7 +92,7 @@ Train.prototype.update = function(){
 				object.position.z = z - part.offset.z;
 				
 				//if animation is done, go to next animation for this object if available
-				if (t > animation.end && ++part.activeAnimation === part.animations.length) {
+				if (relativeT > animation.end && ++part.activeAnimation === part.animations.length) {
 					console.log("an animation for " + part.name + " has ended at " + t);
 					part.activeAnimation = -1;
 				}

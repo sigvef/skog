@@ -52,5 +52,13 @@ SceneManager.prototype.update = function(){
 };
 
 SceneManager.prototype.render = function(){
+    //this.sortedScenes[this.activeSceneIndex+1].render(); //temporarily commented out while deving
     this.activeScene.render();
+};
+
+SceneManager.prototype.warmup = function(){
+    for(var scene in this.scenes){
+        this.scenes[scene].update();
+        this.scenes[scene].render();
+    }
 };
