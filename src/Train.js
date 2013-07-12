@@ -1,29 +1,11 @@
-function TrainScene(){
-    /* starting time of this scene in milliseconds, must be defined */
-    this.startTime = 0;
-    /* short name of this scene, must be defined */
-    this.NAME = 'train';
+function Train(){
+	this.startTime = 0;
 }
 
-TrainScene.prototype.init = function(cb){
-    /* do loady stuff here */
-
-    this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(45, 16/9, 0.1, 10000);
-    this.scene.add(this.camera);
-
+Train.prototype.init = function(cb){
     this.objects = [];
-    this.train = new THREE.Object3D();
+    this.grouped = new THREE.Object3D();
     var that = this;
-    
-    // create a point light
-    var pointLight = new THREE.PointLight(0xFFFFFF);
-    // set its position
-    pointLight.position.x = 10;
-    pointLight.position.y = 50;
-    pointLight.position.z = 130;
-    // add to the scene
-    this.scene.add(pointLight);
 	
     var resourceFolderPath = 'res/';
     var defaultTexturePath = resourceFolderPath + 'wooden train diffuse.jpg';
@@ -66,14 +48,13 @@ TrainScene.prototype.init = function(cb){
 						pivot.add(object);
 						that.objects[name] = pivot;
 					}
-					that.train.add(that.objects[name]);
+					that.grouped.add(that.objects[name]);
 				}
 				if (!trainParts[i].loaded) {
 					everythingIsLoaded = false;
 				}
 			}
 			if (everythingIsLoaded) {
-				that.scene.add(that.train);
 				console.log("all train parts are loaded");
 				cb();	//done with the loading
 			}
@@ -88,14 +69,7 @@ TrainScene.prototype.init = function(cb){
 	}
 };
 
-TrainScene.prototype.reset = function(){
-    /* reset all the variables! */
-    this.camera.position.y = 5;
-    this.camera.position.z = 80;
-};
-
-TrainScene.prototype.update = function(){
-	//this.camera.position.y += 0.01;
+Train.prototype.update = function(){
 	var relativeT = t - this.startTime;
 	
 	for (var i = 0; i < trainParts.length; i++) {
@@ -127,10 +101,4 @@ TrainScene.prototype.update = function(){
 			object.rotation.z -= 0.06*Math.PI;
 		}
 	}
-	
-};
-
-TrainScene.prototype.render = function(){
-    /* do rendery stuff here */
-    renderer.render(this.scene, this.camera);
 };

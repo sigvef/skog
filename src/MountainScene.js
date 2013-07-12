@@ -69,10 +69,17 @@ MountainScene.prototype.init = function(cb){
     this.scene.add(mesh);
 
     mesh.position.y = 50;
+    
+    var that = this;
+    this.train = new Train();
+    this.train.init(function() {
+    	that.train.grouped.position.y = 200;
+    	that.scene.add(that.train.grouped);
+    	/* call cb when you are done loading! */
+    	cb();
+    });
 
-    /* call cb when you are done loading! */
-    cb();
-}
+};
 
 MountainScene.prototype.initMountain = function() {
     var worldWidth = 192,
@@ -99,40 +106,43 @@ MountainScene.prototype.initMountain = function() {
 
     mesh = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map: texture}));
     this.scene.add(mesh);
-}
+};
 
 MountainScene.prototype.reset = function(){
     /* reset all the variables! */
 
     this.camera.position.y = 4000;
-}
+};
 
 MountainScene.prototype.update = function(){
+	this.train.update();
     this.camera.position.x = 4500*Math.sin(t/5000);
     this.camera.position.z = 4500*Math.cos(t/5000);
+    this.camera.position = this.train.grouped.position;
 
     var toOrigo = new THREE.Vector3(0,this.camera.position.y,0).sub(this.camera.position);
     var sideways = toOrigo.cross(new THREE.Vector3(0,1,0));
 
     this.camera.lookAt(sideways);
+    
 
     this.uniforms.time.value = t/1000;
     this.uniforms.time2.value = t/1000;
     this.uniforms.eyePos.value = this.camera.position;
-}
+};
 
 MountainScene.prototype.render = function(){
     /* do rendery stuff here */
     renderer.render(this.scene, this.camera);
 
-}
+};
 
 MountainScene.prototype.setupLights = function() {
     var light = new THREE.DirectionalLight(0xdefbff, 1.75);
     light.position.set(50, 200, 100);
     light.position.multiplyScalar(1.3);
     this.scene.add(light);
-}
+};
 
 MountainScene.prototype.generateHeight = function(width, height) {
 
@@ -142,7 +152,7 @@ MountainScene.prototype.generateHeight = function(width, height) {
     var perlin = new ImprovedNoise(), quality = 1, z = Math.random() * 100;
 
     for (var i=0; i < size; i++) {
-        data[i] = 0
+        data[i] = 0;
     }
 
     for (var j=0; j<4; j++) {
@@ -156,7 +166,7 @@ MountainScene.prototype.generateHeight = function(width, height) {
     }
 
     return data;
-}
+};
 
 MountainScene.prototype.generateTexture = function(data, width, height) {
 
@@ -223,4 +233,4 @@ MountainScene.prototype.generateTexture = function(data, width, height) {
     context.putImageData(image, 0, 0);
 
     return canvasScaled;
-}
+};
