@@ -16,7 +16,7 @@ ExampleScene.prototype.init = function(cb){
 
     this.sphere = new THREE.Mesh( new THREE.SphereGeometry(
         50, 16, 16), sphereMaterial);
-    
+
     this.scene.add(this.sphere);
 
 
