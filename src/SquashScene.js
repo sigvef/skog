@@ -1,6 +1,6 @@
 function SquashScene(){
     /* starting time of this scene in milliseconds, must be defined */
-    this.startTime = 0;
+    this.startTime = 1 << 30;
     /* short name of this scene, must be defined */
     this.NAME = 'squash';
 }
