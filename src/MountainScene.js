@@ -76,16 +76,14 @@ MountainScene.prototype.init = function(cb){
     	that.train.grouped.scale.x = 10;
     	that.train.grouped.scale.y = 10;
     	that.train.grouped.scale.z = 10;
-    	//that.train.grouped.position.x = 850;
-    	that.train.grouped.position.y = 1085;
-    	//that.train.grouped.position.z = 2750;
+    	that.train.grouped.position.y = 885;
     	
     	that.scene.add(that.train.grouped);
         that.rail = new Rail();
         that.rail.init(function() {
         	for (var i = 0; i < 63; i++) {
         		that.rails[i] = that.rail.object.clone();
-        		that.rails[i].position.y = 1000;
+        		that.rails[i].position.y = 800;
         		that.rails[i].position.x = 2700*Math.sin(i*0.1);
         		that.rails[i].position.z = 2700*Math.cos(i*0.1);
         		that.rails[i].rotation.y = 0.1*i + Math.PI * 0.5;
