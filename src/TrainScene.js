@@ -102,9 +102,6 @@ TrainScene.prototype.update = function(){
 	for (var i = 0; i < trainParts.length; i++) {
 		var object = this.objects[trainParts[i].name];
 		var part = trainParts[i];
-		if (part.type === 'wheel') {
-			object.rotation.z -= 0.06*Math.PI;
-		}
 		if (part.activeAnimation >= 0) {
 			var animation = part.animations[part.activeAnimation];
 			if (relativeT >= animation.start) {
@@ -127,6 +124,8 @@ TrainScene.prototype.update = function(){
 					part.activeAnimation = -1;
 				}
 			}
+		} else if (part.type === 'wheel') {
+			object.rotation.z -= 0.06*Math.PI;
 		}
 	}
 	
