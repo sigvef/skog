@@ -86,6 +86,12 @@ MountainScene.prototype.init = function(cb){
         	cb();
         });
     });
+
+    this.arms = new Arms(20);
+    arms.init(function() {
+        that.arms.grouped.position = new THREE.Vector3(0, 1000, 0);
+        that.scene.add(that.arms.grouped);
+    });
 };
 
 MountainScene.prototype.initMountain = function() {
@@ -129,16 +135,22 @@ MountainScene.prototype.update = function(){
 	this.train.grouped.position.x = 2485*Math.sin(t*0.0002);
 	this.train.grouped.position.z = 2485*Math.cos(t*0.0002);
 	this.train.grouped.rotation.y += 0.004;
+
+    if (this.arms) { 
+        this.arms.grouped.position.x = 2700*Math.sin(t*0.0002);
+        this.arms.grouped.position.z = 2700*Math.cos(t*0.0002);
+        this.arms.grouped.position.y = this.train.grouped.position.y - 130;
+        this.arms.update(this.train.grouped.rotation.y + Math.PI/2);
+    }
 	
     //var toOrigo = new THREE.Vector3(0,this.camera.position.y,0).sub(this.camera.position);
     //var sideways = toOrigo.cross(new THREE.Vector3(0,1,0));
     //this.camera.lookAt(sideways);
 
 
-    //this.camera.lookAt(this.train.grouped.position);
+    this.camera.lookAt(this.train.grouped.position);
     //this.camera.lookAt(this.rails.rails[30].position);
-    this.camera.lookAt(new THREE.Vector3(0,800,0));
-
+    //this.camera.lookAt(new THREE.Vector3(0,800,0));
 
     this.uniforms.time.value = t/1500;
     this.uniforms.time2.value = t/1500;
