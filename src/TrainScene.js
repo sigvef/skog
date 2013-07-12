@@ -13,6 +13,7 @@ TrainScene.prototype.init = function(cb){
     this.scene.add(this.camera);
 
     this.objects = [];
+    this.train = new THREE.Object3D();
     var that = this;
     
     // create a point light
@@ -52,8 +53,8 @@ TrainScene.prototype.init = function(cb){
 					}
 					if (typeof trainParts[i].offset === 'undefined') {
 						trainParts[i].offset = new THREE.Vector3(0, 0, 0);
-					}
-					if (trainParts[i].type === 'wheel') {
+						that.objects[name] = object;
+					} else {
 						var offset = trainParts[i].offset;
 						var pivot = new THREE.Object3D();
 						pivot.position.x = -offset.x;
@@ -64,17 +65,15 @@ TrainScene.prototype.init = function(cb){
 						object.position.z += offset.z;
 						pivot.add(object);
 						that.objects[name] = pivot;
-						that.scene.add(pivot);
-					} else {
-						that.objects[name] = object;
-						that.scene.add(object);
 					}
+					that.train.add(that.objects[name]);
 				}
 				if (!trainParts[i].loaded) {
 					everythingIsLoaded = false;
 				}
 			}
 			if (everythingIsLoaded) {
+				that.scene.add(that.train);
 				console.log("all train parts are loaded");
 				cb();	//done with the loading
 			}
