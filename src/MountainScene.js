@@ -43,7 +43,9 @@ MountainScene.prototype.initTrainAndRails = function(cb) {
     	that.train.grouped.scale.x = 10;
     	that.train.grouped.scale.y = 10;
     	that.train.grouped.scale.z = 10;
-    	that.train.grouped.position.y = 6000;
+    	that.train.grouped.position.y = 885;
+        that.train.grouped.position.x = 2485*Math.sin(300*0.0002);
+        that.train.grouped.position.z = 2485*Math.cos(300*0.0002);
     	that.scene.add(that.train.grouped);
     	
         that.rails = new Rails();
@@ -202,24 +204,19 @@ MountainScene.prototype.update = function(){
 	this.train.update();
 	this.rails.update();
 
-    this.updateCamera();
+    this.updateCamera(relativeT);
 
-    //this.camera.position.x = this.train.grouped.position.x + 0.6 * 2650*Math.sin(t*0.0002 + 2);
-    //this.camera.position.y = 0.09 * 800*Math.sin(t/2500)+1100;
-    //this.camera.position.z = this.train.grouped.position.z + 0.6 * 2650*Math.sin(t*0.0002 + 2);
-
-    if (relativeT > this.startTime + 7300) {
-        this.train.grouped.position.x = 2485*Math.sin(relativeT*0.0002);
-        this.train.grouped.position.y = 885;
-        this.train.grouped.position.z = 2485*Math.cos(relativeT*0.0002);
+    if (relativeT > 24000) {
+        this.train.grouped.position.x = 2485*Math.sin((relativeT-24000)*0.0002);
+        this.train.grouped.position.z = 2485*Math.cos((relativeT-24000)*0.0002);
+        this.train.grouped.rotation.y += 0.004;
     }
-    this.train.grouped.rotation.y += 0.004;
 
     this.uniforms.time.value = t/1500;
     this.uniforms.time2.value = t/1500;
     this.uniforms.eyePos.value = this.camera.position;
 
-    if (t < this.startTime + 4000) {
+    if (relativeT < 4000) {
         for (var i=0; i < this.trees.length; i++) {
             if (t > this.startTime + this.trees[i].delay) {
                 var treeAnimationTime = (t - this.startTime - this.trees[i].delay)/(4000-this.trees[i].delay);
@@ -234,9 +231,9 @@ MountainScene.prototype.update = function(){
     }
 };
 
-MountainScene.prototype.updateCamera = function() {
-    if (t < this.startTime + 4000) {
-        var camTime = (t - this.startTime)/4000;
+MountainScene.prototype.updateCamera = function(relativeT) {
+    if (relativeT < 4000) {
+        var camTime = relativeT/4000;
         this.camera.position.x = smoothstep(13000, 2500, camTime);
         this.camera.position.z = smoothstep(13000, 2500, camTime);
 
@@ -251,7 +248,7 @@ MountainScene.prototype.updateCamera = function() {
         var dummy = new THREE.Camera();
         dummy.position = this.camera.position;
         dummy.lookAt(newPos);
-        var panTime = (t - this.startTime - 4000)/1500;
+        var panTime = (relativeT - 4000)/1500;
         this.camera.rotation.x = smoothstep(
             this.camera.oldRotation.x,
             dummy.rotation.x,
@@ -273,20 +270,20 @@ MountainScene.prototype.updateCamera = function() {
             panTime
         );
         this.camera.updateProjectionMatrix();
-    } else if (t < this.startTime + 6000) {
+    } else if (relativeT < 6000) {
         // Blur effects
-    } else if (t < this.startTime + 30000) {
+    } else if (relativeT < 30000) {
         this.camera.fov = 45;
         this.camera.position = new THREE.Vector3(400, 880, 3200);
         this.camera.lookAt(this.train.grouped.position);
     }
-}
+};
 
 MountainScene.prototype.render = function(){
     /* do rendery stuff here */
     renderer.render(this.scene, this.camera);
     //this.composer.render();
-}
+};
 
 MountainScene.prototype.setupLights = function() {
     var light = new THREE.DirectionalLight(0xdefbff, 1.75);

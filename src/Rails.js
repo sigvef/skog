@@ -34,7 +34,7 @@ Rails.prototype.init = function(cb){
     		that.rails[i].rotation.y = 0.1*i + Math.PI * 0.5;
     		var relativeStartY = 5000;
     		var secondAnimationSequenceStartsAt = 20000;
-    		if (i > 0) {
+    		if (i > 1) {
     			that.rails[i].animations = [
                     {
                     	start: 0,
@@ -57,13 +57,13 @@ Rails.prototype.init = function(cb){
     			that.rails[i].animations = [
                     {
                     	start: 0,
-                    	end: 300,
+                    	end: 300 + 300*i,
                     	fromY: y + relativeStartY,
                     	toY: y + relativeStartY
                     },
                     {
-                    	start: 300,
-                    	end: 300 + 1000,
+                    	start: 300 + 300*i,
+                    	end: 300 + 300*i + 1000,
                     	fromY: y + relativeStartY,
                     	toY: y
                     },
