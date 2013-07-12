@@ -198,6 +198,7 @@ MountainScene.prototype.reset = function(){
 };
 
 MountainScene.prototype.update = function(){
+	var relativeT = t - this.startTime;
 	this.train.update();
 	this.rails.update();
 
@@ -207,18 +208,12 @@ MountainScene.prototype.update = function(){
     //this.camera.position.y = 0.09 * 800*Math.sin(t/2500)+1100;
     //this.camera.position.z = this.train.grouped.position.z + 0.6 * 2650*Math.sin(t*0.0002 + 2);
 
-    if (t > this.startTime + 7300) {
-        this.train.grouped.position.x = 2485*Math.sin(t*0.0002);
+    if (relativeT > this.startTime + 7300) {
+        this.train.grouped.position.x = 2485*Math.sin(relativeT*0.0002);
         this.train.grouped.position.y = 885;
-        this.train.grouped.position.z = 2485*Math.cos(t*0.0002);
+        this.train.grouped.position.z = 2485*Math.cos(relativeT*0.0002);
     }
     this.train.grouped.rotation.y += 0.004;
-
-
-
-    //this.camera.lookAt(this.train.grouped.position);
-    //this.camera.lookAt(this.rails.rails[30].position);
-
 
     this.uniforms.time.value = t/1500;
     this.uniforms.time2.value = t/1500;
