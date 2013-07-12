@@ -42,8 +42,31 @@ MountainScene.prototype.init = function(cb){
     this.scene.fog = new THREE.Fog(0x888888, 6000, 26000 );
 
     /* call cb when you are done loading! */
-    cb();
-}
+    this.initTrainAndRails(function() {
+    	cb();
+    });
+};
+
+MountainScene.prototype.initTrainAndRails = function(cb) {
+    this.rails = [];
+    var that = this;
+    this.train = new Train();
+    this.train.startTime = this.startTime;
+    this.train.init(function() {
+    	that.train.grouped.scale.x = 10;
+    	that.train.grouped.scale.y = 10;
+    	that.train.grouped.scale.z = 10;
+    	that.train.grouped.position.y = 885;
+    	that.scene.add(that.train.grouped);
+    	
+        that.rails = new Rails();
+        that.rails.startTime = that.startTime;
+        that.rails.init(function() {
+        	that.scene.add(that.rails.grouped);
+        	cb();
+        });
+    });
+};
 
 MountainScene.prototype.initWater = function() {
 
@@ -149,7 +172,7 @@ MountainScene.prototype.initTrees = function() {
             treesPlaced++;
         }
     }
-}
+};
 
 MountainScene.prototype.reset = function(){
     this.camera.position.y = 150;
@@ -325,4 +348,4 @@ MountainScene.prototype.getYValue = function(x,z) {
     var height = this.mapData[ dataIndex ] * 10; // geometry is scaled by this value 
 
     return height;
-}
+};
