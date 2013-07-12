@@ -14,7 +14,7 @@ SceneManager.prototype.addScene = function(scene){
 
 SceneManager.prototype.initScenes = function(cb){
     var numberOfScenes = 0;
-    for(var scene in this.scenes){numberOfScenes++}
+    for(var scene in this.scenes){numberOfScenes++;}
     function initcb(){
         if(!--numberOfScenes){
             cb();
@@ -52,7 +52,7 @@ SceneManager.prototype.update = function(){
 };
 
 SceneManager.prototype.render = function(){
-    this.sortedScenes[this.activeSceneIndex+1].render();
+    //this.sortedScenes[this.activeSceneIndex+1].render(); //temporarily commented out while deving
     this.activeScene.render();
 };
 
