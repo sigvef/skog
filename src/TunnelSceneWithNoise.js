@@ -1,11 +1,11 @@
-function TunnelScene(){
+function TunnelSceneWithNoise(){
     /* starting time of this scene in milliseconds, must be defined */
     this.startTime = 0;
     /* short name of this scene, must be defined */
     this.NAME = 'tunnelnoise';
 }
 
-TunnelScene.prototype.init = function(cb){
+TunnelSceneWithNoise.prototype.init = function(cb){
     this.scene = new THREE.Scene();
     this.fov = 0; //also set in reset
     var that = this;
@@ -106,7 +106,7 @@ TunnelScene.prototype.init = function(cb){
     cb();
 }
 
-TunnelScene.prototype.reset = function(){
+TunnelSceneWithNoise.prototype.reset = function(){
     /* reset all the variables! */
     this.title.style.opacity = 0;
     this.firstSet = true;
@@ -125,7 +125,7 @@ TunnelScene.prototype.reset = function(){
     */
 }
 
-TunnelScene.prototype.update = function(){
+TunnelSceneWithNoise.prototype.update = function(){
     var length = 500;
     var lightoffset = 190;
     //this.directionalLight.intensity = 0.5 + 0.5 * (length-((lightoffset + t) % length)) / length;
@@ -197,7 +197,7 @@ TunnelScene.prototype.update = function(){
 
 }
 
-TunnelScene.prototype.render = function(){
+TunnelSceneWithNoise.prototype.render = function(){
     this.camera.fov = this.fov;
     this.camera.updateProjectionMatrix();
     renderer.render(this.scene, this.camera);
