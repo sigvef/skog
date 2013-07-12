@@ -8,7 +8,7 @@ Train.prototype.init = function(cb){
     var that = this;
 	
     var resourceFolderPath = 'res/';
-    var defaultTexturePath = resourceFolderPath + 'wooden train diffuse.jpg';
+    var defaultTexturePath = resourceFolderPath + 'wooden_train_diffuse_colorful.jpg';
     var texture = new THREE.Texture();
     var loader = new THREE.ImageLoader();
     loader.addEventListener('load', function (event) {
