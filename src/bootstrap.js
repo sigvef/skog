@@ -46,10 +46,10 @@ function start(){
     old_time = 0;
     dt = 0;
 
-    sm = new SceneManager(); 
-    sm.addScene(new ExampleScene());
-    sm.addScene(new MountainScene());
+    sm = new SceneManager();
+    //sm.addScene(new ExampleScene());
     sm.addScene(new TunnelScene());
+    sm.addScene(new MountainScene());
     sm.initScenes(function(){
         sm.warmup();
         music.play();
