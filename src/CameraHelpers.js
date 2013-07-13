@@ -25,3 +25,28 @@ function panCamera(startCamera, camera, toPos, time, zoom, t) {
     );
     camera.updateProjectionMatrix();
 }
+
+function moveCamera(startCamera, camera, toPos, time, zoom, t) {
+    var panTime = t/time;
+    camera.position.x = smoothstep(
+        startCamera.position.x,
+        toPos.x,
+        panTime
+    );
+    camera.position.y = smoothstep(
+        startCamera.position.y,
+        toPos.y,
+        panTime
+    );
+    camera.position.z = smoothstep(
+        startCamera.position.z,
+        toPos.z,
+        panTime
+    );
+    camera.fov = smoothstep(
+        startCamera.fov,
+        startCamera.fov/zoom,
+        panTime
+    );
+    camera.updateProjectionMatrix();
+}

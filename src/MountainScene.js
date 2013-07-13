@@ -272,9 +272,40 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         );
     } else if (relativeT < 10500) {
         // Blur effects
-    } else if (relativeT < 30000) {
+    } else if (relativeT < 25000) {
+        if (this.startCameraThree === undefined) {
+            this.startCameraThree = {
+                position: new THREE.Vector3(1500, 920, 4000),
+                fov: this.camera.fov
+            };
+        }
         this.camera.fov = 45;
-        this.camera.position = new THREE.Vector3(500, 880, 3400);
+        moveCamera(
+            this.startCameraThree,
+            this.camera,
+            new THREE.Vector3(540, 810, 3400),
+            14500,
+            1,
+            relativeT - 10500
+        );
+        this.camera.lookAt(this.train.grouped.position);
+    } else if (relativeT < 32000) {
+        if (this.startCameraFour === undefined) {
+            this.startCameraFour = {
+                position: new THREE.Vector3(0, 780, 2700),
+                fov: this.camera.fov
+            };
+        }
+        moveCamera(
+            this.startCameraFour,
+            this.camera,
+            new THREE.Vector3(0, 1300, 2700),
+            7000,
+            1,
+            relativeT - 25000
+        );
+        this.camera.lookAt(this.train.grouped.position);
+    } else {
         this.camera.lookAt(this.train.grouped.position);
     }
 };
