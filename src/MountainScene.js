@@ -238,17 +238,18 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         this.camera.position.z = smoothstep(13000, 2500, camTime);
 
         this.camera.lookAt(new THREE.Vector3(0,800,0));
-    } else if (t < this.startTime + 5500) {
+    } else if (t < this.startTime + 8000) {
+        /*
         if (this.camera.oldRotation === undefined) {
             this.camera.oldRotation = this.camera.rotation.clone();
         }
         var newPos = new THREE.Vector3(
-            0, 800, 2700
+            1000, 300, 2700
         );
         var dummy = new THREE.Camera();
         dummy.position = this.camera.position;
         dummy.lookAt(newPos);
-        var panTime = (relativeT - 4000)/1500;
+        var panTime = (relativeT - 4000)/4000;
         this.camera.rotation.x = smoothstep(
             this.camera.oldRotation.x,
             dummy.rotation.x,
@@ -266,11 +267,41 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         );
         this.camera.fov = smoothstep(
             45,
-            15,
+            25,
             panTime
         );
         this.camera.updateProjectionMatrix();
-    } else if (relativeT < 6000) {
+        */
+        if (this.startCameraOne === undefined) {
+            this.startCameraOne = {
+                rotation: this.camera.rotation.clone(),
+                fov: this.camera.fov
+            };
+        }
+        panCamera(
+            this.startCameraOne,
+            this.camera,
+            new THREE.Vector3(2500, 220, 0),
+            4000,
+            2,
+            relativeT - 4000
+        );
+    } else if (relativeT < 9500) {
+        if (this.startCameraTwo === undefined) {
+            this.startCameraTwo = {
+                rotation: this.camera.rotation.clone(),
+                fov: this.camera.fov
+            };
+        }
+        panCamera(
+            this.startCameraTwo,
+            this.camera,
+            new THREE.Vector3(0, 800, 2700),
+            1500,
+            2,
+            relativeT - 8000
+        );
+    } else if (relativeT < 10000) {
         // Blur effects
     } else if (relativeT < 30000) {
         this.camera.fov = 45;
