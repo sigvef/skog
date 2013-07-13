@@ -117,9 +117,9 @@ MountainScene.prototype.initWater = function() {
 
     this.composernoise = new THREE.EffectComposer(renderer, RENDERTARGET);
     this.composernoise.addPass( new THREE.RenderPass(this.scene, this.camera));
-    var effect = new THREE.ShaderPass(THREE.NoiseShader);
-    effect.renderToScreen = true;
-    this.composernoise.addPass(effect);
+    this.noiseShaderEffect = new THREE.ShaderPass(THREE.NoiseShader);
+    this.noiseShaderEffect.renderToScreen = true;
+    this.composernoise.addPass(this.noiseShaderEffect);
 
     mesh.position.y = 50;
     
@@ -252,6 +252,12 @@ MountainScene.prototype.update = function(){
             this.trees[i].position.y = moveFactor * Math.sin( (t-this.startTime-4000) / 250*Math.PI ) + this.trees[i].finalYPos;
         }
     }
+
+    this.noiseShaderEffect.uniforms.width.value = (16*GU)/4;
+    this.noiseShaderEffect.uniforms.time.value = t/1000 % 1000;
+    this.noiseShaderEffect.uniforms.height.value = (9*GU)/4;
+    //this is how much noise there should be
+    this.noiseShaderEffect.uniforms.amount.value = Math.max(0.025, Math.min(0.07, Math.sin(t/1000)-0.9));
 };
 
 MountainScene.prototype.updateCamera = function(relativeT) {
