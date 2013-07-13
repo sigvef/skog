@@ -53,13 +53,34 @@ function start(){
     sm.addScene(new GreetScene());
     sm.initScenes(function(){
         sm.warmup();
-        music_lo_fi.volume = 0;
-        music.play();
-        music_lo_fi.play();
-        sm.jumpToScene('tunnel');
-        renderer.domElement.style.opacity = 1;
-        setTimeout(loop, 0);
+        readytostart();
     });
+}
+
+function readytostart(){
+    var wb = document.createElement('div');
+    wb.setAttribute('class', 'p-wrapper');
+    wb.setAttribute('id', 'starttext');
+    var b = document.createElement('p');
+    b.innerHTML = "Go to fullscreen, then click ENTER to start!";
+    var disclaimer = document.createElement('h6');
+    disclaimer.innerHTML = "Remember to use Chrome with --allow-file-access-from-files";
+    b.appendChild(disclaimer);
+    b.setAttribute('style', 'z-index: 999');
+    document.addEventListener('keydown',function(){
+        document.body.removeChild(b);
+    });
+    wb.appendChild(b);
+    document.body.appendChild(wb);
+}
+
+function actuallystart(){
+    music_lo_fi.volume = 0;
+    music.play();
+    music_lo_fi.play();
+    sm.jumpToScene('tunnel');
+    renderer.domElement.style.opacity = 1;
+    setTimeout(loop, 0);
 }
 
 function swapstagroover(){
@@ -70,6 +91,11 @@ function swapstagroover(){
 
 function bootstrap(){
     document.addEventListener("keydown",function(e){
+        if(e.keyCode == /*ENTER*/ 13) {
+            document.body.removeChild(document.getElementById('starttext'));
+            setTimeout(actuallystart, 100);
+        }
+
         if(e.keyCode == /*ESC*/ 27){
             window.open('', '_self', ''); //bug fix
             window.close(); 
