@@ -26,6 +26,8 @@ MountainScene.prototype.init = function(cb){
     
     this.initSkyBox();
 
+    this.initSmokePuffs();
+
     /* call cb when you are done loading! */
     this.initTrainAndRails(function() {
     	cb();
@@ -112,7 +114,6 @@ MountainScene.prototype.initWater = function() {
     this.composer.addPass(effect);
     mesh.position.y = 50;
     
-
 };
 
 MountainScene.prototype.initMountain = function() {
@@ -192,6 +193,10 @@ MountainScene.prototype.initTrees = function() {
     }
 };
 
+MountainScene.prototype.initSmokePuffs = function() {
+    this.smokePuffs = new Array();
+}
+
 MountainScene.prototype.reset = function(){
     this.camera.position.y = 150;
 };
@@ -246,7 +251,63 @@ MountainScene.prototype.update = function(){
             this.trees[i].position.y = moveFactor * Math.sin( (t-this.startTime-4300) / 250*Math.PI ) + this.trees[i].finalYPos;
         }
     }
+    for(var i=0;i<this.smokePuffs.length; i++) {
+        this.updateSmoke(this.smokePuffs[i]);
+    }
 };
+
+MountainScene.prototype.updateSmoke = function(updateParticleGroup){
+    
+    for ( var c = 0; c < updateParticleGroup.children.length; c ++ ) 
+    {
+        var sprite = updateParticleGroup.children[ c ];
+
+            // particle wiggle
+             var wiggleScale = 2;
+             sprite.position.x += wiggleScale * (Math.random() - 0.5);
+             sprite.position.y += wiggleScale * (Math.random() - 0.5);
+             sprite.position.z += wiggleScale * (Math.random() - 0.5);
+
+        var a = particleAttributes.randomness[c] + 1;
+        var pulseFactor = Math.sin(a * 0.01 * t) * 0.1 + 0.9;
+        sprite.position.x = particleAttributes.startPosition[c].x * pulseFactor;
+        sprite.position.y = particleAttributes.startPosition[c].y * pulseFactor + updateParticleGroup.rotation.y*40;
+        sprite.position.z = particleAttributes.startPosition[c].z * pulseFactor;
+    }
+
+    updateParticleGroup.rotation.y = t * 0.00075;
+    if(particleGroup.rotation.y>20) {
+        this.scene.remove(updateParticleGroup)
+    }
+}
+
+MountainScene.prototype.addSmokePuff = function(x,y,z) {
+    var particleTexture = THREE.ImageUtils.loadTexture( 'images/smokeparticle.png' );
+    
+    particleGroup = new THREE.Object3D();
+    particleAttributes = { startSize: [], startPosition: [], randomness: [] };
+
+    var totalParticles = 200;
+    var radiusRange = 50;
+    for( var i = 0; i < totalParticles; i++ ) 
+    {
+        var spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture, useScreenCoordinates: false, color: 0xffffff } );
+
+        var sprite = new THREE.Sprite( spriteMaterial );
+        sprite.scale.set( 32, 32, 1.0 ); // imageWidth, imageHeight
+        sprite.position.set( Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5 );
+        sprite.position.setLength( radiusRange * (Math.random() * 0.1 + 0.9) );
+
+        sprite.material.color.setHSL( 0, 0, 0.4 ); 
+        sprite.material.blending = THREE.AdditiveBlending; // "glowing" particles
+        particleGroup.add( sprite );
+        particleAttributes.startPosition.push( sprite.position.clone() );
+        particleAttributes.randomness.push( Math.random() );
+    }
+    particleGroup.position.set(x,y,z);
+    this.smokePuffs.push(particleGroup);
+    this.scene.add( particleGroup );
+}
 
 MountainScene.prototype.render = function(){
     /* do rendery stuff here */
