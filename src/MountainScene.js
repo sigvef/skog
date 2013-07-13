@@ -121,7 +121,6 @@ MountainScene.prototype.attachArms = function() {
     var that = this;
     this.arms = new Arms(20);
     this.arms.init(function() {
-        that.arms.grouped.position = new THREE.Vector3(0, 1000, 0);
         that.scene.add(that.arms.grouped);
     });
 };
@@ -318,9 +317,10 @@ MountainScene.prototype.updateCamera = function(relativeT) {
             1,
             relativeT - 25000
         );
+
         this.camera.lookAt(this.train.grouped.position);
     } else {
-        this.camera.lookAt(this.train.grouped.position);
+        this.camera.lookAt(this.arms.grouped.position);
     }
 };
 
