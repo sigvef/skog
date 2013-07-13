@@ -52,9 +52,6 @@ Rails.prototype.init = function(cb){
                 ];
     		}
     		else {
-    			console.log(that.rails[i].position.x);
-    			console.log(that.rails[i].position.y);
-    			console.log(that.rails[i].position.z);
     			that.rails[i].animations = [
                     {
                     	start: 0,
