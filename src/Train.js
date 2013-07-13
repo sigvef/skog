@@ -107,7 +107,7 @@ Train.prototype.update = function(){
 Train.prototype.partytime = function(){
 	var diff = 2*Math.cos(Math.PI*t/500*2);
 	this.grouped.scale.y = 10 + diff;
-	this.grouped.position.y -= diff;
+	this.grouped.position.y = 885 + 5 * diff;
 };
 
 Train.prototype.rotateWheels = function(rotationSpeed) {
