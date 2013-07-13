@@ -160,7 +160,6 @@ MountainScene.prototype.initMountain = function() {
         party: {type:'f', value: 0},
         gravel: {type: 't', value: THREE.ImageUtils.loadTexture('res/gravel.jpg')},
         grass: {type: 't', value: THREE.ImageUtils.loadTexture('res/floral.jpg')},
-        snow: {type: 't', value: THREE.ImageUtils.loadTexture('res/snow.jpg')},
         height: {type: 't', value: this.heightMap}
     };
     this.mountainMesh = new THREE.Mesh(geometry, createMountainShaderMaterial(this.mountainuniforms));

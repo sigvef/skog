@@ -9,8 +9,6 @@ TunnelScene.prototype.init = function(cb){
     this.scene = new THREE.Scene();
     this.fov = 0; //also set in reset
 
-
-
     var that = this;
     var scale = 400;
     this.ninjadev = new THREE.Mesh(new THREE.CubeGeometry(1607/scale,0.0001,267/scale), new THREE.MeshLambertMaterial({
