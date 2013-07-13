@@ -1,5 +1,5 @@
 function Train(){
-	this.startTime = 0;
+	this.startTime = 0;	//set this startTime correctly
 }
 
 Train.prototype.init = function(cb){
@@ -102,8 +102,15 @@ Train.prototype.update = function(){
 					part.activeAnimation = -1;
 				}
 			}
-		} else if (part.type === 'wheel') {
-			object.rotation.z -= 0.1*Math.PI;
 		}
+	}
+};
+
+Train.prototype.rotateWheels = function(rotationSpeed) {
+	if (arguments.length === 0) {
+		rotationSpeed = 0.1*Math.PI;
+	}
+	for (var i = 0; i < 12; i++) {	//because the 12 first elements in the array are wheels
+		this.objects[trainParts[i].name].rotation.z -= rotationSpeed;
 	}
 };
