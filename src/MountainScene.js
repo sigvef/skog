@@ -424,13 +424,6 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         this.camera.position.y = this.train.grouped.position.y + 100 + smoothstep(-50, 100, (relativeT - 80000) / 6000 );
         this.camera.position.z = 2700*Math.cos((relativeT + 3000)*0.0002);
 
-        /*
-        var camTime = (relativeT - 36000) / 6000;
-        this.camera.position.x = smoothstep(2950, 2800, camTime);
-        this.camera.position.y = smoothstep(805, 1000, camTime);
-        this.camera.position.z = smoothstep(0, -200, camTime);
-        */
-
         var hackyPos = this.train.grouped.position.clone();
         hackyPos.x += 150;
         this.camera.lookAt(hackyPos);
