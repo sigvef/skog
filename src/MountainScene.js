@@ -377,7 +377,7 @@ MountainScene.prototype.updateCamera = function(relativeT) {
 
         this.camera.lookAt(new THREE.Vector3(0, 820, 2700));
     } else if (relativeT < 32000) {
-        var camTime = (relativeT - 29000) / 4000;
+        var camTime = (relativeT - 29000) / 3000;
         if (this.startCameraFour === undefined) {
             this.startCameraFour = {
                 position: new THREE.Vector3(500, 800, 2650),
@@ -417,15 +417,22 @@ MountainScene.prototype.updateCamera = function(relativeT) {
             this.attachArms();
         }
 
-        this.camera.position.x = 2900*Math.sin((relativeT + 3000)*0.0002);
-        this.camera.position.y = this.train.grouped.position.y + 100 + smoothstep(-50, 100, (relativeT - 80000) / 6000 );
-        this.camera.position.z = 2700*Math.cos((relativeT + 3000)*0.0002);
-
         this.camera.fov = 25;
         this.camera.updateProjectionMatrix();
 
-        var hackyPos = this.arms.grouped.position.clone();
-        hackyPos.y += 150;
+        this.camera.position.x = 3000*Math.sin((relativeT + 3000)*0.0002);
+        this.camera.position.y = this.train.grouped.position.y + 100 + smoothstep(-50, 100, (relativeT - 80000) / 6000 );
+        this.camera.position.z = 2700*Math.cos((relativeT + 3000)*0.0002);
+
+        /*
+        var camTime = (relativeT - 36000) / 6000;
+        this.camera.position.x = smoothstep(2950, 2800, camTime);
+        this.camera.position.y = smoothstep(805, 1000, camTime);
+        this.camera.position.z = smoothstep(0, -200, camTime);
+        */
+
+        var hackyPos = this.train.grouped.position.clone();
+        hackyPos.x += 150;
         this.camera.lookAt(hackyPos);
     } else if (relativeT < 48500) {
         this.arms.disarm();
