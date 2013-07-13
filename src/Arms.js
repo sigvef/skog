@@ -99,6 +99,7 @@ Arms.prototype.update = function(trainY, yRotate, relativeT){
 Arms.prototype.disarm = function() {
     if (this.disarming === false) {
         this.doneLoading = false;
+        this.title.style.opacity = 0;
         this.disarming = true;
         this.dropTheArms = t;
     }
