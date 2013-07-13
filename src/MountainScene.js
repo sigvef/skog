@@ -335,19 +335,20 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         this.camera.position.y = smoothstep(550, 70, camTime);
 
         this.camera.lookAt(new THREE.Vector3(0,500,0));
-    } else if (relativeT < 8000) {
-        var camTime = (relativeT-4000)/4000;
-        this.camera.position.x = smoothstep(2500, 3000, camTime);
-        this.camera.position.y = smoothstep(70, 900, camTime);
-        this.camera.position.z = smoothstep(2500, -1500, camTime);
+    } else if (relativeT < 10500) {
+        var camTime = (relativeT-4000)/6500;
+        this.camera.position.x = smoothstep(2500, 4200, camTime);
+        this.camera.position.y = smoothstep(70, 1450, camTime);
+        this.camera.position.z = smoothstep(2500, -3500, camTime);
         this.camera.lookAt(new THREE.Vector3(0, 500, 0));
+        /*
     } else if (relativeT < 10500) {
         var camTime = (relativeT-8000)/2500;
         this.camera.position.x = smoothstep(3000, 2000, camTime);
         this.camera.position.y = smoothstep(900, 700, camTime);
         this.camera.position.z = smoothstep(-1500, -2000, camTime);
         this.camera.fov = smoothstep(45, 25, camTime);
-        this.camera.updateProjectionMatrix();
+        this.camera.updateProjectionMatrix();*/
     } else if (relativeT < 20000) {
         this.camera.fov = 45;
         this.camera.updateProjectionMatrix();
