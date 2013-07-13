@@ -229,11 +229,6 @@ MountainScene.prototype.update = function(){
         this.train.grouped.position.x = 2485*Math.sin((relativeT-timeToStartMovingTrain)*0.0002);
         this.train.grouped.position.z = 2485*Math.cos((relativeT-timeToStartMovingTrain)*0.0002);
         this.train.grouped.rotation.y += 0.004;
-        if (this.arms) { 
-            this.arms.update(this.train.grouped.position.y, this.train.grouped.rotation.y + Math.PI/2); 
-        } else {
-            this.attachArms();
-        }
         this.train.rotateWheels();
     }
 
@@ -329,8 +324,21 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         );
 
         this.camera.lookAt(this.train.grouped.position);
+    } else if (relativeT > (80700 - 14000)) {
+        if (this.arms) { 
+            this.arms.update(this.train.grouped.position.y, this.train.grouped.rotation.y + Math.PI/2, relativeT); 
+        } else {
+            this.attachArms();
+        }
+
+        this.camera.position.y = this.arms.grouped.position.y + 100 + smoothstep(-100, 100, (relativeT - (80700 - 14000)) / 6000 );
+        this.camera.position.x = 2700*Math.sin((relativeT + 3000)*0.0002);
+        this.camera.position.z = 2700*Math.cos((relativeT + 3000)*0.0002);
+        var hackyPos = this.arms.grouped.position.clone();
+        hackyPos.y += 150;
+        this.camera.lookAt(hackyPos);
     } else {
-        this.camera.lookAt(this.arms.grouped.position);
+        this.camera.lookAt(this.train.grouped.position);
     }
     for(var i=0;i<this.smokePuffs.length; i++) {
         this.updateSmoke(this.smokePuffs[i]);
