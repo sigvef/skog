@@ -157,6 +157,7 @@ MountainScene.prototype.initMountain = function() {
 
     this.mountainuniforms = {
         time: {type:'f', value: 0},
+        party: {type:'f', value: 0},
         gravel: {type: 't', value: THREE.ImageUtils.loadTexture('res/gravel.jpg')},
         grass: {type: 't', value: THREE.ImageUtils.loadTexture('res/floral.jpg')},
         snow: {type: 't', value: THREE.ImageUtils.loadTexture('res/snow.jpg')},
@@ -200,6 +201,9 @@ MountainScene.prototype.update = function(){
 	var relativeT = t - this.startTime;
 	this.train.update();
 	this.rails.update();
+
+    this.mountainuniforms.time.value = t;
+    this.mountainuniforms.party.value = +(t > (32180 + this.startTime));
 
     if(t == 64740){
         swapstagroover(); 
