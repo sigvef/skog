@@ -24,6 +24,8 @@ Train.prototype.init = function(cb){
 			object.traverse(function (child) {
 				if (child instanceof THREE.Mesh) {
 					child.material.map = texture;
+                    child.geometry.mergeVertices();
+                    child.geometry.computeVertexNormals();
 				}
 			});
 			var everythingIsLoaded = true;
