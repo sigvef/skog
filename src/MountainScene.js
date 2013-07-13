@@ -38,7 +38,7 @@ MountainScene.prototype.initTrainAndRails = function(cb) {
     this.rails = [];
     var that = this;
     this.train = new Train();
-    this.train.startTime = this.startTime + 10500;
+    this.train.startTime = this.startTime + 10000;
     this.train.init(function() {
     	that.train.grouped.scale.x = 10;
     	that.train.grouped.scale.y = 10;
@@ -233,6 +233,10 @@ MountainScene.prototype.update = function(){
 
     this.updateCamera(relativeT);
 
+    for(var i=0;i<this.smokePuffs.length; i++) {
+        this.updateSmoke(this.smokePuffs[i]);
+    }
+
     var timeToStartMovingTrain = 30500;
     if (relativeT > timeToStartMovingTrain) {
         this.train.grouped.position.x = 2485*Math.sin((relativeT-timeToStartMovingTrain)*0.0002);
@@ -275,73 +279,81 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         this.camera.position.z = smoothstep(13000, 2500, camTime);
         this.camera.position.y = smoothstep(550, 70, camTime);
 
-        this.camera.lookAt(new THREE.Vector3(0,800,0));
-    } else if (relativeT < 9000) {
-        if (this.startCameraOne === undefined) {
-            this.startCameraOne = {
-                rotation: this.camera.rotation.clone(),
-                fov: this.camera.fov
-            };
-        }
-        panCamera(
-            this.startCameraOne,
-            this.camera,
-            new THREE.Vector3(2500, 220, 0),
-            4000,
-            2,
-            relativeT - 4000
-        );
-    } else if (relativeT < 9500) {
-        if (this.startCameraTwo === undefined) {
-            this.startCameraTwo = {
-                rotation: this.camera.rotation.clone(),
-                fov: this.camera.fov
-            };
-        }
-        panCamera(
-            this.startCameraTwo,
-            this.camera,
-            new THREE.Vector3(0, 800, 2700),
-            1500,
-            2,
-            relativeT - 8000
-        );
+        this.camera.lookAt(new THREE.Vector3(0,500,0));
+    } else if (relativeT < 8000) {
+        var camTime = (relativeT-4000)/4000;
+        this.camera.position.x = smoothstep(2500, 3000, camTime);
+        this.camera.position.y = smoothstep(70, 900, camTime);
+        this.camera.position.z = smoothstep(2500, -1500, camTime);
+        this.camera.lookAt(new THREE.Vector3(0, 500, 0));
     } else if (relativeT < 10500) {
-        // Blur effects
-    } else if (relativeT < 25000) {
+        var camTime = (relativeT-8000)/2500;
+        this.camera.position.x = smoothstep(3000, 2000, camTime);
+        this.camera.position.y = smoothstep(900, 700, camTime);
+        this.camera.position.z = smoothstep(-1500, -2000, camTime);
+        this.camera.fov = smoothstep(45, 25, camTime);
+        this.camera.updateProjectionMatrix();
+    } else if (relativeT < 20000) {
+        this.camera.fov = 45;
+        this.camera.updateProjectionMatrix();
         if (this.startCameraThree === undefined) {
             this.startCameraThree = {
-                position: new THREE.Vector3(1500, 920, 4000),
+                position: new THREE.Vector3(-300, 800, 2800),
                 fov: this.camera.fov
             };
         }
-        this.camera.fov = 45;
         moveCamera(
             this.startCameraThree,
             this.camera,
-            new THREE.Vector3(540, 810, 3400),
-            14500,
+            new THREE.Vector3(540, 840, 2800),
+            9500,
             1,
             relativeT - 10500
         );
         this.camera.lookAt(this.train.grouped.position);
+    } else if (relativeT < 21000) {
+        // Wait
+    } else if (relativeT < 24000) {
+        var camTime = (relativeT-21000)/3000;
+        this.camera.position.x = smoothstep(300, 550, camTime);
+        this.camera.position.y = smoothstep(1100, 920, camTime);
+        this.camera.position.z = 2675;
+
+        this.camera.lookAt(new THREE.Vector3(0, 820, 2700));
+    } else if (relativeT < 29000) {
+        var camTime = (relativeT-24000)/5000;
+        this.camera.position.x = smoothstep(-2000, -1500, camTime);
+        this.camera.position.y = 2300;
+        this.camera.position.z = smoothstep(3800, 3600, camTime);
+
+        this.camera.lookAt(new THREE.Vector3(0, 820, 2700));
     } else if (relativeT < 32000) {
+        var camTime = (relativeT - 29000) / 3000;
         if (this.startCameraFour === undefined) {
             this.startCameraFour = {
-                position: new THREE.Vector3(1700, 780, 3000),
+                position: new THREE.Vector3(500, 800, 2650),
                 fov: this.camera.fov
             };
         }
         moveCamera(
             this.startCameraFour,
             this.camera,
-            new THREE.Vector3(1700, 1300, 3000),
-            7000,
+            new THREE.Vector3(700, 800, 2950),
+            3000,
             1,
-            relativeT - 25000
+            relativeT - 29000
         );
 
-        this.camera.lookAt(this.train.grouped.position);
+        var cameraTarget = {
+            x: smoothstep(300, 550, camTime),
+            y: 850,
+            z: smoothstep(2650, 2600, camTime)
+        };
+        this.camera.lookAt(new THREE.Vector3(
+            cameraTarget.x,
+            cameraTarget.y,
+            cameraTarget.z
+        ));
     } else if (relativeT > (80700 - 14000)) {
         if (this.arms) { 
             this.arms.update(this.train.grouped.position.y, this.train.grouped.rotation.y + Math.PI/2, relativeT); 
@@ -352,14 +364,15 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         this.camera.position.y = this.arms.grouped.position.y + 100 + smoothstep(-100, 100, (relativeT - (80700 - 14000)) / 6000 );
         this.camera.position.x = 2700*Math.sin((relativeT + 3000)*0.0002);
         this.camera.position.z = 2700*Math.cos((relativeT + 3000)*0.0002);
+
+        this.camera.fov = 25;
+        this.camera.updateProjectionMatrix();
+
         var hackyPos = this.arms.grouped.position.clone();
         hackyPos.y += 150;
         this.camera.lookAt(hackyPos);
     } else {
-        this.camera.lookAt(this.train.grouped.position);
-    }
-    for(var i=0;i<this.smokePuffs.length; i++) {
-        this.updateSmoke(this.smokePuffs[i]);
+        // this.camera.lookAt(this.train.grouped.position);
     }
 };
 
