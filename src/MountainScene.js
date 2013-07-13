@@ -38,7 +38,7 @@ MountainScene.prototype.initTrainAndRails = function(cb) {
     this.rails = [];
     var that = this;
     this.train = new Train();
-    this.train.startTime = this.startTime + 10000;
+    this.train.startTime = this.startTime + 10500;
     this.train.init(function() {
     	that.train.grouped.scale.x = 10;
     	that.train.grouped.scale.y = 10;
