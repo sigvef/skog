@@ -426,7 +426,6 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         var camTime = (relativeT - 58000) / 6000;
 
         var orbitron = this.trees[10].position;
-        console.log("tree pos:", oribitron);
 
         this.camera.position.x = orbitron.x + smoothstep(-100, -500, camTime);
         this.camera.position.y = orbitron.y + smoothstep(300, 350, camTime);
