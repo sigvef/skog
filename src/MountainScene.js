@@ -7,8 +7,8 @@ function MountainScene(){
     this.segments = 192;
     this.halfSegments = 96;
     this.size = 8000;
-}
-
+};
+ 
 MountainScene.prototype.init = function(cb){
     /* do loady stuff here */
 
@@ -38,7 +38,7 @@ MountainScene.prototype.initTrainAndRails = function(cb) {
     this.rails = [];
     var that = this;
     this.train = new Train();
-    this.train.startTime = this.startTime + 10500;
+    this.train.startTime = this.startTime + 10000;
     this.train.init(function() {
     	that.train.grouped.scale.x = 10;
     	that.train.grouped.scale.y = 10;
@@ -49,7 +49,7 @@ MountainScene.prototype.initTrainAndRails = function(cb) {
     	that.scene.add(that.train.grouped);
     	
         that.rails = new Rails();
-        that.rails.startTime = that.startTime + 4500;
+        that.rails.startTime = that.startTime + 8500;
         that.rails.init(function() {
         	that.scene.add(that.rails.grouped);
         	cb();
@@ -114,8 +114,33 @@ MountainScene.prototype.initWater = function() {
     var effect = new THREE.ShaderPass(AsciiShader);
     effect.renderToScreen = true;
     this.composer.addPass(effect);
+
+    this.composernoise = new THREE.EffectComposer(renderer, RENDERTARGET);
+    this.composernoise.addPass( new THREE.RenderPass(this.scene, this.camera));
+    this.noiseShaderEffect = new THREE.ShaderPass(THREE.NoiseShader);
+    this.noiseShaderEffect.renderToScreen = true;
+    this.composernoise.addPass(this.noiseShaderEffect);
+
+    this.composersquash = new THREE.EffectComposer( renderer, RENDERTARGET );
+    this.composersquash.addPass( new THREE.RenderPass(this.scene, this.camera));
+    this.squashShaderEffect = new THREE.ShaderPass(THREE.SquashShader);
+    this.squashShaderEffect.renderToScreen = true;
+    this.composersquash.addPass(this.squashShaderEffect);
+
     mesh.position.y = 50;
-    
+};
+
+MountainScene.prototype.attachArms = function() {
+    var that = this;
+    this.arms = new Arms(20);
+    this.arms.init(function() {
+        that.scene.add(that.arms.grouped);
+        that.arms.title.style.opacity = 1;
+    });
+};
+
+MountainScene.prototype.detachArms = function() {
+    this.scene.remove(this.arms.grouped);
 };
 
 MountainScene.prototype.initMountain = function() {
@@ -161,7 +186,6 @@ MountainScene.prototype.initMountain = function() {
         party: {type:'f', value: 0},
         gravel: {type: 't', value: THREE.ImageUtils.loadTexture('res/gravel.jpg')},
         grass: {type: 't', value: THREE.ImageUtils.loadTexture('res/floral.jpg')},
-        snow: {type: 't', value: THREE.ImageUtils.loadTexture('res/snow.jpg')},
         height: {type: 't', value: this.heightMap}
     };
     this.mountainMesh = new THREE.Mesh(geometry, createMountainShaderMaterial(this.mountainuniforms));
@@ -196,7 +220,7 @@ MountainScene.prototype.initTrees = function() {
 
 MountainScene.prototype.initSmokePuffs = function() {
     this.smokePuffs = new Array();
-}
+};
 
 MountainScene.prototype.reset = function(){
     this.camera.position.y = 70;
@@ -207,6 +231,9 @@ MountainScene.prototype.update = function(){
 	this.train.update();
 	this.rails.update();
 
+    this.mountainuniforms.time.value = t;
+    this.mountainuniforms.party.value = +(t > (32180 + this.startTime));
+
     if(t == 64740){
         swapstagroover(); 
     }
@@ -216,12 +243,18 @@ MountainScene.prototype.update = function(){
 
     this.updateCamera(relativeT);
 
+    for(var i=0;i<this.smokePuffs.length; i++) {
+        this.updateSmoke(this.smokePuffs[i]);
+    }
+
     var timeToStartMovingTrain = 30500;
     if (relativeT > timeToStartMovingTrain) {
         this.train.grouped.position.x = 2485*Math.sin((relativeT-timeToStartMovingTrain)*0.0002);
         this.train.grouped.position.z = 2485*Math.cos((relativeT-timeToStartMovingTrain)*0.0002);
         this.train.grouped.rotation.y += 0.004;
         this.train.rotateWheels();
+        if(relativeT > 32250)
+        this.train.partytime();
     }
 
     this.uniforms.time.value = t/1500;
@@ -241,6 +274,12 @@ MountainScene.prototype.update = function(){
             this.trees[i].position.y = moveFactor * Math.sin( (t-this.startTime-4000) / 250*Math.PI ) + this.trees[i].finalYPos;
         }
     }
+
+    this.noiseShaderEffect.uniforms.width.value = (16*GU)/4;
+    this.noiseShaderEffect.uniforms.time.value = t/1000 % 1000;
+    this.noiseShaderEffect.uniforms.height.value = (9*GU)/4;
+    //this is how much noise there should be
+    this.noiseShaderEffect.uniforms.amount.value = Math.max(0.025, Math.min(0.07, Math.sin(t/1000)-0.9));
 };
 
 MountainScene.prototype.updateCamera = function(relativeT) {
@@ -248,78 +287,102 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         var camTime = relativeT/4000;
         this.camera.position.x = smoothstep(13000, 2500, camTime);
         this.camera.position.z = smoothstep(13000, 2500, camTime);
+        this.camera.position.y = smoothstep(550, 70, camTime);
 
-        this.camera.lookAt(new THREE.Vector3(0,800,0));
+        this.camera.lookAt(new THREE.Vector3(0,500,0));
     } else if (relativeT < 8000) {
-        if (this.startCameraOne === undefined) {
-            this.startCameraOne = {
-                rotation: this.camera.rotation.clone(),
-                fov: this.camera.fov
-            };
-        }
-        panCamera(
-            this.startCameraOne,
-            this.camera,
-            new THREE.Vector3(2500, 220, 0),
-            4000,
-            2,
-            relativeT - 4000
-        );
-    } else if (relativeT < 9500) {
-        if (this.startCameraTwo === undefined) {
-            this.startCameraTwo = {
-                rotation: this.camera.rotation.clone(),
-                fov: this.camera.fov
-            };
-        }
-        panCamera(
-            this.startCameraTwo,
-            this.camera,
-            new THREE.Vector3(0, 800, 2700),
-            1500,
-            2,
-            relativeT - 8000
-        );
+        var camTime = (relativeT-4000)/4000;
+        this.camera.position.x = smoothstep(2500, 3000, camTime);
+        this.camera.position.y = smoothstep(70, 900, camTime);
+        this.camera.position.z = smoothstep(2500, -1500, camTime);
+        this.camera.lookAt(new THREE.Vector3(0, 500, 0));
     } else if (relativeT < 10500) {
-        // Blur effects
-    } else if (relativeT < 25000) {
+        var camTime = (relativeT-8000)/2500;
+        this.camera.position.x = smoothstep(3000, 2000, camTime);
+        this.camera.position.y = smoothstep(900, 700, camTime);
+        this.camera.position.z = smoothstep(-1500, -2000, camTime);
+        this.camera.fov = smoothstep(45, 25, camTime);
+        this.camera.updateProjectionMatrix();
+    } else if (relativeT < 20000) {
+        this.camera.fov = 45;
+        this.camera.updateProjectionMatrix();
         if (this.startCameraThree === undefined) {
             this.startCameraThree = {
-                position: new THREE.Vector3(1500, 920, 4000),
+                position: new THREE.Vector3(-300, 800, 2800),
                 fov: this.camera.fov
             };
         }
-        this.camera.fov = 45;
         moveCamera(
             this.startCameraThree,
             this.camera,
-            new THREE.Vector3(540, 810, 3400),
-            14500,
+            new THREE.Vector3(540, 840, 2800),
+            9500,
             1,
             relativeT - 10500
         );
         this.camera.lookAt(this.train.grouped.position);
+    } else if (relativeT < 21000) {
+        // Wait
+    } else if (relativeT < 24000) {
+        var camTime = (relativeT-21000)/3000;
+        this.camera.position.x = smoothstep(300, 550, camTime);
+        this.camera.position.y = smoothstep(1100, 920, camTime);
+        this.camera.position.z = 2675;
+
+        this.camera.lookAt(new THREE.Vector3(0, 820, 2700));
+    } else if (relativeT < 29000) {
+        var camTime = (relativeT-24000)/5000;
+        this.camera.position.x = smoothstep(-2000, -1500, camTime);
+        this.camera.position.y = 2300;
+        this.camera.position.z = smoothstep(3800, 3600, camTime);
+
+        this.camera.lookAt(new THREE.Vector3(0, 820, 2700));
     } else if (relativeT < 32000) {
+        var camTime = (relativeT - 29000) / 3000;
         if (this.startCameraFour === undefined) {
             this.startCameraFour = {
-                position: new THREE.Vector3(1700, 780, 3000),
+                position: new THREE.Vector3(500, 800, 2650),
                 fov: this.camera.fov
             };
         }
         moveCamera(
             this.startCameraFour,
             this.camera,
-            new THREE.Vector3(1700, 1300, 3000),
-            7000,
+            new THREE.Vector3(700, 800, 2950),
+            3000,
             1,
-            relativeT - 25000
+            relativeT - 29000
         );
-        this.camera.lookAt(this.train.grouped.position);
+
+        var cameraTarget = {
+            x: smoothstep(300, 550, camTime),
+            y: 850,
+            z: smoothstep(2650, 2600, camTime)
+        };
+        this.camera.lookAt(new THREE.Vector3(
+            cameraTarget.x,
+            cameraTarget.y,
+            cameraTarget.z
+        ));
+    } else if (relativeT > (80700 - 14000)) {
+        if (this.arms) { 
+            this.arms.update(this.train.grouped.position.y, this.train.grouped.rotation.y + Math.PI/2, relativeT); 
+        } else {
+            this.attachArms();
+        }
+
+        this.camera.position.y = this.arms.grouped.position.y + 100 + smoothstep(-100, 100, (relativeT - (80700 - 14000)) / 6000 );
+        this.camera.position.x = 2700*Math.sin((relativeT + 3000)*0.0002);
+        this.camera.position.z = 2700*Math.cos((relativeT + 3000)*0.0002);
+
+        this.camera.fov = 25;
+        this.camera.updateProjectionMatrix();
+
+        var hackyPos = this.arms.grouped.position.clone();
+        hackyPos.y += 150;
+        this.camera.lookAt(hackyPos);
     } else {
-        this.camera.lookAt(this.train.grouped.position);
-    }
-    for(var i=0;i<this.smokePuffs.length; i++) {
-        this.updateSmoke(this.smokePuffs[i]);
+        // this.camera.lookAt(this.train.grouped.position);
     }
 };
 
@@ -378,8 +441,13 @@ MountainScene.prototype.addSmokePuff = function(x,y,z) {
 
 MountainScene.prototype.render = function(){
     /* do rendery stuff here */
-    music.volume ? renderer.render(this.scene, this.camera)
-                 : this.composer.render();
+    if(t > 64239 && t < 64740 || t > 80700 && t < 81200) {
+        this.composersquash.render();
+    } else {
+        music.volume ? this.composernoise.render()
+                     : this.composer.render();
+    }
+
 };
 
 MountainScene.prototype.setupLights = function() {
