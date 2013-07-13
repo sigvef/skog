@@ -83,7 +83,7 @@ Arms.prototype.init = function(cb){
 Arms.prototype.update = function(trainY, yRotate, relativeT){
     // Update the armGroup position
     if (this.doneLoading) {
-        this.grouped.position.y = trainY - 130;
+        this.grouped.position.y = trainY - 105;
         this.grouped.position.x = 2700*Math.sin((relativeT + 1000)*0.0002);
         this.grouped.position.z = 2700*Math.cos((relativeT + 1000)*0.0002);
 
