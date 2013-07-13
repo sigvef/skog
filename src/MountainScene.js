@@ -233,13 +233,6 @@ MountainScene.prototype.update = function(){
     this.mountainuniforms.time.value = t;
     this.mountainuniforms.party.value = +(t > (32180 + this.startTime));
 
-    if(t == 64740){
-        swapstagroover(); 
-    }
-    if(t == 80700){
-        swapstagroover(); 
-    }
-
     this.updateCamera(relativeT);
 
     for(var i=0;i<this.smokePuffs.length; i++) {
@@ -520,10 +513,12 @@ MountainScene.prototype.render = function(){
     if(t > 64239 && t < 64740 || t > 80700 && t < 81200) {
         this.composersquash.render();
     } else {
-        music.volume ? this.composernoise.render()
-                     : this.composer.render();
+    	if (t > 64740 && t < 80700) {
+    		this.composer.render();
+    	} else {
+    		this.composernoise.render();
+    	}
     }
-
 };
 
 MountainScene.prototype.setupLights = function() {
