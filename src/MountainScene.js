@@ -181,7 +181,7 @@ MountainScene.prototype.initMountain = function() {
     this.mountainuniforms = {
         time: {type:'f', value: 0},
         party: {type:'f', value: 0},
-        gravel: {type: 't', value: THREE.ImageUtils.loadTexture('res/gravel.jpg')},
+        gravel: {type: 't', value: THREE.ImageUtils.loadTexture('res/dirt.jpg')},
         grass: {type: 't', value: THREE.ImageUtils.loadTexture('res/floral.jpg')},
         height: {type: 't', value: this.heightMap}
     };
