@@ -275,7 +275,7 @@ MountainScene.prototype.update = function(){
         }
 
         if(t%500==0) {
-            this.addSmokePuff(2700*Math.sin((relativeT-timeToStartMovingTrain+440)*0.0002),this.train.grouped.position.y+100,2700*Math.cos((relativeT-timeToStartMovingTrain+440)*0.0002));
+            this.addSmokePuff(2700*Math.sin((relativeT-timeToStartMovingTrain+750)*0.0002),this.train.grouped.position.y+100,2700*Math.cos((relativeT-timeToStartMovingTrain+750)*0.0002));
         }
         if(relativeT > 32250)
             this.train.partytime();
@@ -491,7 +491,7 @@ MountainScene.prototype.addSmokePuff = function(x,y,z) {
         var spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture, useScreenCoordinates: false, color: 0xffffff } );
 
         this.smokePuffs[this.smokePuffs.length-1].add( new THREE.Sprite( spriteMaterial ));
-        this.smokePuffs[this.smokePuffs.length-1].children[i].scale.set( 128, 128, 1.0 ); // imageWidth, imageHeight
+        this.smokePuffs[this.smokePuffs.length-1].children[i].scale.set( 64, 64, 1.0 ); // imageWidth, imageHeight
         this.smokePuffs[this.smokePuffs.length-1].children[i].position.set( Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5 );
         this.smokePuffs[this.smokePuffs.length-1].children[i].position.setLength( radiusRange * (Math.random() * 0.1 + 0.9) );
 
