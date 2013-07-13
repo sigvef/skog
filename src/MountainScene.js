@@ -345,6 +345,11 @@ MountainScene.prototype.updateCamera = function(relativeT) {
             cameraTarget.y,
             cameraTarget.z
         ));
+    } else if (relativeT < 64000) {
+        this.camera.position = new THREE.Vector3(
+            0, 1300, 0
+        );
+        this.camera.lookAt(this.train.grouped.position);
     } else {
         // this.camera.lookAt(this.train.grouped.position);
     }
