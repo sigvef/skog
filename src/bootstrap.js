@@ -48,12 +48,12 @@ function start(){
 
     sm = new SceneManager();
     //sm.addScene(new ExampleScene());
-    //sm.addScene(new TunnelScene());
+    sm.addScene(new TunnelScene());
     sm.addScene(new MountainScene());
     sm.initScenes(function(){
         sm.warmup();
         music.play();
-        sm.jumpToScene('mountain');
+        sm.jumpToScene('tunnel');
         setTimeout(loop, 0);
     });
 }
