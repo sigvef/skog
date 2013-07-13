@@ -213,7 +213,15 @@ MountainScene.prototype.initTrees = function() {
             treesPlaced++;
         }
     }
-    a = this.trees;
+    var finalI = -1;
+    var minY = 10000;
+    for (var i=0; i < this.trees.length; i++) {
+        if (this.trees[i].finalYPos < minY) {
+            minY = this.trees[i].finalYPos;
+            finalI = i;
+        }
+    }
+    console.log("the lowest tree:", finalI);
 };
 
 MountainScene.prototype.initSmokePuffs = function() {
@@ -408,14 +416,14 @@ MountainScene.prototype.updateCamera = function(relativeT) {
             0
         );
         this.camera.lookAt(this.train.grouped.position);
-    } else if (relativeT < 40000) {
+    } else if (relativeT < 42000) {
         if (this.arms) { 
             this.arms.update(this.train.grouped.position.y, this.train.grouped.rotation.y + Math.PI/2, relativeT); 
         } else {
             this.attachArms();
         }
 
-        this.camera.position.x = 2700*Math.sin((relativeT + 3000)*0.0002);
+        this.camera.position.x = 2900*Math.sin((relativeT + 3000)*0.0002);
         this.camera.position.y = this.train.grouped.position.y + 100 + smoothstep(-50, 100, (relativeT - 80000) / 6000 );
         this.camera.position.z = 2700*Math.cos((relativeT + 3000)*0.0002);
 
@@ -433,7 +441,7 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         this.camera.updateProjectionMatrix();
         this.camera.position = new THREE.Vector3(
             0,
-            smoothstep(1500, 1000, (relativeT - 40000) / 8500),
+            smoothstep(1500, 1000, (relativeT - 42000) / 6500),
             0
         );
         this.camera.lookAt(this.train.grouped.position);
@@ -456,11 +464,12 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         // tree
         var camTime = (relativeT - 58000) / 6000;
 
-        var orbitron = this.trees[10].position;
+        var orbitron = this.trees[12].position;
+        orbitron.y += 100;
 
-        this.camera.position.x = orbitron.x + smoothstep(-100, -500, camTime);
-        this.camera.position.y = orbitron.y + smoothstep(300, 350, camTime);
-        this.camera.position.z = orbitron.z + smoothstep(-100, 300, camTime);
+        this.camera.position.x = orbitron.x + smoothstep(-700, -300, camTime);
+        this.camera.position.y = orbitron.y + smoothstep(140, 40, camTime);
+        this.camera.position.z = orbitron.z + smoothstep(1000, 300, camTime);
 
         this.camera.lookAt(orbitron);
     }
