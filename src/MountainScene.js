@@ -238,40 +238,7 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         this.camera.position.z = smoothstep(13000, 2500, camTime);
 
         this.camera.lookAt(new THREE.Vector3(0,800,0));
-    } else if (t < this.startTime + 8000) {
-        /*
-        if (this.camera.oldRotation === undefined) {
-            this.camera.oldRotation = this.camera.rotation.clone();
-        }
-        var newPos = new THREE.Vector3(
-            1000, 300, 2700
-        );
-        var dummy = new THREE.Camera();
-        dummy.position = this.camera.position;
-        dummy.lookAt(newPos);
-        var panTime = (relativeT - 4000)/4000;
-        this.camera.rotation.x = smoothstep(
-            this.camera.oldRotation.x,
-            dummy.rotation.x,
-            panTime
-        );
-        this.camera.rotation.y = smoothstep(
-            this.camera.oldRotation.y,
-            dummy.rotation.y,
-            panTime
-        );
-        this.camera.rotation.z = smoothstep(
-            this.camera.oldRotation.z,
-            dummy.rotation.z,
-            panTime
-        );
-        this.camera.fov = smoothstep(
-            45,
-            25,
-            panTime
-        );
-        this.camera.updateProjectionMatrix();
-        */
+    } else if (relativeT < 8000) {
         if (this.startCameraOne === undefined) {
             this.startCameraOne = {
                 rotation: this.camera.rotation.clone(),
@@ -301,11 +268,11 @@ MountainScene.prototype.updateCamera = function(relativeT) {
             2,
             relativeT - 8000
         );
-    } else if (relativeT < 10000) {
+    } else if (relativeT < 10500) {
         // Blur effects
     } else if (relativeT < 30000) {
         this.camera.fov = 45;
-        this.camera.position = new THREE.Vector3(400, 880, 3200);
+        this.camera.position = new THREE.Vector3(500, 880, 3400);
         this.camera.lookAt(this.train.grouped.position);
     }
 };
