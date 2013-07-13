@@ -57,6 +57,10 @@ var GreetShader = {
             "if(time > 30000.){",
                 "color += vec4(1.) * (time - 30000.) / 2000.;",
             "}",
+            
+            "if(time < 2000.){",
+                "color += vec4(1.) * (2000. - time) / 2000.;",
+            "}",
 
             "gl_FragColor = color;",
         "}",
