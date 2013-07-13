@@ -16,8 +16,6 @@ MountainScene.prototype.init = function(cb){
     this.camera = new THREE.PerspectiveCamera(45, 16/9, 1, 50000);
     this.scene.add(this.camera);
 
-    c = this.camera;
-
     this.initMountain();
 
     this.initWater();
@@ -145,7 +143,6 @@ MountainScene.prototype.initMountain = function() {
         var imageData = ctx.getImageData(0,0,s,s);
         for(var i=0; i<m.length;i++){
             var height = m[i];
-            //if(height > 0) console.log(height);
             imageData.data[i*4 + 0] = height;
             imageData.data[i*4 + 1] = height;
             imageData.data[i*4 + 2] = height;
@@ -174,7 +171,7 @@ MountainScene.prototype.initTrees = function() {
     this.trees = [];
     Math.seedrandom("the-forest");
     var treesPlaced = 0;
-    while (treesPlaced < 500) {
+    while (treesPlaced < 100) {
         var pos = {
             x: Math.random()*6000-3000,
             y: Math.random()*1000+9000,
@@ -203,6 +200,13 @@ MountainScene.prototype.update = function(){
 	var relativeT = t - this.startTime;
 	this.train.update();
 	this.rails.update();
+
+    if(t == 64740){
+        swapstagroover(); 
+    }
+    if(t == 80700){
+        swapstagroover(); 
+    }
 
     this.updateCamera(relativeT);
 
@@ -437,11 +441,12 @@ MountainScene.prototype.initSkyBox = function() {
     var imagePath = "res/red_floral.jpg";
     var skyGeometry = new THREE.CubeGeometry( 26000, 26000, 26000 );   
     var materialArray = [];
-    for (var i = 0; i < 6; i++) {
-    	materialArray.push( new THREE.MeshBasicMaterial({
+    var material =  new THREE.MeshBasicMaterial({
     		map: THREE.ImageUtils.loadTexture(imagePath),
     		side: THREE.BackSide
-    	}));
+    	});
+    for (var i = 0; i < 6; i++) {
+        materialArray[i] = material;
     }
     var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
     var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
