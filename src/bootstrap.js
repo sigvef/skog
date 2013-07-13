@@ -52,12 +52,27 @@ function start(){
     sm.addScene(new MountainScene());
     sm.initScenes(function(){
         sm.warmup();
-        music_lo_fi.volume = 0;
-        music.play();
-        music_lo_fi.play();
-        sm.jumpToScene('tunnel');
-        setTimeout(loop, 0);
+        readytostart();
     });
+}
+
+function readytostart(){
+    var b = document.createElement('button');
+    b.innerHTML = "Please fullscreen, then click me to start!";
+    b.addEventListener('click',function(){
+        document.body.removeChild(b);
+        setTimeout(actuallystart, 100);
+    });
+    document.body.appendChild(b);
+}
+
+function actuallystart(){
+    music_lo_fi.volume = 0;
+    music.play();
+    music_lo_fi.play();
+    sm.jumpToScene('tunnel');
+    renderer.domElement.style.opacity = 1;
+    setTimeout(loop, 0);
 }
 
 function swapstagroover(){
