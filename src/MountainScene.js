@@ -38,7 +38,7 @@ MountainScene.prototype.initTrainAndRails = function(cb) {
     this.rails = [];
     var that = this;
     this.train = new Train();
-    this.train.startTime = this.startTime + 6000;
+    this.train.startTime = this.startTime + 10500;
     this.train.init(function() {
     	that.train.grouped.scale.x = 10;
     	that.train.grouped.scale.y = 10;
@@ -206,7 +206,7 @@ MountainScene.prototype.update = function(){
 
     this.updateCamera(relativeT);
 
-    var timeToStartMovingTrain = 24000;
+    var timeToStartMovingTrain = 30500;
     if (relativeT > timeToStartMovingTrain) {
         this.train.grouped.position.x = 2485*Math.sin((relativeT-timeToStartMovingTrain)*0.0002);
         this.train.grouped.position.z = 2485*Math.cos((relativeT-timeToStartMovingTrain)*0.0002);
