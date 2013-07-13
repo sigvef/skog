@@ -57,13 +57,20 @@ function start(){
 }
 
 function readytostart(){
-    var b = document.createElement('button');
-    b.innerHTML = "Please fullscreen, then click me to start!";
-    b.addEventListener('click',function(){
+    var wb = document.createElement('div');
+    wb.setAttribute('class', 'p-wrapper');
+    wb.setAttribute('id', 'starttext');
+    var b = document.createElement('p');
+    b.innerHTML = "Go to fullscreen, then click ENTER to start!";
+    var disclaimer = document.createElement('h6');
+    disclaimer.innerHTML = "Remember to use Chrome with --allow-file-access-from-files";
+    b.appendChild(disclaimer);
+    b.setAttribute('style', 'z-index: 999');
+    document.addEventListener('keydown',function(){
         document.body.removeChild(b);
-        setTimeout(actuallystart, 100);
     });
-    document.body.appendChild(b);
+    wb.appendChild(b);
+    document.body.appendChild(wb);
 }
 
 function actuallystart(){
@@ -83,6 +90,11 @@ function swapstagroover(){
 
 function bootstrap(){
     document.addEventListener("keydown",function(e){
+        if(e.keyCode == /*ENTER*/ 13) {
+            document.body.removeChild(document.getElementById('starttext'));
+            setTimeout(actuallystart, 100);
+        }
+
         if(e.keyCode == /*ESC*/ 27){
             window.open('', '_self', ''); //bug fix
             window.close(); 
