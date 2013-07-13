@@ -27,6 +27,7 @@ SceneManager.prototype.initScenes = function(cb){
 };
 
 SceneManager.prototype.jumpToScene = function(key, dontResetMusic){
+    console.log("jumping to scene", key, t)
     this.activeKey = key;
     this.activeScene = this.scenes[key];
     this.activeScene.reset();
@@ -37,16 +38,16 @@ SceneManager.prototype.jumpToScene = function(key, dontResetMusic){
     }
     this.activeSceneIndex = i;
     if(!dontResetMusic){
+        old_time = t = _t = this.activeScene.startTime;
+        dt = 0;
         music.currentTime = this.activeScene.startTime / 1000;
-        t = music.currentTime;
-        old_time = t;
     }
 };
 
 SceneManager.prototype.update = function(){
     this.activeScene.update();
     if(this.activeSceneIndex + 1 < this.sortedScenes.length &&
-       this.sortedScenes[this.activeSceneIndex+1].startTime < t){
+       this.sortedScenes[this.activeSceneIndex+1].startTime <= t){
         this.jumpToScene(this.sortedScenes[this.activeSceneIndex+1].NAME, 'dont reset music');
     }
 };

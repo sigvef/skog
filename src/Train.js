@@ -8,7 +8,7 @@ Train.prototype.init = function(cb){
     var that = this;
 	
     var resourceFolderPath = 'res/';
-    var defaultTexturePath = resourceFolderPath + 'wooden train diffuse.jpg';
+    var defaultTexturePath = resourceFolderPath + 'wooden_train_diffuse_colorful.jpg';
     var texture = new THREE.Texture();
     var loader = new THREE.ImageLoader();
     loader.addEventListener('load', function (event) {
@@ -47,6 +47,11 @@ Train.prototype.init = function(cb){
 						object.position.z += offset.z;
 						pivot.add(object);
 						that.objects[name] = pivot;
+					}
+					if (typeof trainParts[i].initPos !== 'undefined') {
+						that.objects[name].position.x += trainParts[i].initPos.x;
+						that.objects[name].position.y += trainParts[i].initPos.y;
+						that.objects[name].position.z += trainParts[i].initPos.z;
 					}
 					that.grouped.add(that.objects[name]);
 				}

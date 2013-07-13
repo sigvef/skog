@@ -1,6 +1,6 @@
 function createWaterShaderMaterial(uniforms) {
 
-    uniforms.texture2.value.wrapS = uniforms.texture2.value.wrapT = THREE.Repeat;
+    uniforms.texture2.value.wrapS = uniforms.texture2.value.wrapT = THREE.RepeatWrapping;
     uniforms.texture2.value.repeat.set(25, 25);
 
     console.log(uniforms);

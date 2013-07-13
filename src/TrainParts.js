@@ -2,20 +2,13 @@ var trainParts = [{
     name: 'front_left_wheel0',
     type: 'wheel',
     offset: new THREE.Vector3(-19.15, 5, 0),
-    animations: [{
-        start: 0,
-        end: 4000,
-        fromPos: {
-            x: 0,
-            y: 0,
-            z: -100
-        },
-        toPos: {
-            x: 0,
-            y: 0,
-            z: -100
-        }
-    }, {
+    initPos: {
+    	x: 0,
+    	y: 0,
+    	z: -100
+    },
+    animations: [
+     {
         start: 4000,
         end: 6000,
         fromPos: {
@@ -28,24 +21,17 @@ var trainParts = [{
             y: 0,
             z: 0
         }
-    }, ]
+    }
+   ]
 }, {
     name: 'front_left_wheel1',
     type: 'wheel',
+    initPos: {
+    	x: 0,
+    	y: 0,
+    	z: -100
+    },
     animations: [{
-        start: 0,
-        end: 4250,
-        fromPos: {
-            x: 0,
-            y: 0,
-            z: -100
-        },
-        toPos: {
-            x: 0,
-            y: 0,
-            z: -100
-        }
-    }, {
         start: 4250,
         end: 6250,
         fromPos: {
@@ -63,20 +49,12 @@ var trainParts = [{
 }, {
     name: 'front_right_wheel0',
     type: 'wheel',
+    initPos: {
+    	x: 0,
+    	y: 0,
+    	z: 100
+    },
     animations: [{
-        start: 0,
-        end: 5000,
-        fromPos: {
-            x: 0,
-            y: 0,
-            z: 100
-        },
-        toPos: {
-            x: 0,
-            y: 0,
-            z: 100
-        }
-    }, {
         start: 5000,
         end: 7000,
         fromPos: {
@@ -94,20 +72,12 @@ var trainParts = [{
 }, {
     name: 'front_right_wheel1',
     type: 'wheel',
+    initPos: {
+    	x: 0,
+    	y: 0,
+    	z: 100
+    },
     animations: [{
-        start: 0,
-        end: 5250,
-        fromPos: {
-            x: 0,
-            y: 0,
-            z: 100
-        },
-        toPos: {
-            x: 0,
-            y: 0,
-            z: 100
-        }
-    }, {
         start: 5250,
         end: 7250,
         fromPos: {
@@ -125,20 +95,12 @@ var trainParts = [{
 }, {
     name: 'middle_left_wheel0',
     type: 'wheel',
+    initPos: {
+    	x: 0,
+    	y: 0,
+    	z: -100
+    },
     animations: [{
-        start: 0,
-        end: 7000,
-        fromPos: {
-            x: 0,
-            y: 0,
-            z: -100
-        },
-        toPos: {
-            x: 0,
-            y: 0,
-            z: -100
-        }
-    }, {
         start: 7000,
         end: 9000,
         fromPos: {
@@ -156,20 +118,12 @@ var trainParts = [{
 }, {
     name: 'middle_left_wheel1',
     type: 'wheel',
+    initPos: {
+    	x: 0,
+    	y: 0,
+    	z: -100
+    },
     animations: [{
-        start: 0,
-        end: 7250,
-        fromPos: {
-            x: 0,
-            y: 0,
-            z: -100
-        },
-        toPos: {
-            x: 0,
-            y: 0,
-            z: -100
-        }
-    }, {
         start: 7250,
         end: 9250,
         fromPos: {
@@ -187,20 +141,12 @@ var trainParts = [{
 }, {
     name: 'middle_right_wheel0',
     type: 'wheel',
+    initPos: {
+    	x: 0,
+    	y: 0,
+    	z: 100
+    },
     animations: [{
-        start: 0,
-        end: 6000,
-        fromPos: {
-            x: 0,
-            y: 0,
-            z: 100
-        },
-        toPos: {
-            x: 0,
-            y: 0,
-            z: 100
-        }
-    }, {
         start: 6000,
         end: 8000,
         fromPos: {
@@ -218,20 +164,12 @@ var trainParts = [{
 }, {
     name: 'middle_right_wheel1',
     type: 'wheel',
+    initPos: {
+    	x: 0,
+    	y: 0,
+    	z: 100
+    },
     animations: [{
-        start: 0,
-        end: 6250,
-        fromPos: {
-            x: 0,
-            y: 0,
-            z: 100
-        },
-        toPos: {
-            x: 0,
-            y: 0,
-            z: 100
-        }
-    }, {
         start: 6250,
         end: 8250,
         fromPos: {
@@ -249,20 +187,12 @@ var trainParts = [{
 }, {
     name: 'rear_left_wheel0',
     type: 'wheel',
+    initPos: {
+    	x: 0,
+    	y: 0,
+    	z: -100
+    },
     animations: [{
-        start: 0,
-        end: 8000,
-        fromPos: {
-            x: 0,
-            y: 0,
-            z: -100
-        },
-        toPos: {
-            x: 0,
-            y: 0,
-            z: -100
-        }
-    }, {
         start: 8000,
         end: 10000,
         fromPos: {
@@ -280,20 +210,12 @@ var trainParts = [{
 }, {
     name: 'rear_left_wheel1',
     type: 'wheel',
+    initPos: {
+    	x: 0,
+    	y: 0,
+    	z: -100
+    },
     animations: [{
-        start: 0,
-        end: 8250,
-        fromPos: {
-            x: 0,
-            y: 0,
-            z: -100
-        },
-        toPos: {
-            x: 0,
-            y: 0,
-            z: -100
-        }
-    }, {
         start: 8250,
         end: 10250,
         fromPos: {
@@ -311,20 +233,12 @@ var trainParts = [{
 }, {
     name: 'rear_right_wheel0',
     type: 'wheel',
+    initPos: {
+    	x: 0,
+    	y: 0,
+    	z: 100
+    },
     animations: [{
-        start: 0,
-        end: 9000,
-        fromPos: {
-            x: 0,
-            y: 0,
-            z: 100
-        },
-        toPos: {
-            x: 0,
-            y: 0,
-            z: 100
-        }
-    }, {
         start: 9000,
         end: 11000,
         fromPos: {
@@ -342,20 +256,12 @@ var trainParts = [{
 }, {
     name: 'rear_right_wheel1',
     type: 'wheel',
+    initPos: {
+    	x: 0,
+    	y: 0,
+    	z: 100
+    },
     animations: [{
-        start: 0,
-        end: 9250,
-        fromPos: {
-            x: 0,
-            y: 0,
-            z: 100
-        },
-        toPos: {
-            x: 0,
-            y: 0,
-            z: 100
-        }
-    }, {
         start: 9250,
         end: 11250,
         fromPos: {
@@ -372,20 +278,12 @@ var trainParts = [{
     offset: new THREE.Vector3(23.1, 5, 0)
 }, {
     name: 'chimney',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 16250,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 16250,
         end: 18250,
         fromPos: {
@@ -401,20 +299,12 @@ var trainParts = [{
     }]
 }, {
     name: 'cube0',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 15500,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 15500,
         end: 17500,
         fromPos: {
@@ -430,20 +320,12 @@ var trainParts = [{
     }]
 }, {
     name: 'cube1',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 14250,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 14250,
         end: 16250,
         fromPos: {
@@ -459,20 +341,12 @@ var trainParts = [{
     }]
 }, {
     name: 'cube2',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 14000,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 14000,
         end: 16000,
         fromPos: {
@@ -488,20 +362,12 @@ var trainParts = [{
     }]
 }, {
     name: 'cube3',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 13750,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 13750,
         end: 15750,
         fromPos: {
@@ -517,20 +383,12 @@ var trainParts = [{
     }]
 }, {
     name: 'front_body',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 1000,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 1000,
         end: 3000,
         fromPos: {
@@ -546,20 +404,12 @@ var trainParts = [{
     }, ]
 }, {
     name: 'front_bullet',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 15750,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 15750,
         end: 17750,
         fromPos: {
@@ -575,20 +425,12 @@ var trainParts = [{
     }]
 }, {
     name: 'front_plate',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 15250,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 15250,
         end: 17250,
         fromPos: {
@@ -604,20 +446,12 @@ var trainParts = [{
     }]
 }, {
     name: 'hook0',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 1500,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 1500,
         end: 3500,
         fromPos: {
@@ -633,20 +467,12 @@ var trainParts = [{
     }, ]
 }, {
     name: 'hook1',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 2500,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 2500,
         end: 4500,
         fromPos: {
@@ -662,20 +488,12 @@ var trainParts = [{
     }, ]
 }, {
     name: 'lower_plate',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 14500,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 14500,
         end: 16500,
         fromPos: {
@@ -691,20 +509,12 @@ var trainParts = [{
     }]
 }, {
     name: 'middle_body',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 2000,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 2000,
         end: 4000,
         fromPos: {
@@ -720,20 +530,12 @@ var trainParts = [{
     }, ]
 }, {
     name: 'middle_plate',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 14750,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 14750,
         end: 16750,
         fromPos: {
@@ -749,20 +551,12 @@ var trainParts = [{
     }]
 }, {
     name: 'pole0',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 11250,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 11250,
         end: 13250,
         fromPos: {
@@ -778,20 +572,12 @@ var trainParts = [{
     }]
 }, {
     name: 'pole1',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 11000,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 11000,
         end: 13000,
         fromPos: {
@@ -807,20 +593,12 @@ var trainParts = [{
     }]
 }, {
     name: 'pole2',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 10750,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 10750,
         end: 12750,
         fromPos: {
@@ -836,20 +614,12 @@ var trainParts = [{
     }]
 }, {
     name: 'pole3',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 10500,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 10500,
         end: 12500,
         fromPos: {
@@ -865,20 +635,12 @@ var trainParts = [{
     }]
 }, {
     name: 'pole4',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 10250,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 10250,
         end: 12250,
         fromPos: {
@@ -894,20 +656,12 @@ var trainParts = [{
     }]
 }, {
     name: 'pole5',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 10000,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 10000,
         end: 12000,
         fromPos: {
@@ -923,20 +677,12 @@ var trainParts = [{
     }, ]
 }, {
     name: 'rear_body',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 3000,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 3000,
         end: 5000,
         fromPos: {
@@ -952,20 +698,12 @@ var trainParts = [{
     }, ]
 }, {
 	name: 'roof0',
-    animations: [{
-        start: 0,
-        end: 16000,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
+	animations: [{
         start: 16000,
         end: 18000,
         fromPos: {
@@ -981,20 +719,12 @@ var trainParts = [{
     }]
 }, {
     name: 'roof1',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 15125,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 15125,
         end: 17125,
         fromPos: {
@@ -1010,20 +740,12 @@ var trainParts = [{
     }]
 }, {
     name: 'roof2',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 15375,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 15375,
         end: 17375,
         fromPos: {
@@ -1039,20 +761,12 @@ var trainParts = [{
     }]
 }, {
     name: 'roof3',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 15625,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 15625,
         end: 17625,
         fromPos: {
@@ -1068,20 +782,12 @@ var trainParts = [{
     }]
 }, {
     name: 'upper_plate',
+    initPos: {
+    	x: 0,
+    	y: 100,
+    	z: 0
+    },
     animations: [{
-        start: 0,
-        end: 15000,
-        fromPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        },
-        toPos: {
-            x: 0,
-            y: 100,
-            z: 0
-        }
-    }, {
         start: 15000,
         end: 17000,
         fromPos: {

@@ -1,6 +1,6 @@
 function ExampleScene(){
     /* starting time of this scene in milliseconds, must be defined */
-    this.startTime = 145000;
+    this.startTime = 118000;
     /* short name of this scene, must be defined */
     this.NAME = 'example';
 }
@@ -16,7 +16,7 @@ ExampleScene.prototype.init = function(cb){
 
     this.sphere = new THREE.Mesh( new THREE.SphereGeometry(
         50, 16, 16), sphereMaterial);
-    
+
     this.scene.add(this.sphere);
 
 
