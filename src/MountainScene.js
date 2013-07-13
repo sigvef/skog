@@ -380,6 +380,26 @@ MountainScene.prototype.updateCamera = function(relativeT) {
             cameraTarget.y,
             cameraTarget.z
         ));
+    } else if (relativeT < 48500) {
+        this.camera.position = new THREE.Vector3(
+            0, 1300, 0
+        );
+        this.camera.lookAt(this.train.grouped.position);
+    } else if (relativeT < 50000) {
+        if (this.startCameraFive === undefined) {
+            this.startCameraFive = {
+                rotation: this.camera.rotation.clone(),
+                fov: this.camera.fov
+            };
+        }
+        panCamera(
+            this.startCameraFive,
+            this.camera,
+            this.train.grouped.position,
+            1500,
+            4.5,
+            relativeT - 48500
+        );
     } else if (relativeT < 64000) {
         this.camera.position = new THREE.Vector3(
             0, 1300, 0
@@ -392,8 +412,8 @@ MountainScene.prototype.updateCamera = function(relativeT) {
             this.attachArms();
         }
 
-        this.camera.position.y = this.arms.grouped.position.y + 100 + smoothstep(-100, 100, (relativeT - (80700 - 14000)) / 6000 );
         this.camera.position.x = 2700*Math.sin((relativeT + 3000)*0.0002);
+        this.camera.position.y = this.arms.grouped.position.y + 100 + smoothstep(-100, 100, (relativeT - (80700 - 14000)) / 6000 );
         this.camera.position.z = 2700*Math.cos((relativeT + 3000)*0.0002);
 
         this.camera.fov = 25;
