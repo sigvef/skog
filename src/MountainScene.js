@@ -181,7 +181,7 @@ MountainScene.prototype.initMountain = function() {
     this.mountainuniforms = {
         time: {type:'f', value: 0},
         party: {type:'f', value: 0},
-        gravel: {type: 't', value: THREE.ImageUtils.loadTexture('res/gravel.jpg')},
+        gravel: {type: 't', value: THREE.ImageUtils.loadTexture('res/dirt.jpg')},
         grass: {type: 't', value: THREE.ImageUtils.loadTexture('res/floral.jpg')},
         height: {type: 't', value: this.heightMap}
     };
@@ -221,7 +221,6 @@ MountainScene.prototype.initTrees = function() {
             finalI = i;
         }
     }
-    console.log("the lowest tree:", finalI);
 };
 
 MountainScene.prototype.initSmokePuffs = function() {
@@ -417,15 +416,15 @@ MountainScene.prototype.updateCamera = function(relativeT) {
             this.attachArms();
         }
 
-        this.camera.position.x = 2900*Math.sin((relativeT + 3000)*0.0002);
-        this.camera.position.y = this.train.grouped.position.y + 100 + smoothstep(-50, 100, (relativeT - 80000) / 6000 );
-        this.camera.position.z = 2700*Math.cos((relativeT + 3000)*0.0002);
-
         this.camera.fov = 25;
         this.camera.updateProjectionMatrix();
 
-        var hackyPos = this.arms.grouped.position.clone();
-        hackyPos.y += 150;
+        this.camera.position.x = 3000*Math.sin((relativeT + 3000)*0.0002);
+        this.camera.position.y = this.train.grouped.position.y + 100 + smoothstep(-50, 100, (relativeT - 80000) / 6000 );
+        this.camera.position.z = 2700*Math.cos((relativeT + 3000)*0.0002);
+
+        var hackyPos = this.train.grouped.position.clone();
+        hackyPos.x += 150;
         this.camera.lookAt(hackyPos);
     } else if (relativeT < 48500) {
         this.arms.disarm();
