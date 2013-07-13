@@ -49,7 +49,7 @@ MountainScene.prototype.initTrainAndRails = function(cb) {
     	that.scene.add(that.train.grouped);
     	
         that.rails = new Rails();
-        that.rails.startTime = that.startTime + 4500;
+        that.rails.startTime = that.startTime + 8500;
         that.rails.init(function() {
         	that.scene.add(that.rails.grouped);
         	cb();
@@ -114,6 +114,13 @@ MountainScene.prototype.initWater = function() {
     var effect = new THREE.ShaderPass(AsciiShader);
     effect.renderToScreen = true;
     this.composer.addPass(effect);
+
+    this.composernoise = new THREE.EffectComposer(renderer, RENDERTARGET);
+    this.composernoise.addPass( new THREE.RenderPass(this.scene, this.camera));
+    this.noiseShaderEffect = new THREE.ShaderPass(THREE.NoiseShader);
+    this.noiseShaderEffect.renderToScreen = true;
+    this.composernoise.addPass(this.noiseShaderEffect);
+
     mesh.position.y = 50;
 };
 
@@ -169,7 +176,6 @@ MountainScene.prototype.initMountain = function() {
         party: {type:'f', value: 0},
         gravel: {type: 't', value: THREE.ImageUtils.loadTexture('res/gravel.jpg')},
         grass: {type: 't', value: THREE.ImageUtils.loadTexture('res/floral.jpg')},
-        snow: {type: 't', value: THREE.ImageUtils.loadTexture('res/snow.jpg')},
         height: {type: 't', value: this.heightMap}
     };
     this.mountainMesh = new THREE.Mesh(geometry, createMountainShaderMaterial(this.mountainuniforms));
@@ -204,7 +210,7 @@ MountainScene.prototype.initTrees = function() {
 
 MountainScene.prototype.initSmokePuffs = function() {
     this.smokePuffs = new Array();
-}
+};
 
 MountainScene.prototype.reset = function(){
     this.camera.position.y = 70;
@@ -214,6 +220,9 @@ MountainScene.prototype.update = function(){
 	var relativeT = t - this.startTime;
 	this.train.update();
 	this.rails.update();
+
+    this.mountainuniforms.time.value = t;
+    this.mountainuniforms.party.value = +(t > (32180 + this.startTime));
 
     if(t == 64740){
         swapstagroover(); 
@@ -230,6 +239,8 @@ MountainScene.prototype.update = function(){
         this.train.grouped.position.z = 2485*Math.cos((relativeT-timeToStartMovingTrain)*0.0002);
         this.train.grouped.rotation.y += 0.004;
         this.train.rotateWheels();
+        if(relativeT > 32250)
+        this.train.partytime();
     }
 
     this.uniforms.time.value = t/1500;
@@ -249,6 +260,12 @@ MountainScene.prototype.update = function(){
             this.trees[i].position.y = moveFactor * Math.sin( (t-this.startTime-4000) / 250*Math.PI ) + this.trees[i].finalYPos;
         }
     }
+
+    this.noiseShaderEffect.uniforms.width.value = (16*GU)/4;
+    this.noiseShaderEffect.uniforms.time.value = t/1000 % 1000;
+    this.noiseShaderEffect.uniforms.height.value = (9*GU)/4;
+    //this is how much noise there should be
+    this.noiseShaderEffect.uniforms.amount.value = Math.max(0.025, Math.min(0.07, Math.sin(t/1000)-0.9));
 };
 
 MountainScene.prototype.updateCamera = function(relativeT) {
@@ -256,9 +273,10 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         var camTime = relativeT/4000;
         this.camera.position.x = smoothstep(13000, 2500, camTime);
         this.camera.position.z = smoothstep(13000, 2500, camTime);
+        this.camera.position.y = smoothstep(550, 70, camTime);
 
         this.camera.lookAt(new THREE.Vector3(0,800,0));
-    } else if (relativeT < 8000) {
+    } else if (relativeT < 9000) {
         if (this.startCameraOne === undefined) {
             this.startCameraOne = {
                 rotation: this.camera.rotation.clone(),
@@ -400,7 +418,7 @@ MountainScene.prototype.addSmokePuff = function(x,y,z) {
 
 MountainScene.prototype.render = function(){
     /* do rendery stuff here */
-    music.volume ? renderer.render(this.scene, this.camera)
+    music.volume ? this.composernoise.render()
                  : this.composer.render();
 };
 

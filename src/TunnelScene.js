@@ -9,8 +9,6 @@ TunnelScene.prototype.init = function(cb){
     this.scene = new THREE.Scene();
     this.fov = 0; //also set in reset
 
-
-
     var that = this;
     var scale = 400;
     this.ninjadev = new THREE.Mesh(new THREE.CubeGeometry(1607/scale,0.0001,267/scale), new THREE.MeshLambertMaterial({
@@ -97,17 +95,20 @@ TunnelScene.prototype.init = function(cb){
     );
 
     this.parent.add(tubeMesh);
-    this.reset();
+    //this.reset();
     this.composer = new THREE.EffectComposer(renderer, RENDERTARGET);
     this.composer.addPass( new THREE.RenderPass(this.scene, this.camera));
-    var effect = new THREE.ShaderPass(AsciiShader);
-    effect.renderToScreen = true;
-    this.composer.addPass(effect);
+    this.effect = new THREE.ShaderPass(THREE.NoiseShader);
+    this.effect.renderToScreen = true;
+    this.composer.addPass(this.effect);
     cb();
 }
 
 TunnelScene.prototype.reset = function(){
     /* reset all the variables! */
+    var that = sm.sortedScenes[1];
+    that.scene.add(that.train.grouped);
+    that.scene.add(that.rails.grouped);
     this.title.style.opacity = 0;
     this.firstSet = true;
     this.fov = 172;
@@ -190,10 +191,25 @@ TunnelScene.prototype.update = function(){
         this.fov *= 1.009;
     }
 
+    this.effect.uniforms.width.value = (16*GU)/4;
+    this.effect.uniforms.time.value = t/1000 % 1000;
+    this.effect.uniforms.height.value = (9*GU)/4;
+    //this is how much noise there should be
+
+    var noiseValueChecker = function(value) {
+        if(Math.max(0.1, Math.min(0.15, value)) > 0.14) {
+            return Math.sin(14*t/1000-20)*Math.cos(14*t/1009-200)-0.6;
+        } else {
+            return 0;
+        }
+    };
+    this.effect.uniforms.amount.value = noiseValueChecker((Math.sin(t/1000)-0.8)*100);
+
 }
 
 TunnelScene.prototype.render = function(){
     this.camera.fov = this.fov;
     this.camera.updateProjectionMatrix();
-    renderer.render(this.scene, this.camera)
+    //renderer.render(this.scene, this.camera)
+    this.composer.render();
 }
