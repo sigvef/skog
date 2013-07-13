@@ -13,16 +13,16 @@ Arms.prototype.init = function(cb){
     // Begin hasGoneTooFar loader
     this.title = new Image();
     this.title.src = 'res/It has gone too far.png';
-    this.title.style.opacity = 1;
+    this.title.style.opacity = 0;
     this.title.style.position = 'absolute';
     this.title.style.zIndex = 99999999999;
     
     var w = 1024/16*GU*0.1;
-    var h = 1024/16*GU*0.1;
+    var h = 1024/9*GU*0.1;
     this.title.style.width =  w + 'px';
     this.title.style.height = h + 'px';
     this.title.style.left = renderer.domElement.offsetLeft + 8*GU - w/2 + 'px';
-    this.title.style.top = renderer.domElement.offsetTop + 4.5*GU - h/2 + 'px';
+    this.title.style.top = renderer.domElement.offsetTop + 2.5*GU - h/2 + 'px';
     document.body.appendChild(this.title);
 
     // Texture loader
@@ -78,12 +78,10 @@ Arms.prototype.init = function(cb){
 }
 
 Arms.prototype.update = function(trainY, yRotate){
-    this.grouped.position.y = trainY - 130;
-
-    // Update the label
-    //this.hasScienceGoneTooFar.position.set(new THREE.Vector3(2700*Math.sin(t*0.0002), trainY - 130, 2700*Math.cos(t*0.0002)));
+    if (this.title.style.opacity == 0) this.title.style.opacity = 1;
 
     // Update the armGroup position
+    this.grouped.position.y = trainY - 130;
     this.grouped.position.x = 2700*Math.sin(t*0.0002);
     this.grouped.position.z = 2700*Math.cos(t*0.0002);
 
