@@ -206,10 +206,12 @@ MountainScene.prototype.update = function(){
 
     this.updateCamera(relativeT);
 
-    if (relativeT > 24000) {
-        this.train.grouped.position.x = 2485*Math.sin((relativeT-24000)*0.0002);
-        this.train.grouped.position.z = 2485*Math.cos((relativeT-24000)*0.0002);
+    var timeToStartMovingTrain = 24000;
+    if (relativeT > timeToStartMovingTrain) {
+        this.train.grouped.position.x = 2485*Math.sin((relativeT-timeToStartMovingTrain)*0.0002);
+        this.train.grouped.position.z = 2485*Math.cos((relativeT-timeToStartMovingTrain)*0.0002);
         this.train.grouped.rotation.y += 0.004;
+        this.train.rotateWheels();
     }
 
     this.uniforms.time.value = t/1500;
