@@ -67,9 +67,6 @@ function readytostart(){
     disclaimer.innerHTML = "Remember to use Chrome with --allow-file-access-from-files<br><br>Made by:<br>sigveseb<br>iverjo<br>cristea<br>runholm<br>capitalism<br>stiaje";
     b.appendChild(disclaimer);
     b.setAttribute('style', 'z-index: 999');
-    document.addEventListener('keydown',function(){
-        document.body.removeChild(b);
-    });
     wb.appendChild(b);
     document.body.appendChild(wb);
 }
