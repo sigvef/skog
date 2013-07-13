@@ -385,7 +385,7 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         moveCamera(
             this.startCameraFour,
             this.camera,
-            new THREE.Vector3(700, 800, 2950),
+            new THREE.Vector3(700, 800, 3200),
             3000,
             1,
             relativeT - 29000
