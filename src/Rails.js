@@ -70,7 +70,6 @@ Rails.prototype.update = function(){
 				
 				//if animation is done, go to next animation for this object if available
 				if (relativeT > animation.end && ++object.activeAnimation === object.animations.length) {
-					console.log("an animation for rail " + i + " has ended at " + t);
 					object.activeAnimation = -1;
 				}
 			}

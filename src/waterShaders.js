@@ -3,8 +3,6 @@ function createWaterShaderMaterial(uniforms) {
     uniforms.texture2.value.wrapS = uniforms.texture2.value.wrapT = THREE.RepeatWrapping;
     uniforms.texture2.value.repeat.set(25, 25);
 
-    console.log(uniforms);
-
     var vertexShaders = [
         "const float pi = 3.141592;",
         "const int numWaves = 8;",
