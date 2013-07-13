@@ -32,7 +32,7 @@ Rails.prototype.init = function(cb){
     		that.rails[i].position.x = 2700*Math.sin(i*0.1);
     		that.rails[i].position.z = 2700*Math.cos(i*0.1);
     		that.rails[i].rotation.y = 0.1*i + Math.PI * 0.5;
-    		var relativeStartY = 5000;
+    		var relativeStartY = 1000;
     		var secondAnimationSequenceStartsAt = 20000;
     		var layDownRailsFrequency = 500;
     		if (i > 1) {
@@ -40,8 +40,8 @@ Rails.prototype.init = function(cb){
                     {
                     	start: 0,
                     	end: secondAnimationSequenceStartsAt + i*layDownRailsFrequency,
-                    	fromY: y + relativeStartY,
-                    	toY: y + relativeStartY
+                    	fromY: y + relativeStartY + 4000,
+                    	toY: y + relativeStartY + 4000
                     },
                     {
                     	start: secondAnimationSequenceStartsAt + i*layDownRailsFrequency,
