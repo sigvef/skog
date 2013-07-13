@@ -40,6 +40,7 @@ SceneManager.prototype.jumpToScene = function(key, dontResetMusic){
         old_time = t = _t = this.activeScene.startTime;
         dt = 0;
         music.currentTime = this.activeScene.startTime / 1000;
+        music_lo_fi.currentTime = this.activeScene.startTime / 1000;
     }
 };
 

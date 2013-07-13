@@ -33,20 +33,43 @@ Rails.prototype.init = function(cb){
     		that.rails[i].position.z = 2700*Math.cos(i*0.1);
     		that.rails[i].rotation.y = 0.1*i + Math.PI * 0.5;
     		var relativeStartY = 5000;
-    		that.rails[i].animations = [
-	            {
-	    	        start: 0,
-	    	        end: i*300,
-	    	        fromY: y + relativeStartY,
-	    	        toY: y + relativeStartY
-	            },
-	            {
-	            	start: i*300,
-	            	end: i*300 + 1000,
-	            	fromY: y + relativeStartY,
-	            	toY: y
-	            },
-	        ];
+    		var secondAnimationSequenceStartsAt = 20000;
+    		var layDownRailsFrequency = 500;
+    		if (i > 1) {
+    			that.rails[i].animations = [
+                    {
+                    	start: 0,
+                    	end: secondAnimationSequenceStartsAt + i*layDownRailsFrequency,
+                    	fromY: y + relativeStartY,
+                    	toY: y + relativeStartY
+                    },
+                    {
+                    	start: secondAnimationSequenceStartsAt + i*layDownRailsFrequency,
+                    	end: secondAnimationSequenceStartsAt + i*layDownRailsFrequency + 1000,
+                    	fromY: y + relativeStartY,
+                    	toY: y
+                    },
+                ];
+    		}
+    		else {
+    			console.log(that.rails[i].position.x);
+    			console.log(that.rails[i].position.y);
+    			console.log(that.rails[i].position.z);
+    			that.rails[i].animations = [
+                    {
+                    	start: 0,
+                    	end: layDownRailsFrequency*(i+1),
+                    	fromY: y + relativeStartY,
+                    	toY: y + relativeStartY
+                    },
+                    {
+                    	start: layDownRailsFrequency*(i+1),
+                    	end: layDownRailsFrequency*(i+1) + 1000,
+                    	fromY: y + relativeStartY,
+                    	toY: y
+                    },
+                ];
+    		}
     		that.rails[i].activeAnimation = 0;
     	    that.grouped.add(that.rails[i]);
     	}

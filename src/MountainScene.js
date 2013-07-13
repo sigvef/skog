@@ -38,16 +38,18 @@ MountainScene.prototype.initTrainAndRails = function(cb) {
     this.rails = [];
     var that = this;
     this.train = new Train();
-    this.train.startTime = this.startTime + 5000;
+    this.train.startTime = this.startTime + 10500;
     this.train.init(function() {
     	that.train.grouped.scale.x = 10;
     	that.train.grouped.scale.y = 10;
     	that.train.grouped.scale.z = 10;
     	that.train.grouped.position.y = 885;
+        that.train.grouped.position.x = 2485*Math.sin(300*0.0002);
+        that.train.grouped.position.z = 2485*Math.cos(300*0.0002);
     	that.scene.add(that.train.grouped);
     	
         that.rails = new Rails();
-        that.rails.startTime = that.startTime + 10000;
+        that.rails.startTime = that.startTime + 4500;
         that.rails.init(function() {
         	that.scene.add(that.rails.grouped);
         	cb();
@@ -142,7 +144,6 @@ MountainScene.prototype.initMountain = function() {
         var imageData = ctx.getImageData(0,0,s,s);
         for(var i=0; i<m.length;i++){
             var height = m[i];
-            //if(height > 0) console.log(height);
             imageData.data[i*4 + 0] = height;
             imageData.data[i*4 + 1] = height;
             imageData.data[i*4 + 2] = height;
@@ -172,7 +173,7 @@ MountainScene.prototype.initTrees = function() {
     this.trees = [];
     Math.seedrandom("the-forest");
     var treesPlaced = 0;
-    while (treesPlaced < 500) {
+    while (treesPlaced < 100) {
         var pos = {
             x: Math.random()*6000-3000,
             y: Math.random()*1000+9000,
@@ -198,58 +199,124 @@ MountainScene.prototype.initSmokePuffs = function() {
 }
 
 MountainScene.prototype.reset = function(){
-    this.camera.position.y = 150;
+    this.camera.position.y = 70;
 };
 
 MountainScene.prototype.update = function(){
+	var relativeT = t - this.startTime;
 	this.train.update();
 	this.rails.update();
-    this.camera.position.x = this.train.grouped.position.x + 0.6 * 2650*Math.sin(t*0.0002 + 2);
-    this.camera.position.y = 0.09 * 800*Math.sin(t/2500)+1100;
-    this.camera.position.z = this.train.grouped.position.z + 0.6 * 2650*Math.sin(t*0.0002 + 2);
 
-    this.mountainuniforms.time.value = t;
-    this.mountainuniforms.party.value = +(t > (32180 + this.startTime));
+    if(t == 64740){
+        swapstagroover(); 
+    }
+    if(t == 80700){
+        swapstagroover(); 
+    }
 
-	this.train.grouped.position.x = 2485*Math.sin(t*0.0002);
-	this.train.grouped.position.z = 2485*Math.cos(t*0.0002);
-	this.train.grouped.rotation.y += 0.004;
-	
-    //var toOrigo = new THREE.Vector3(0,this.camera.position.y,0).sub(this.camera.position);
-    //var sideways = toOrigo.cross(new THREE.Vector3(0,1,0));
-    //this.camera.lookAt(sideways);
+    this.updateCamera(relativeT);
 
-    if (t < this.startTime + 4300) {
-        var camTime = (t - this.startTime)/4300;
-        this.camera.position.x = smoothstep(13000, 2500, camTime);
-        this.camera.position.z = smoothstep(13000, 2500, camTime);
-    } /*else {
-        this.camera.position.x = 4300*Math.sin(t/3000);
-        this.camera.position.z = 4300*Math.cos(t/3000);
-    }*/
-
-
-    //this.camera.lookAt(this.train.grouped.position);
-    //this.camera.lookAt(this.rails.rails[30].position);
-    this.camera.lookAt(new THREE.Vector3(0,800,0));
-
+    var timeToStartMovingTrain = 30500;
+    if (relativeT > timeToStartMovingTrain) {
+        this.train.grouped.position.x = 2485*Math.sin((relativeT-timeToStartMovingTrain)*0.0002);
+        this.train.grouped.position.z = 2485*Math.cos((relativeT-timeToStartMovingTrain)*0.0002);
+        this.train.grouped.rotation.y += 0.004;
+        this.train.rotateWheels();
+    }
 
     this.uniforms.time.value = t/1500;
     this.uniforms.time2.value = t/1500;
     this.uniforms.eyePos.value = this.camera.position;
 
-    if (t < this.startTime + 4300) {
+    if (relativeT < 4000) {
         for (var i=0; i < this.trees.length; i++) {
             if (t > this.startTime + this.trees[i].delay) {
-                var treeAnimationTime = (t - this.startTime - this.trees[i].delay)/(4300-this.trees[i].delay);
+                var treeAnimationTime = (t - this.startTime - this.trees[i].delay)/(4000-this.trees[i].delay);
                 this.trees[i].position.y = smoothstep(10000, this.trees[i].finalYPos, treeAnimationTime);
             }
         }
     } else {
         for (var i=0; i < this.trees.length; i++) {
             var moveFactor = (i%2) ? 10 : -10;
-            this.trees[i].position.y = moveFactor * Math.sin( (t-this.startTime-4300) / 250*Math.PI ) + this.trees[i].finalYPos;
+            this.trees[i].position.y = moveFactor * Math.sin( (t-this.startTime-4000) / 250*Math.PI ) + this.trees[i].finalYPos;
         }
+    }
+};
+
+MountainScene.prototype.updateCamera = function(relativeT) {
+    if (relativeT < 4000) {
+        var camTime = relativeT/4000;
+        this.camera.position.x = smoothstep(13000, 2500, camTime);
+        this.camera.position.z = smoothstep(13000, 2500, camTime);
+
+        this.camera.lookAt(new THREE.Vector3(0,800,0));
+    } else if (relativeT < 8000) {
+        if (this.startCameraOne === undefined) {
+            this.startCameraOne = {
+                rotation: this.camera.rotation.clone(),
+                fov: this.camera.fov
+            };
+        }
+        panCamera(
+            this.startCameraOne,
+            this.camera,
+            new THREE.Vector3(2500, 220, 0),
+            4000,
+            2,
+            relativeT - 4000
+        );
+    } else if (relativeT < 9500) {
+        if (this.startCameraTwo === undefined) {
+            this.startCameraTwo = {
+                rotation: this.camera.rotation.clone(),
+                fov: this.camera.fov
+            };
+        }
+        panCamera(
+            this.startCameraTwo,
+            this.camera,
+            new THREE.Vector3(0, 800, 2700),
+            1500,
+            2,
+            relativeT - 8000
+        );
+    } else if (relativeT < 10500) {
+        // Blur effects
+    } else if (relativeT < 25000) {
+        if (this.startCameraThree === undefined) {
+            this.startCameraThree = {
+                position: new THREE.Vector3(1500, 920, 4000),
+                fov: this.camera.fov
+            };
+        }
+        this.camera.fov = 45;
+        moveCamera(
+            this.startCameraThree,
+            this.camera,
+            new THREE.Vector3(540, 810, 3400),
+            14500,
+            1,
+            relativeT - 10500
+        );
+        this.camera.lookAt(this.train.grouped.position);
+    } else if (relativeT < 32000) {
+        if (this.startCameraFour === undefined) {
+            this.startCameraFour = {
+                position: new THREE.Vector3(1700, 780, 3000),
+                fov: this.camera.fov
+            };
+        }
+        moveCamera(
+            this.startCameraFour,
+            this.camera,
+            new THREE.Vector3(1700, 1300, 3000),
+            7000,
+            1,
+            relativeT - 25000
+        );
+        this.camera.lookAt(this.train.grouped.position);
+    } else {
+        this.camera.lookAt(this.train.grouped.position);
     }
     for(var i=0;i<this.smokePuffs.length; i++) {
         this.updateSmoke(this.smokePuffs[i]);
@@ -311,9 +378,9 @@ MountainScene.prototype.addSmokePuff = function(x,y,z) {
 
 MountainScene.prototype.render = function(){
     /* do rendery stuff here */
-    renderer.render(this.scene, this.camera);
-    //this.composer.render();
-}
+    music.volume ? renderer.render(this.scene, this.camera)
+                 : this.composer.render();
+};
 
 MountainScene.prototype.setupLights = function() {
     var light = new THREE.DirectionalLight(0xdefbff, 1.75);
@@ -436,11 +503,12 @@ MountainScene.prototype.initSkyBox = function() {
     var imagePath = "res/red_floral.jpg";
     var skyGeometry = new THREE.CubeGeometry( 26000, 26000, 26000 );   
     var materialArray = [];
-    for (var i = 0; i < 6; i++) {
-    	materialArray.push( new THREE.MeshBasicMaterial({
+    var material =  new THREE.MeshBasicMaterial({
     		map: THREE.ImageUtils.loadTexture(imagePath),
     		side: THREE.BackSide
-    	}));
+    	});
+    for (var i = 0; i < 6; i++) {
+        materialArray[i] = material;
     }
     var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
     var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
