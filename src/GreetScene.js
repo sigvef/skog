@@ -1,6 +1,6 @@
 function GreetScene(){
     /* starting time of this scene in milliseconds, must be defined */
-    this.startTime = 100000;
+    this.startTime = 82000;
     /* short name of this scene, must be defined */
     this.NAME = 'greet';
 }
