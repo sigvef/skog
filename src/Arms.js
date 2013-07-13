@@ -78,8 +78,6 @@ Arms.prototype.init = function(cb){
 }
 
 Arms.prototype.update = function(trainY, yRotate){
-    if (this.title.style.opacity == 0) this.title.style.opacity = 1;
-
     // Update the armGroup position
     this.grouped.position.y = trainY - 130;
     this.grouped.position.x = 2700*Math.sin(t*0.0002);
