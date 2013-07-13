@@ -121,6 +121,12 @@ MountainScene.prototype.initWater = function() {
     this.noiseShaderEffect.renderToScreen = true;
     this.composernoise.addPass(this.noiseShaderEffect);
 
+    this.composersquash = new THREE.EffectComposer( renderer, RENDERTARGET );
+    this.composersquash.addPass( new THREE.RenderPass(this.scene, this.camera));
+    this.squashShaderEffect = new THREE.ShaderPass(THREE.SquashShader);
+    this.squashShaderEffect.renderToScreen = true;
+    this.composersquash.addPass(this.squashShaderEffect);
+
     mesh.position.y = 50;
 };
 
@@ -435,8 +441,13 @@ MountainScene.prototype.addSmokePuff = function(x,y,z) {
 
 MountainScene.prototype.render = function(){
     /* do rendery stuff here */
-    music.volume ? this.composernoise.render()
-                 : this.composer.render();
+    if(t > 64239 && t < 64740 || t > 80700 && t < 81200) {
+        this.composersquash.render();
+    } else {
+        music.volume ? this.composernoise.render()
+                     : this.composer.render();
+    }
+
 };
 
 MountainScene.prototype.setupLights = function() {
