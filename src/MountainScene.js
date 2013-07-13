@@ -475,9 +475,6 @@ MountainScene.prototype.updateSmoke = function(updateParticleGroup, age){
     }
 
     updateParticleGroup.rotation.y = t * 0.00075;
-    if(particleGroup.rotation.y>20) {
-        this.scene.remove(updateParticleGroup);
-    }
 }
 
 MountainScene.prototype.addSmokePuff = function(x,y,z) {
