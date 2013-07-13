@@ -7,8 +7,8 @@ function MountainScene(){
     this.segments = 192;
     this.halfSegments = 96;
     this.size = 8000;
-}
-
+};
+ 
 MountainScene.prototype.init = function(cb){
     /* do loady stuff here */
 
@@ -122,7 +122,15 @@ MountainScene.prototype.initWater = function() {
     this.composernoise.addPass(this.noiseShaderEffect);
 
     mesh.position.y = 50;
-    
+};
+
+MountainScene.prototype.attachArms = function() {
+    var that = this;
+    this.arms = new Arms(20);
+    this.arms.init(function() {
+        that.scene.add(that.arms.grouped);
+        that.arms.title.style.opacity = 1;
+    });
 };
 
 MountainScene.prototype.initMountain = function() {
@@ -335,6 +343,7 @@ MountainScene.prototype.updateCamera = function(relativeT) {
             1,
             relativeT - 29000
         );
+
         var cameraTarget = {
             x: smoothstep(300, 550, camTime),
             y: 850,
@@ -345,6 +354,23 @@ MountainScene.prototype.updateCamera = function(relativeT) {
             cameraTarget.y,
             cameraTarget.z
         ));
+    } else if (relativeT > (80700 - 14000)) {
+        if (this.arms) { 
+            this.arms.update(this.train.grouped.position.y, this.train.grouped.rotation.y + Math.PI/2, relativeT); 
+        } else {
+            this.attachArms();
+        }
+
+        this.camera.position.y = this.arms.grouped.position.y + 100 + smoothstep(-100, 100, (relativeT - (80700 - 14000)) / 6000 );
+        this.camera.position.x = 2700*Math.sin((relativeT + 3000)*0.0002);
+        this.camera.position.z = 2700*Math.cos((relativeT + 3000)*0.0002);
+
+        this.camera.fov = 25;
+        this.camera.updateProjectionMatrix();
+
+        var hackyPos = this.arms.grouped.position.clone();
+        hackyPos.y += 150;
+        this.camera.lookAt(hackyPos);
     } else {
         // this.camera.lookAt(this.train.grouped.position);
     }
