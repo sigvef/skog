@@ -52,10 +52,17 @@ function start(){
     sm.addScene(new MountainScene());
     sm.initScenes(function(){
         sm.warmup();
+        music_lo_fi.volume = 0;
         music.play();
+        music_lo_fi.play();
         sm.jumpToScene('tunnel');
         setTimeout(loop, 0);
     });
+}
+
+function swapstagroover(){
+    music.volume = +!music.volume;
+    music_lo_fi.volume = +!music_lo_fi.volume;
 }
 
 
@@ -106,6 +113,7 @@ function bootstrap(){
     resize();
     document.body.appendChild(renderer.domElement);
     music = document.getElementById("music");
+    music_lo_fi = document.getElementById("music_lo_fi");
     setTimeout(start,0);
 }
 
