@@ -59,8 +59,8 @@ SceneManager.prototype.render = function(){
 };
 
 SceneManager.prototype.warmup = function(){
+    renderer.domElement.style.opacity = 0;
     for(var scene in this.scenes){
         this.scenes[scene].update();
-        this.scenes[scene].render();
     }
 };
