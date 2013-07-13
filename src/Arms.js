@@ -17,8 +17,8 @@ Arms.prototype.init = function(cb){
     this.title.style.position = 'absolute';
     this.title.style.zIndex = 99999999999;
     
-    var w = 2048/16*GU*0.1;
-    var h = 2048/16*GU*0.1;
+    var w = 1024/16*GU*0.1;
+    var h = 1024/16*GU*0.1;
     this.title.style.width =  w + 'px';
     this.title.style.height = h + 'px';
     this.title.style.left = renderer.domElement.offsetLeft + 8*GU - w/2 + 'px';
