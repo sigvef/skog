@@ -9,8 +9,8 @@ var trainParts = [{
     },
     animations: [
      {
-        start: 4000,
-        end: 6000,
+        start: 9500,
+        end: 11500,
         fromPos: {
             x: 0,
             y: 0,
@@ -32,8 +32,8 @@ var trainParts = [{
     	z: -80000
     },
     animations: [{
-        start: 4250,
-        end: 6250,
+        start: 9000,
+        end: 11000,
         fromPos: {
             x: 0,
             y: 0,
@@ -55,8 +55,8 @@ var trainParts = [{
     	z: 80000
     },
     animations: [{
-        start: 5000,
-        end: 7000,
+        start: 4000,
+        end: 6000,
         fromPos: {
             x: 0,
             y: 0,
@@ -78,8 +78,8 @@ var trainParts = [{
     	z: 80000
     },
     animations: [{
-        start: 5250,
-        end: 7250,
+        start: 4250,
+        end: 6250,
         fromPos: {
             x: 0,
             y: 0,
@@ -101,8 +101,8 @@ var trainParts = [{
     	z: -80000
     },
     animations: [{
-        start: 7000,
-        end: 9000,
+        start: 8500,
+        end: 10500,
         fromPos: {
             x: 0,
             y: 0,
@@ -124,8 +124,8 @@ var trainParts = [{
     	z: -80000
     },
     animations: [{
-        start: 7250,
-        end: 9250,
+        start: 8000,
+        end: 10000,
         fromPos: {
             x: 0,
             y: 0,
@@ -147,8 +147,8 @@ var trainParts = [{
     	z: 80000
     },
     animations: [{
-        start: 6000,
-        end: 8000,
+        start: 5000,
+        end: 7000,
         fromPos: {
             x: 0,
             y: 0,
@@ -170,8 +170,8 @@ var trainParts = [{
     	z: 80000
     },
     animations: [{
-        start: 6250,
-        end: 8250,
+        start: 5250,
+        end: 7250,
         fromPos: {
             x: 0,
             y: 0,
@@ -193,8 +193,8 @@ var trainParts = [{
     	z: -80000
     },
     animations: [{
-        start: 8000,
-        end: 10000,
+        start: 7500,
+        end: 9500,
         fromPos: {
             x: 0,
             y: 0,
@@ -216,8 +216,8 @@ var trainParts = [{
     	z: -80000
     },
     animations: [{
-        start: 8250,
-        end: 10250,
+        start: 7000,
+        end: 9000,
         fromPos: {
             x: 0,
             y: 0,
@@ -239,8 +239,8 @@ var trainParts = [{
     	z: 80000
     },
     animations: [{
-        start: 9000,
-        end: 11000,
+        start: 6000,
+        end: 8000,
         fromPos: {
             x: 0,
             y: 0,
@@ -262,8 +262,8 @@ var trainParts = [{
     	z: 80000
     },
     animations: [{
-        start: 9250,
-        end: 11250,
+        start: 6250,
+        end: 8250,
         fromPos: {
             x: 0,
             y: 0,
