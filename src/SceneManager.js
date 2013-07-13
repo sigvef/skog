@@ -45,7 +45,6 @@ SceneManager.prototype.jumpToScene = function(key, dontResetMusic){
 };
 
 SceneManager.prototype.update = function(){
-    console.log('update',t);
     this.activeScene.update();
     if(this.activeSceneIndex + 1 < this.sortedScenes.length &&
        this.sortedScenes[this.activeSceneIndex+1].startTime <= t){
@@ -55,7 +54,6 @@ SceneManager.prototype.update = function(){
 
 SceneManager.prototype.render = function(){
     //this.sortedScenes[this.activeSceneIndex+1].render(); //temporarily commented out while deving
-    console.log('update');
     this.activeScene.render();
 };
 
