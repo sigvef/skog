@@ -200,10 +200,10 @@ TunnelScene.prototype.update = function(){
         if(Math.max(0.1, Math.min(0.15, value)) > 0.14) {
             return Math.sin(14*t/1000-20)*Math.cos(14*t/1009-200)-0.6;
         } else {
-            return 0;
+            return 0.05;
         }
     };
-    this.effect.uniforms.amount.value = noiseValueChecker((Math.sin(t/1000)-0.8)*100);
+    this.effect.uniforms.amount.value = noiseValueChecker((Math.sin((t-870)/250/2/2)-0.8)*100);
 
 }
 
