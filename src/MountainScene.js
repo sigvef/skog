@@ -213,6 +213,7 @@ MountainScene.prototype.initTrees = function() {
             treesPlaced++;
         }
     }
+    a = this.trees;
 };
 
 MountainScene.prototype.initSmokePuffs = function() {
@@ -382,29 +383,38 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         ));
     } else if (relativeT < 48500) {
         this.camera.position = new THREE.Vector3(
-            0, 1300, 0
+            0,
+            smoothstep(950, 1300, (relativeT - 32000) / 5000),
+            0
         );
         this.camera.lookAt(this.train.grouped.position);
     } else if (relativeT < 50000) {
-        if (this.startCameraFive === undefined) {
-            this.startCameraFive = {
-                rotation: this.camera.rotation.clone(),
-                fov: this.camera.fov
-            };
-        }
-        panCamera(
-            this.startCameraFive,
-            this.camera,
-            this.train.grouped.position,
-            1500,
-            4.5,
-            relativeT - 48500
-        );
-    } else if (relativeT < 64000) {
-        this.camera.position = new THREE.Vector3(
-            0, 1300, 0
-        );
+        this.camera.fov = smoothstep(45, 10, (relativeT - 48500)/1500);
+        this.camera.updateProjectionMatrix();
         this.camera.lookAt(this.train.grouped.position);
+    } else if (relativeT < 52000) {
+        this.camera.lookAt(this.train.grouped.position);
+    } else if (relativeT < 58000) {
+        this.camera.fov = 45;
+        this.camera.updateProjectionMatrix();
+        var camTime = (relativeT - 52000) / 6000;
+        this.camera.position.x = this.train.grouped.position.x + smoothstep(-300, -400, camTime);
+        this.camera.position.y = this.train.grouped.position.y + smoothstep(100, 200, camTime);
+        this.camera.position.z = this.train.grouped.position.z + smoothstep(100, 500, camTime);
+
+        this.camera.lookAt(this.train.grouped.position);
+    } else if (relativeT < 64000) {
+        // tree
+        var camTime = (relativeT - 58000) / 6000;
+
+        var orbitron = this.trees[10].position;
+        console.log("tree pos:", oribitron);
+
+        this.camera.position.x = orbitron.x + smoothstep(-100, -500, camTime);
+        this.camera.position.y = orbitron.y + smoothstep(300, 350, camTime);
+        this.camera.position.z = orbitron.z + smoothstep(-100, 300, camTime);
+
+        this.camera.lookAt(orbitron);
     } else if (relativeT < 80000) {
         if (this.arms) { 
             this.arms.update(this.train.grouped.position.y, this.train.grouped.rotation.y + Math.PI/2, relativeT); 
@@ -413,7 +423,7 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         }
 
         this.camera.position.x = 2700*Math.sin((relativeT + 3000)*0.0002);
-        this.camera.position.y = this.arms.grouped.position.y + 100 + smoothstep(-100, 100, (relativeT - (80700 - 14000)) / 6000 );
+        this.camera.position.y = this.arms.grouped.position.y + 100 + smoothstep(-50, 100, (relativeT - 80000) / 6000 );
         this.camera.position.z = 2700*Math.cos((relativeT + 3000)*0.0002);
 
         this.camera.fov = 25;
