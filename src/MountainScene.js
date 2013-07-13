@@ -49,7 +49,7 @@ MountainScene.prototype.initTrainAndRails = function(cb) {
     	that.scene.add(that.train.grouped);
     	
         that.rails = new Rails();
-        that.rails.startTime = that.startTime + 4500;
+        that.rails.startTime = that.startTime + 8500;
         that.rails.init(function() {
         	that.scene.add(that.rails.grouped);
         	cb();
@@ -196,7 +196,7 @@ MountainScene.prototype.initTrees = function() {
 
 MountainScene.prototype.initSmokePuffs = function() {
     this.smokePuffs = new Array();
-}
+};
 
 MountainScene.prototype.reset = function(){
     this.camera.position.y = 70;
@@ -250,7 +250,7 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         this.camera.position.z = smoothstep(13000, 2500, camTime);
 
         this.camera.lookAt(new THREE.Vector3(0,800,0));
-    } else if (relativeT < 8000) {
+    } else if (relativeT < 9000) {
         if (this.startCameraOne === undefined) {
             this.startCameraOne = {
                 rotation: this.camera.rotation.clone(),
