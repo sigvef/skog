@@ -231,6 +231,8 @@ MountainScene.prototype.update = function(){
         this.train.grouped.position.z = 2485*Math.cos((relativeT-timeToStartMovingTrain)*0.0002);
         this.train.grouped.rotation.y += 0.004;
         this.train.rotateWheels();
+        if(relativeT > 32250)
+        this.train.partytime();
     }
 
     this.uniforms.time.value = t/1500;
