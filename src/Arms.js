@@ -4,6 +4,7 @@ function Arms(scale){
     this.rightArm = null;
     this.grouped = new THREE.Object3D();
     this.doneLoading = false;
+    this.disarming = false;
 }
 
 Arms.prototype.init = function(cb){
@@ -90,5 +91,16 @@ Arms.prototype.update = function(trainY, yRotate, relativeT){
         // Rotate the arms
         this.leftArm.rotation.y = yRotate + Math.PI/8 * Math.sin(relativeT/50);
         this.rightArm.rotation.y = yRotate + Math.PI - Math.PI/8 * Math.sin(relativeT/50);
+    } else if (this.disarming) {
+        this.grouped.position.y -= Math.pow(9.81, 2 * 0|((t - this.dropTheArms) / 1000));
     }
 }
+
+Arms.prototype.disarm = function() {
+    if (this.disarming === false) {
+        this.doneLoading = false;
+        this.title.style.opacity = 0;
+        this.disarming = true;
+        this.dropTheArms = t;
+    }
+};

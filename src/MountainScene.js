@@ -139,10 +139,6 @@ MountainScene.prototype.attachArms = function() {
     });
 };
 
-MountainScene.prototype.detachArms = function() {
-    this.scene.remove(this.arms.grouped);
-};
-
 MountainScene.prototype.initMountain = function() {
 
     this.mapData = this.generateHeight(this.segments, this.segments);
@@ -381,7 +377,7 @@ MountainScene.prototype.updateCamera = function(relativeT) {
             cameraTarget.y,
             cameraTarget.z
         ));
-    } else if (relativeT > (80700 - 14000)) {
+    } else if (relativeT > (80700 - 14000) && relativeT < (73000)) {
         if (this.arms) { 
             this.arms.update(this.train.grouped.position.y, this.train.grouped.rotation.y + Math.PI/2, relativeT); 
         } else {
@@ -398,8 +394,9 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         var hackyPos = this.arms.grouped.position.clone();
         hackyPos.y += 150;
         this.camera.lookAt(hackyPos);
-    } else {
-        // this.camera.lookAt(this.train.grouped.position);
+    } else if (relativeT > (80700 - 7000)) {
+        this.arms.disarm();
+        this.arms.update();
     }
 };
 
