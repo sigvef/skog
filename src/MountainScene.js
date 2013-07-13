@@ -114,6 +114,13 @@ MountainScene.prototype.initWater = function() {
     var effect = new THREE.ShaderPass(AsciiShader);
     effect.renderToScreen = true;
     this.composer.addPass(effect);
+
+    this.composernoise = new THREE.EffectComposer(renderer, RENDERTARGET);
+    this.composernoise.addPass( new THREE.RenderPass(this.scene, this.camera));
+    var effect = new THREE.ShaderPass(THREE.NoiseShader);
+    effect.renderToScreen = true;
+    this.composernoise.addPass(effect);
+
     mesh.position.y = 50;
     
 };
@@ -161,7 +168,6 @@ MountainScene.prototype.initMountain = function() {
         party: {type:'f', value: 0},
         gravel: {type: 't', value: THREE.ImageUtils.loadTexture('res/gravel.jpg')},
         grass: {type: 't', value: THREE.ImageUtils.loadTexture('res/floral.jpg')},
-        snow: {type: 't', value: THREE.ImageUtils.loadTexture('res/snow.jpg')},
         height: {type: 't', value: this.heightMap}
     };
     this.mountainMesh = new THREE.Mesh(geometry, createMountainShaderMaterial(this.mountainuniforms));
@@ -207,6 +213,9 @@ MountainScene.prototype.update = function(){
 	this.train.update();
 	this.rails.update();
 
+    this.mountainuniforms.time.value = t;
+    this.mountainuniforms.party.value = +(t > (32180 + this.startTime));
+
     if(t == 64740){
         swapstagroover(); 
     }
@@ -248,6 +257,7 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         var camTime = relativeT/4000;
         this.camera.position.x = smoothstep(13000, 2500, camTime);
         this.camera.position.z = smoothstep(13000, 2500, camTime);
+        this.camera.position.y = smoothstep(550, 70, camTime);
 
         this.camera.lookAt(new THREE.Vector3(0,800,0));
     } else if (relativeT < 9000) {
@@ -378,7 +388,7 @@ MountainScene.prototype.addSmokePuff = function(x,y,z) {
 
 MountainScene.prototype.render = function(){
     /* do rendery stuff here */
-    music.volume ? renderer.render(this.scene, this.camera)
+    music.volume ? this.composernoise.render()
                  : this.composer.render();
 };
 

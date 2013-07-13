@@ -9,8 +9,6 @@ TunnelScene.prototype.init = function(cb){
     this.scene = new THREE.Scene();
     this.fov = 0; //also set in reset
 
-
-
     var that = this;
     var scale = 400;
     this.ninjadev = new THREE.Mesh(new THREE.CubeGeometry(1607/scale,0.0001,267/scale), new THREE.MeshLambertMaterial({
@@ -97,10 +95,10 @@ TunnelScene.prototype.init = function(cb){
     );
 
     this.parent.add(tubeMesh);
-    this.reset();
+    //this.reset();
     this.composer = new THREE.EffectComposer(renderer, RENDERTARGET);
     this.composer.addPass( new THREE.RenderPass(this.scene, this.camera));
-    var effect = new THREE.ShaderPass(AsciiShader);
+    var effect = new THREE.ShaderPass(THREE.NoiseShader);
     effect.renderToScreen = true;
     this.composer.addPass(effect);
     cb();
@@ -108,6 +106,9 @@ TunnelScene.prototype.init = function(cb){
 
 TunnelScene.prototype.reset = function(){
     /* reset all the variables! */
+    var that = sm.sortedScenes[1];
+    that.scene.add(that.train.grouped);
+    that.scene.add(that.rails.grouped);
     this.title.style.opacity = 0;
     this.firstSet = true;
     this.fov = 172;
@@ -195,5 +196,6 @@ TunnelScene.prototype.update = function(){
 TunnelScene.prototype.render = function(){
     this.camera.fov = this.fov;
     this.camera.updateProjectionMatrix();
-    renderer.render(this.scene, this.camera)
+    //renderer.render(this.scene, this.camera)
+    this.composer.render();
 }
