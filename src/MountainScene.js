@@ -112,6 +112,13 @@ MountainScene.prototype.initWater = function() {
     var effect = new THREE.ShaderPass(AsciiShader);
     effect.renderToScreen = true;
     this.composer.addPass(effect);
+
+    this.composernoise = new THREE.EffectComposer(renderer, RENDERTARGET);
+    this.composernoise.addPass( new THREE.RenderPass(this.scene, this.camera));
+    var effect = new THREE.ShaderPass(THREE.NoiseShader);
+    effect.renderToScreen = true;
+    this.composernoise.addPass(effect);
+
     mesh.position.y = 50;
     
 
@@ -320,7 +327,7 @@ MountainScene.prototype.updateCamera = function(relativeT) {
 
 MountainScene.prototype.render = function(){
     /* do rendery stuff here */
-    music.volume ? renderer.render(this.scene, this.camera)
+    music.volume ? this.composernoise.render()
                  : this.composer.render();
 };
 
