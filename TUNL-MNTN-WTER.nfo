@@ -1,0 +1,25 @@
+#================================================#
+|                                                |
+|                 TUNL-MNTN-WTER                 |
+|     (pronounced "tunnel mountain water train") |
+|                                                |
+|                  by Ninjadev                   |
+|                                                |
+#================================================#
+
+Hi everyone! This is a demo called TUNL-MNTN-WTER
+( which  is  pronounced  "tunnel  mountain  water
+train" ).  It is written in JavaScript/WebGL, and
+uses THREE.js.  Most of the work on this demo was
+put in during the first night of  Solskogen 2013.
+
+For  best  results you  should run this with  the
+latest version of Google Chrome.  If you  want to
+run it  from  your  local file system,  which you
+probably do if you are reading this,  remember to
+start Chrome  with the  --allow-access-from-files
+command-line argument.
+
+This demo was in the new-school compo at
+Solskogen 2013.
+
