@@ -245,12 +245,14 @@ MountainScene.prototype.update = function(){
             this.trees[i].position.y = moveFactor * Math.sin( (t-this.startTime-4000) / 250*Math.PI ) + this.trees[i].finalYPos;
         }
     }
-    /*for(var i=0;i<this.smokePuffs.length; i++) {
-        if(t-this.smokeBirthTimes[i]>10) {
+    for(var i=0;i<this.smokePuffs.length; i++) {
+        if(t-this.smokeBirthTimes[i]>10000) {
+            this.scene.remove(this.smokePuffs[i])
+            delete this.smokePuffs[i];
             this.smokePuffs.splice(i,1);
             this.smokeBirthTimes.splice(i,1);
         }
-    }*/
+    }
     for(var i=0;i<this.smokePuffs.length; i++) {
         this.updateSmoke(this.smokePuffs[i]);
     }
@@ -353,9 +355,6 @@ MountainScene.prototype.updateSmoke = function(updateParticleGroup){
     }
 
     updateParticleGroup.rotation.y = t * 0.00075;
-    /*if(updateParticleGroup.rotation.y>20) {
-        this.scene.remove(updateParticleGroup)
-    }*/
 }
 MountainScene.prototype.addSmokePuff = function(x,y,z) {
     var particleTexture = THREE.ImageUtils.loadTexture( 'res/smokeparticle.png' );
