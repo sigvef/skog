@@ -60,7 +60,6 @@ Train.prototype.init = function(cb){
 				}
 			}
 			if (everythingIsLoaded) {
-				console.log("all train parts are loaded");
 				cb();	//done with the loading
 			}
 		});
@@ -98,7 +97,6 @@ Train.prototype.update = function(){
 				
 				//if animation is done, go to next animation for this object if available
 				if (relativeT > animation.end && ++part.activeAnimation === part.animations.length) {
-					console.log("an animation for " + part.name + " has ended at " + t);
 					part.activeAnimation = -1;
 				}
 			}

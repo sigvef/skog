@@ -7,16 +7,14 @@ function MountainScene(){
     this.segments = 192;
     this.halfSegments = 96;
     this.size = 8000;
-}
-
+};
+ 
 MountainScene.prototype.init = function(cb){
     /* do loady stuff here */
 
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(45, 16/9, 1, 50000);
     this.scene.add(this.camera);
-
-    c = this.camera;
 
     this.initMountain();
 
@@ -27,6 +25,8 @@ MountainScene.prototype.init = function(cb){
     this.setupLights();
     
     this.initSkyBox();
+
+    this.initSmokePuffs();
 
     /* call cb when you are done loading! */
     this.initTrainAndRails(function() {
@@ -122,6 +122,7 @@ MountainScene.prototype.attachArms = function() {
     this.arms = new Arms(20);
     this.arms.init(function() {
         that.scene.add(that.arms.grouped);
+        that.arms.title.style.opacity = 1;
     });
 };
 
@@ -151,7 +152,6 @@ MountainScene.prototype.initMountain = function() {
         var imageData = ctx.getImageData(0,0,s,s);
         for(var i=0; i<m.length;i++){
             var height = m[i];
-            //if(height > 0) console.log(height);
             imageData.data[i*4 + 0] = height;
             imageData.data[i*4 + 1] = height;
             imageData.data[i*4 + 2] = height;
@@ -181,7 +181,7 @@ MountainScene.prototype.initTrees = function() {
     this.trees = [];
     Math.seedrandom("the-forest");
     var treesPlaced = 0;
-    while (treesPlaced < 500) {
+    while (treesPlaced < 100) {
         var pos = {
             x: Math.random()*6000-3000,
             y: Math.random()*1000+9000,
@@ -202,6 +202,10 @@ MountainScene.prototype.initTrees = function() {
     }
 };
 
+MountainScene.prototype.initSmokePuffs = function() {
+    this.smokePuffs = new Array();
+}
+
 MountainScene.prototype.reset = function(){
     this.camera.position.y = 70;
 };
@@ -211,6 +215,12 @@ MountainScene.prototype.update = function(){
 	this.train.update();
 	this.rails.update();
 
+    if(t == 64740){
+        swapstagroover(); 
+    }
+    if(t == 80700){
+        swapstagroover(); 
+    }
 
     this.updateCamera(relativeT);
 
@@ -305,14 +315,14 @@ MountainScene.prototype.updateCamera = function(relativeT) {
     } else if (relativeT < 32000) {
         if (this.startCameraFour === undefined) {
             this.startCameraFour = {
-                position: new THREE.Vector3(0, 780, 2700),
+                position: new THREE.Vector3(1700, 780, 3000),
                 fov: this.camera.fov
             };
         }
         moveCamera(
             this.startCameraFour,
             this.camera,
-            new THREE.Vector3(0, 1300, 2700),
+            new THREE.Vector3(1700, 1300, 3000),
             7000,
             1,
             relativeT - 25000
@@ -322,7 +332,63 @@ MountainScene.prototype.updateCamera = function(relativeT) {
     } else {
         this.camera.lookAt(this.arms.grouped.position);
     }
+    for(var i=0;i<this.smokePuffs.length; i++) {
+        this.updateSmoke(this.smokePuffs[i]);
+    }
 };
+
+MountainScene.prototype.updateSmoke = function(updateParticleGroup){
+    
+    for ( var c = 0; c < updateParticleGroup.children.length; c ++ ) 
+    {
+        var sprite = updateParticleGroup.children[ c ];
+
+            // particle wiggle
+             var wiggleScale = 2;
+             sprite.position.x += wiggleScale * (Math.random() - 0.5);
+             sprite.position.y += wiggleScale * (Math.random() - 0.5);
+             sprite.position.z += wiggleScale * (Math.random() - 0.5);
+
+        var a = particleAttributes.randomness[c] + 1;
+        var pulseFactor = Math.sin(a * 0.01 * t) * 0.1 + 0.9;
+        sprite.position.x = particleAttributes.startPosition[c].x * pulseFactor;
+        sprite.position.y = particleAttributes.startPosition[c].y * pulseFactor + updateParticleGroup.rotation.y*40;
+        sprite.position.z = particleAttributes.startPosition[c].z * pulseFactor;
+    }
+
+    updateParticleGroup.rotation.y = t * 0.00075;
+    if(particleGroup.rotation.y>20) {
+        this.scene.remove(updateParticleGroup)
+    }
+}
+
+MountainScene.prototype.addSmokePuff = function(x,y,z) {
+    var particleTexture = THREE.ImageUtils.loadTexture( 'images/smokeparticle.png' );
+    
+    particleGroup = new THREE.Object3D();
+    particleAttributes = { startSize: [], startPosition: [], randomness: [] };
+
+    var totalParticles = 200;
+    var radiusRange = 50;
+    for( var i = 0; i < totalParticles; i++ ) 
+    {
+        var spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture, useScreenCoordinates: false, color: 0xffffff } );
+
+        var sprite = new THREE.Sprite( spriteMaterial );
+        sprite.scale.set( 32, 32, 1.0 ); // imageWidth, imageHeight
+        sprite.position.set( Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5 );
+        sprite.position.setLength( radiusRange * (Math.random() * 0.1 + 0.9) );
+
+        sprite.material.color.setHSL( 0, 0, 0.4 ); 
+        sprite.material.blending = THREE.AdditiveBlending; // "glowing" particles
+        particleGroup.add( sprite );
+        particleAttributes.startPosition.push( sprite.position.clone() );
+        particleAttributes.randomness.push( Math.random() );
+    }
+    particleGroup.position.set(x,y,z);
+    this.smokePuffs.push(particleGroup);
+    this.scene.add( particleGroup );
+}
 
 MountainScene.prototype.render = function(){
     /* do rendery stuff here */
@@ -451,11 +517,12 @@ MountainScene.prototype.initSkyBox = function() {
     var imagePath = "res/red_floral.jpg";
     var skyGeometry = new THREE.CubeGeometry( 26000, 26000, 26000 );   
     var materialArray = [];
-    for (var i = 0; i < 6; i++) {
-    	materialArray.push( new THREE.MeshBasicMaterial({
+    var material =  new THREE.MeshBasicMaterial({
     		map: THREE.ImageUtils.loadTexture(imagePath),
     		side: THREE.BackSide
-    	}));
+    	});
+    for (var i = 0; i < 6; i++) {
+        materialArray[i] = material;
     }
     var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
     var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
