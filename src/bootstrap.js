@@ -95,7 +95,6 @@ function bootstrap(){
         }
 
         if(e.keyCode == /*LEFT*/ 37){
-            console.log("LEFT");
             sm.jumpToScene(sm.sortedScenes[sm.activeSceneIndex - 1].NAME);
         }
 

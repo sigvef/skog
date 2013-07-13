@@ -221,7 +221,6 @@ MountainScene.prototype.initTrees = function() {
             finalI = i;
         }
     }
-    console.log("the lowest tree:", finalI);
 };
 
 MountainScene.prototype.initSmokePuffs = function() {
