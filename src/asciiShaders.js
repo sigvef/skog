@@ -26,7 +26,7 @@ var AsciiShader = {
             "texel = texture2D( tDiffuse, floor(vUv*ratio) / ratio);",
             "float gray = (texel.x + texel.y + texel.z)/3.01;",
             "gray = floor(gray*8.)/8.;",
-            "gl_FragColor = texel * texture2D(tAscii, vec2(",
+            "gl_FragColor = 1.2 * texel * texture2D(tAscii, vec2(",
                 "gray + (vUv.x-floor(vUv.x*ratio.x)/ratio.x) / (1./ratio.x) * 1./8.,",
                 "7./8. + (vUv.y-floor(vUv.y*ratio.y)/ratio.y) / 8. * ratio.y",
             "));",
