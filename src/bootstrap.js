@@ -64,7 +64,7 @@ function readytostart(){
     var b = document.createElement('p');
     b.innerHTML = "Go to fullscreen, then click ENTER to start!";
     var disclaimer = document.createElement('h6');
-    disclaimer.innerHTML = "Remember to use Chrome with --allow-file-access-from-files";
+    disclaimer.innerHTML = "Remember to use Chrome with --allow-file-access-from-files<br><br>Made by:<br>sigveseb<br>iverjo<br>cristea<br>runholm<br>capitalism<br>stiaje";
     b.appendChild(disclaimer);
     b.setAttribute('style', 'z-index: 999');
     document.addEventListener('keydown',function(){
