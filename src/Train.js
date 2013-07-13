@@ -108,11 +108,11 @@ Train.prototype.partytime = function(){
 	var diff = 2*Math.cos(Math.PI*t/500*2);
 	this.grouped.scale.y = 10 + diff;
 	this.grouped.position.y -= diff;
-}
+};
 
 Train.prototype.rotateWheels = function(rotationSpeed) {
 	if (arguments.length === 0) {
-		rotationSpeed = 0.1*Math.PI;
+		rotationSpeed = 0.314;
 	}
 	for (var i = 0; i < 12; i++) {	//because the 12 first elements in the array are wheels
 		this.objects[trainParts[i].name].rotation.z -= rotationSpeed;
