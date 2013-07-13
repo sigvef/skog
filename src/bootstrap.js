@@ -50,6 +50,7 @@ function start(){
     sm = new SceneManager();
     sm.addScene(new TunnelScene());
     sm.addScene(new MountainScene());
+    sm.addScene(new GreetScene());
     sm.initScenes(function(){
         sm.warmup();
         music_lo_fi.volume = 0;
