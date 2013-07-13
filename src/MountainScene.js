@@ -401,10 +401,39 @@ MountainScene.prototype.updateCamera = function(relativeT) {
             cameraTarget.y,
             cameraTarget.z
         ));
-    } else if (relativeT < 48500) {
+    } else if (relativeT < 36000) {
         this.camera.position = new THREE.Vector3(
             0,
-            smoothstep(950, 1300, (relativeT - 32000) / 5000),
+            smoothstep(950, 1200, (relativeT - 32000) / 4000),
+            0
+        );
+        this.camera.lookAt(this.train.grouped.position);
+    } else if (relativeT < 40000) {
+        if (this.arms) { 
+            this.arms.update(this.train.grouped.position.y, this.train.grouped.rotation.y + Math.PI/2, relativeT); 
+        } else {
+            this.attachArms();
+        }
+
+        this.camera.position.x = 2700*Math.sin((relativeT + 3000)*0.0002);
+        this.camera.position.y = this.train.grouped.position.y + 100 + smoothstep(-50, 100, (relativeT - 80000) / 6000 );
+        this.camera.position.z = 2700*Math.cos((relativeT + 3000)*0.0002);
+
+        this.camera.fov = 25;
+        this.camera.updateProjectionMatrix();
+
+        var hackyPos = this.arms.grouped.position.clone();
+        hackyPos.y += 150;
+        this.camera.lookAt(hackyPos);
+    } else if (relativeT < 48500) {
+        this.arms.disarm();
+        this.arms.update();
+
+        this.camera.fov = 45;
+        this.camera.updateProjectionMatrix();
+        this.camera.position = new THREE.Vector3(
+            0,
+            smoothstep(1500, 1000, (relativeT - 40000) / 8500),
             0
         );
         this.camera.lookAt(this.train.grouped.position);
@@ -423,7 +452,7 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         this.camera.position.z = this.train.grouped.position.z + smoothstep(100, 500, camTime);
 
         this.camera.lookAt(this.train.grouped.position);
-    } else if (relativeT < 64000) {
+    } else {
         // tree
         var camTime = (relativeT - 58000) / 6000;
 
@@ -434,26 +463,6 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         this.camera.position.z = orbitron.z + smoothstep(-100, 300, camTime);
 
         this.camera.lookAt(orbitron);
-    } else if (relativeT < 80000) {
-        if (this.arms) { 
-            this.arms.update(this.train.grouped.position.y, this.train.grouped.rotation.y + Math.PI/2, relativeT); 
-        } else {
-            this.attachArms();
-        }
-
-        this.camera.position.x = 2700*Math.sin((relativeT + 3000)*0.0002);
-        this.camera.position.y = this.arms.grouped.position.y + 100 + smoothstep(-50, 100, (relativeT - 80000) / 6000 );
-        this.camera.position.z = 2700*Math.cos((relativeT + 3000)*0.0002);
-
-        this.camera.fov = 25;
-        this.camera.updateProjectionMatrix();
-
-        var hackyPos = this.arms.grouped.position.clone();
-        hackyPos.y += 150;
-        this.camera.lookAt(hackyPos);
-    } else if (relativeT > (80700 - 7000)) {
-        this.arms.disarm();
-        this.arms.update();
     }
 };
 
