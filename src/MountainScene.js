@@ -156,6 +156,7 @@ MountainScene.prototype.initMountain = function() {
 
     this.mountainuniforms = {
         time: {type:'f', value: 0},
+        party: {type:'f', value: 0},
         gravel: {type: 't', value: THREE.ImageUtils.loadTexture('res/gravel.jpg')},
         grass: {type: 't', value: THREE.ImageUtils.loadTexture('res/floral.jpg')},
         snow: {type: 't', value: THREE.ImageUtils.loadTexture('res/snow.jpg')},
@@ -201,6 +202,9 @@ MountainScene.prototype.update = function(){
     this.camera.position.x = this.train.grouped.position.x + 0.6 * 2650*Math.sin(t*0.0002 + 2);
     this.camera.position.y = 0.09 * 800*Math.sin(t/2500)+1100;
     this.camera.position.z = this.train.grouped.position.z + 0.6 * 2650*Math.sin(t*0.0002 + 2);
+
+    this.mountainuniforms.time.value = t;
+    this.mountainuniforms.party.value = +(t > (32180 + this.startTime));
 
 	this.train.grouped.position.x = 2485*Math.sin(t*0.0002);
 	this.train.grouped.position.z = 2485*Math.cos(t*0.0002);
