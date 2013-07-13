@@ -133,6 +133,10 @@ MountainScene.prototype.attachArms = function() {
     });
 };
 
+MountainScene.prototype.detachArms = function() {
+    this.scene.remove(this.arms.grouped);
+};
+
 MountainScene.prototype.initMountain = function() {
 
     this.mapData = this.generateHeight(this.segments, this.segments);
