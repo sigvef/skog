@@ -3,6 +3,7 @@ function Arms(scale){
     this.leftArm = null;
     this.rightArm = null;
     this.grouped = new THREE.Object3D();
+    this.doneLoading = false;
 }
 
 Arms.prototype.init = function(cb){
@@ -17,12 +18,13 @@ Arms.prototype.init = function(cb){
     this.title.style.position = 'absolute';
     this.title.style.zIndex = 99999999999;
     
-    var w = 1024/16*GU*0.1;
-    var h = 1024/9*GU*0.1;
+    var w = 1024/16*GU*0.13;
+    var h = 1024/16*GU*0.13;
+
     this.title.style.width =  w + 'px';
     this.title.style.height = h + 'px';
     this.title.style.left = renderer.domElement.offsetLeft + 8*GU - w/2 + 'px';
-    this.title.style.top = renderer.domElement.offsetTop + 2.5*GU - h/2 + 'px';
+    this.title.style.top = renderer.domElement.offsetTop + 4.5*GU - h/2 + 'px';
     document.body.appendChild(this.title);
 
     // Texture loader
@@ -71,19 +73,22 @@ Arms.prototype.init = function(cb){
         that.grouped.add(that.leftArm);
         that.grouped.add(that.rightArm);
 
+        that.doneLoading = true;
         cb();
     });
 
     objLoader.load( objPath );
 }
 
-Arms.prototype.update = function(trainY, yRotate){
+Arms.prototype.update = function(trainY, yRotate, relativeT){
     // Update the armGroup position
-    this.grouped.position.y = trainY - 130;
-    this.grouped.position.x = 2700*Math.sin(t*0.0002);
-    this.grouped.position.z = 2700*Math.cos(t*0.0002);
+    if (this.doneLoading) {
+        this.grouped.position.y = trainY - 130;
+        this.grouped.position.x = 2700*Math.sin((relativeT + 1000)*0.0002);
+        this.grouped.position.z = 2700*Math.cos((relativeT + 1000)*0.0002);
 
-    // Rotate the arms
-    this.leftArm.rotation.y = yRotate + Math.PI/8 * Math.sin(t/50);
-    this.rightArm.rotation.y = yRotate + Math.PI - Math.PI/8 * Math.sin(t/50);
+        // Rotate the arms
+        this.leftArm.rotation.y = yRotate + Math.PI/8 * Math.sin(relativeT/50);
+        this.rightArm.rotation.y = yRotate + Math.PI - Math.PI/8 * Math.sin(relativeT/50);
+    }
 }
