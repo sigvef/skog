@@ -353,14 +353,14 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         this.camera.updateProjectionMatrix();
         if (this.startCameraThree === undefined) {
             this.startCameraThree = {
-                position: new THREE.Vector3(-300, 800, 2800),
+                position: new THREE.Vector3(-300, 800, 2900),
                 fov: this.camera.fov
             };
         }
         moveCamera(
             this.startCameraThree,
             this.camera,
-            new THREE.Vector3(540, 840, 2800),
+            new THREE.Vector3(540, 840, 2900),
             9500,
             1,
             relativeT - 10500
