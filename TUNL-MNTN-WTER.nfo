@@ -17,7 +17,7 @@ For  best  results you  should run this with  the
 latest version of Google Chrome.  If you  want to
 run it  from  your  local file system,  which you
 probably do if you are reading this,  remember to
-start Chrome  with the  --allow-access-from-files
+start Chrome  with the  --allow-file-access-from-files
 command-line argument.
 
 This demo was in the new-school compo at
