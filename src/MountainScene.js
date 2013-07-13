@@ -255,11 +255,13 @@ MountainScene.prototype.update = function(){
         this.train.grouped.rotation.y += 0.004;
         this.train.rotateWheels();
         if(t%500==0) {
-            this.addSmokePuff(2700*Math.sin((relativeT-timeToStartMovingTrain+440)*0.0002),this.train.grouped.position.y+100,2700*Math.cos((relativeT-timeToStartMovingTrain+440)*0.0002))
+            this.addSmokePuff(2700*Math.sin((relativeT-timeToStartMovingTrain+440)*0.0002),this.train.grouped.position.y+100,2700*Math.cos((relativeT-timeToStartMovingTrain+440)*0.0002));
         }
         if(relativeT > 32250)
         this.train.partytime();
     }
+    if(relativeT==30630) this.addSmokePuff(2700*Math.sin((relativeT-timeToStartMovingTrain+440)*0.0002),this.train.grouped.position.y+100,2700*Math.cos((relativeT-timeToStartMovingTrain+440)*0.0002));
+    if(relativeT==31130) this.addSmokePuff(2700*Math.sin((relativeT-timeToStartMovingTrain+440)*0.0002),this.train.grouped.position.y+100,2700*Math.cos((relativeT-timeToStartMovingTrain+440)*0.0002));
 
     this.uniforms.time.value = t/1500;
     this.uniforms.time2.value = t/1500;
@@ -279,7 +281,7 @@ MountainScene.prototype.update = function(){
         }
     }
     for(var i=0;i<this.smokePuffs.length; i++) {
-        if(t-this.smokeBirthTimes[i]>3500) {
+        if(t-this.smokeBirthTimes[i]>5500) {
             this.scene.remove(this.smokePuffs[i])
             delete this.smokePuffs[i];
             this.smokePuffs.splice(i,1);
