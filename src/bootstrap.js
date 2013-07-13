@@ -56,6 +56,7 @@ function start(){
         music.play();
         music_lo_fi.play();
         sm.jumpToScene('tunnel');
+        renderer.domElement.style.opacity = 1;
         setTimeout(loop, 0);
     });
 }
