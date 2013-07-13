@@ -242,6 +242,7 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         var camTime = relativeT/4000;
         this.camera.position.x = smoothstep(13000, 2500, camTime);
         this.camera.position.z = smoothstep(13000, 2500, camTime);
+        this.camera.position.y = smoothstep(550, 70, camTime);
 
         this.camera.lookAt(new THREE.Vector3(0,800,0));
     } else if (relativeT < 8000) {
