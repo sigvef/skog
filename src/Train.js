@@ -75,7 +75,7 @@ Train.prototype.init = function(cb){
 
 Train.prototype.update = function(){
 	var relativeT = t - this.startTime;
-	
+
 	for (var i = 0; i < trainParts.length; i++) {
 		var object = this.objects[trainParts[i].name];
 		var part = trainParts[i];
@@ -103,6 +103,12 @@ Train.prototype.update = function(){
 		}
 	}
 };
+
+Train.prototype.partytime = function(){
+	var diff = 2*Math.cos(Math.PI*t/500*2);
+	this.grouped.scale.y = 10 + diff;
+	this.grouped.position.y -= diff;
+}
 
 Train.prototype.rotateWheels = function(rotationSpeed) {
 	if (arguments.length === 0) {
