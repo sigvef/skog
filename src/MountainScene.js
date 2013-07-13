@@ -377,7 +377,7 @@ MountainScene.prototype.updateCamera = function(relativeT) {
 
         this.camera.lookAt(new THREE.Vector3(0, 820, 2700));
     } else if (relativeT < 32000) {
-        var camTime = (relativeT - 29000) / 3000;
+        var camTime = (relativeT - 29000) / 4000;
         if (this.startCameraFour === undefined) {
             this.startCameraFour = {
                 position: new THREE.Vector3(500, 800, 2650),
