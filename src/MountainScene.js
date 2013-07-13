@@ -46,6 +46,7 @@ MountainScene.prototype.initTrainAndRails = function(cb) {
     	that.train.grouped.position.y = 885;
         that.train.grouped.position.x = 2485*Math.sin(300*0.0002);
         that.train.grouped.position.z = 2485*Math.cos(300*0.0002);
+        that.train.grouped.rotation.y = 0.06;
     	that.scene.add(that.train.grouped);
     	
         that.rails = new Rails();
@@ -245,12 +246,31 @@ MountainScene.prototype.update = function(){
 
     var timeToStartMovingTrain = 30500;
     if (relativeT > timeToStartMovingTrain) {
-        this.train.grouped.position.x = 2485*Math.sin((relativeT-timeToStartMovingTrain)*0.0002);
-        this.train.grouped.position.z = 2485*Math.cos((relativeT-timeToStartMovingTrain)*0.0002);
-        this.train.grouped.rotation.y += 0.004;
-        this.train.rotateWheels();
-        if(relativeT > 32250)
-        this.train.partytime();
+    	var timeSinceTrainStartedMoving = relativeT - timeToStartMovingTrain;
+    	this.train.grouped.rotation.y += 0.004;
+    	
+    	if (timeSinceTrainStartedMoving < 500) {
+    		var zeroToOne = timeSinceTrainStartedMoving * 0.002;
+    		this.train.grouped.position.x = lerp(
+				2485*Math.sin(300*0.0002),
+				2485*Math.sin((relativeT-timeToStartMovingTrain+300)*0.0002),
+				zeroToOne
+			);
+			this.train.grouped.position.z = lerp(
+				2485*Math.cos(300*0.0002),
+				2485*Math.cos((relativeT-timeToStartMovingTrain+300)*0.0002),
+				zeroToOne
+			);
+    		this.train.rotateWheels(lerp(0, 0.314, timeSinceTrainStartedMoving * 0.002));
+    	}
+    	else {
+    		this.train.grouped.position.x = 2485*Math.sin((relativeT-timeToStartMovingTrain+300)*0.0002);
+    		this.train.grouped.position.z = 2485*Math.cos((relativeT-timeToStartMovingTrain+300)*0.0002);
+    		this.train.rotateWheels(0.314);
+    	}
+        if (relativeT > 32250) {
+        	this.train.partytime();
+        }
     }
 
     this.uniforms.time.value = t/1500;
@@ -408,9 +428,9 @@ MountainScene.prototype.updateSmoke = function(updateParticleGroup){
 
     updateParticleGroup.rotation.y = t * 0.00075;
     if(particleGroup.rotation.y>20) {
-        this.scene.remove(updateParticleGroup)
+        this.scene.remove(updateParticleGroup);
     }
-}
+};
 
 MountainScene.prototype.addSmokePuff = function(x,y,z) {
     var particleTexture = THREE.ImageUtils.loadTexture( 'images/smokeparticle.png' );
@@ -438,7 +458,7 @@ MountainScene.prototype.addSmokePuff = function(x,y,z) {
     particleGroup.position.set(x,y,z);
     this.smokePuffs.push(particleGroup);
     this.scene.add( particleGroup );
-}
+};
 
 MountainScene.prototype.render = function(){
     /* do rendery stuff here */
