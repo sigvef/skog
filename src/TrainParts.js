@@ -280,7 +280,7 @@ var trainParts = [{
     name: 'chimney',
     initPos: {
     	x: 0,
-    	y: 500,
+    	y: 1000,
     	z: 0
     },
     animations: [{
@@ -301,7 +301,7 @@ var trainParts = [{
     name: 'cube0',
     initPos: {
     	x: 0,
-    	y: 500,
+    	y: 1000,
     	z: 0
     },
     animations: [{
@@ -322,7 +322,7 @@ var trainParts = [{
     name: 'cube1',
     initPos: {
     	x: 0,
-    	y: 500,
+    	y: 1000,
     	z: 0
     },
     animations: [{
@@ -343,7 +343,7 @@ var trainParts = [{
     name: 'cube2',
     initPos: {
     	x: 0,
-    	y: 500,
+    	y: 1000,
     	z: 0
     },
     animations: [{
@@ -364,7 +364,7 @@ var trainParts = [{
     name: 'cube3',
     initPos: {
     	x: 0,
-    	y: 500,
+    	y: 1000,
     	z: 0
     },
     animations: [{
@@ -385,7 +385,7 @@ var trainParts = [{
     name: 'front_body',
     initPos: {
     	x: 0,
-    	y: 500,
+    	y: 1000,
     	z: 0
     },
     animations: [{
@@ -406,7 +406,7 @@ var trainParts = [{
     name: 'front_bullet',
     initPos: {
     	x: 0,
-    	y: 500,
+    	y: 1000,
     	z: 0
     },
     animations: [{
@@ -427,7 +427,7 @@ var trainParts = [{
     name: 'front_plate',
     initPos: {
     	x: 0,
-    	y: 500,
+    	y: 1000,
     	z: 0
     },
     animations: [{
@@ -448,7 +448,7 @@ var trainParts = [{
     name: 'hook0',
     initPos: {
     	x: 0,
-    	y: 500,
+    	y: 1000,
     	z: 0
     },
     animations: [{
@@ -721,7 +721,7 @@ var trainParts = [{
     name: 'roof1',
     initPos: {
     	x: 0,
-    	y: 500,
+    	y: 1000,
     	z: 0
     },
     animations: [{
@@ -742,7 +742,7 @@ var trainParts = [{
     name: 'roof2',
     initPos: {
     	x: 0,
-    	y: 500,
+    	y: 1000,
     	z: 0
     },
     animations: [{
@@ -763,7 +763,7 @@ var trainParts = [{
     name: 'roof3',
     initPos: {
     	x: 0,
-    	y: 500,
+    	y: 1000,
     	z: 0
     },
     animations: [{
@@ -784,7 +784,7 @@ var trainParts = [{
     name: 'upper_plate',
     initPos: {
     	x: 0,
-    	y: 500,
+    	y: 1000,
     	z: 0
     },
     animations: [{
