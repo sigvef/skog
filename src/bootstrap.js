@@ -60,11 +60,11 @@ function start(){
 function readytostart(){
     var wb = document.createElement('div');
     wb.setAttribute('class', 'p-wrapper');
-    wb.setAttribute('id', 'starttext');
+    wb.setAttribute('id', 'startText');
     var b = document.createElement('p');
     b.innerHTML = "Go to fullscreen, then press ENTER to start!";
     var disclaimer = document.createElement('h6');
-    disclaimer.innerHTML = "Remember to use Chrome with --allow-file-access-from-files<br><br>Made by:<br>sigveseb<br>iverjo<br>cristea<br>run<br>capitalism<br>stiaje";
+    disclaimer.innerHTML = "Made by:<br>sigveseb<br>iverjo<br>cristea<br>run<br>capitalism<br>stiaje";
     b.appendChild(disclaimer);
     b.setAttribute('style', 'z-index: 999');
     wb.appendChild(b);
@@ -81,7 +81,9 @@ function actuallystart(){
 function bootstrap(){
     document.addEventListener("keydown",function(e){
         if(e.keyCode == /*ENTER*/ 13) {
-            document.body.removeChild(document.getElementById('starttext'));
+        	document.body.removeChild(document.getElementById('startText'));
+        	if (notChrome) document.body.removeChild(document.getElementById('notChrome'));
+        	if (runLocally) document.body.removeChild(document.getElementById('runLocally'));
             setTimeout(actuallystart, 100);
         }
 
