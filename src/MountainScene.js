@@ -226,6 +226,7 @@ MountainScene.prototype.initTrees = function() {
 MountainScene.prototype.initSmokePuffs = function() {
     this.smokePuffs = new Array();
     this.smokeBirthTimes = new Array();
+    this.particleTexture = THREE.ImageUtils.loadTexture( 'res/smoke.png' );
 };
 
 MountainScene.prototype.reset = function(){
@@ -241,10 +242,6 @@ MountainScene.prototype.update = function(){
     this.mountainuniforms.party.value = +(t > (32180 + this.startTime));
 
     this.updateCamera(relativeT);
-
-    for(var i=0;i<this.smokePuffs.length; i++) {
-        this.updateSmoke(this.smokePuffs[i]);
-    }
 
     var timeToStartMovingTrain = 30500;
     if (relativeT > timeToStartMovingTrain) {
@@ -275,13 +272,15 @@ MountainScene.prototype.update = function(){
         }
 
         if(t%500==0) {
-            this.addSmokePuff(2700*Math.sin((relativeT-timeToStartMovingTrain+750)*0.0002),this.train.grouped.position.y+100,2700*Math.cos((relativeT-timeToStartMovingTrain+750)*0.0002));
+            this.addSmokePuff(
+                2700*Math.sin((relativeT-timeToStartMovingTrain+750)*0.0002),
+                this.train.grouped.position.y+100,
+                2700*Math.cos((relativeT-timeToStartMovingTrain+750)*0.0002)
+            );
         }
-        if(relativeT > 32250)
-            this.train.partytime();
     }
-    if(relativeT==30630) this.addSmokePuff(2700*Math.sin((relativeT-timeToStartMovingTrain+440)*0.0002),this.train.grouped.position.y+100,2700*Math.cos((relativeT-timeToStartMovingTrain+440)*0.0002));
-    if(relativeT==31130) this.addSmokePuff(2700*Math.sin((relativeT-timeToStartMovingTrain+440)*0.0002),this.train.grouped.position.y+100,2700*Math.cos((relativeT-timeToStartMovingTrain+440)*0.0002));
+
+    this.updateSmoke();
 
     this.uniforms.time.value = t/1500;
     this.uniforms.time2.value = t/1500;
@@ -299,17 +298,6 @@ MountainScene.prototype.update = function(){
             var moveFactor = (i%2) ? 10 : -10;
             this.trees[i].position.y = moveFactor * Math.sin( (t-this.startTime-4000) / 250*Math.PI ) + this.trees[i].finalYPos;
         }
-    }
-    for(var i=0;i<this.smokePuffs.length; i++) {
-        if(t-this.smokeBirthTimes[i]>5500) {
-            this.scene.remove(this.smokePuffs[i])
-            delete this.smokePuffs[i];
-            this.smokePuffs.splice(i,1);
-            this.smokeBirthTimes.splice(i,1);
-        }
-    }
-    for(var i=0;i<this.smokePuffs.length; i++) {
-        this.updateSmoke(this.smokePuffs[i], i);
     }
 
     this.noiseShaderEffect.uniforms.width.value = (16*GU)/4;
@@ -468,52 +456,85 @@ MountainScene.prototype.updateCamera = function(relativeT) {
     }
 };
 
-MountainScene.prototype.updateSmoke = function(updateParticleGroup, age){
+MountainScene.prototype.updateSmoke = function() {
+    var relativeT = t - this.startTime;
+
+    if(relativeT==30630) {
+        this.addSmokePuff(
+            2700*Math.sin((relativeT-timeToStartMovingTrain+440)*0.0002),
+            this.train.grouped.position.y+100,
+            2700*Math.cos((relativeT-timeToStartMovingTrain+440)*0.0002)
+        );
+    }
+    if(relativeT==31130) {
+        this.addSmokePuff(
+            2700*Math.sin((relativeT-timeToStartMovingTrain+440)*0.0002),
+            this.train.grouped.position.y+100,
+            2700*Math.cos((relativeT-timeToStartMovingTrain+440)*0.0002)
+        );
+    }
+
+    for(var i=0;i<this.smokePuffs.length; i++) {
+        if(t-this.smokeBirthTimes[i]>4000) {
+            this.scene.remove(this.smokePuffs[i]);
+            delete this.smokePuffs[i];
+            this.smokePuffs.splice(i,1);
+            this.smokeBirthTimes.splice(i,1);
+        }
+    }
+    for(var i=0;i<this.smokePuffs.length; i++) {
+        this.updateSmokePuff(this.smokePuffs[i], i);
+    }
+}
+
+MountainScene.prototype.updateSmokePuff = function(updateParticleGroup, age){
     
-    for ( var c = 0; c < updateParticleGroup.children.length; c ++ ) {
-        updateParticleGroup.children[ c ];
-
-            // particle wiggle
-             var wiggleScale = 2;
-             updateParticleGroup.children[ c ].position.x += wiggleScale * (Math.random() - 0.5);
-             updateParticleGroup.children[ c ].position.y += wiggleScale * (Math.random() - 0.5);
-             updateParticleGroup.children[ c ].position.z += wiggleScale * (Math.random() - 0.5);
-
-        var a = particleAttributes.randomness[c] + 1;
+    for (var c=0; c < updateParticleGroup.children.length; c++) {
+        var particle = updateParticleGroup.children[c];
+        var attributes = updateParticleGroup.particleAttributes;
+        var a = attributes.randomness[c] + 1;
         var pulseFactor = Math.sin(a * 0.01 * t) * 0.1 + 0.9;
-        updateParticleGroup.children[ c ].position.x = particleAttributes.startPosition[c].x * pulseFactor;
-        updateParticleGroup.children[ c ].position.y = particleAttributes.startPosition[c].y * pulseFactor + (t - this.smokeBirthTimes[age])*0.1
-        updateParticleGroup.children[ c ].position.z = particleAttributes.startPosition[c].z * pulseFactor;
+        particle.position.x = attributes.startPosition[c].x * pulseFactor;
+        particle.position.y = attributes.startPosition[c].y * pulseFactor + (t - this.smokeBirthTimes[age])*0.1
+        particle.position.z = attributes.startPosition[c].z * pulseFactor;
     }
 
     updateParticleGroup.rotation.y = t * 0.00075;
 }
 
 MountainScene.prototype.addSmokePuff = function(x,y,z) {
-    var particleTexture = THREE.ImageUtils.loadTexture( 'res/smokeparticle.png' );
     
     this.smokePuffs.push( new THREE.Object3D() );
-    particleAttributes = { startSize: [], startPosition: [], randomness: [] };
+    var smokePuff = this.smokePuffs[this.smokePuffs.length-1];
 
-    var totalParticles = 200;
+    smokePuff.particleAttributes = { startSize: [], startPosition: [], randomness: [] };
+
+    var totalParticles = 40;
     var radiusRange = 40;
-    for( var i = 0; i < totalParticles; i++ ) 
-    {
-        var spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture, useScreenCoordinates: false, color: 0xffffff } );
-
-        this.smokePuffs[this.smokePuffs.length-1].add( new THREE.Sprite( spriteMaterial ));
-        this.smokePuffs[this.smokePuffs.length-1].children[i].scale.set( 64, 64, 1.0 ); // imageWidth, imageHeight
-        this.smokePuffs[this.smokePuffs.length-1].children[i].position.set( Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5 );
-        this.smokePuffs[this.smokePuffs.length-1].children[i].position.setLength( radiusRange * (Math.random() * 0.1 + 0.9) );
-
-        this.smokePuffs[this.smokePuffs.length-1].children[i].material.color.setHSL( 120, 0, 0.2 ); 
-        this.smokePuffs[this.smokePuffs.length-1].children[i].material.blending = THREE.AdditiveBlending; // "glowing" particles
-        particleAttributes.startPosition.push( this.smokePuffs[this.smokePuffs.length-1].children[i].position.clone() );
-        particleAttributes.randomness.push( Math.random() );
+    var spriteMaterial = new THREE.SpriteMaterial({
+        map: this.particleTexture,
+        useScreenCoordinates: false,
+        color: 0xffffff
+    });
+    for(var i=0; i < totalParticles; i++) {
+        smokePuff.add(new THREE.Sprite(spriteMaterial));
+        smokePuff.children[i].scale.set(64, 64, 1.0); // imageWidth, imageHeight
+        smokePuff.children[i].position.set(
+            Math.random() - 0.5,
+            Math.random() - 0.5,
+            Math.random() - 0.5
+        );
+        smokePuff.children[i].position.setLength(
+            radiusRange * (Math.random() * 0.1 + 0.9)
+        );
+        smokePuff.children[i].material.color.setHSL(120, 0, 1); 
+        smokePuff.children[i].material.blending = THREE.AlphaBlending; // "glowing" particles
+        smokePuff.particleAttributes.startPosition.push(smokePuff.children[i].position.clone());
+        smokePuff.particleAttributes.randomness.push(Math.random());
     }
 
-    this.smokePuffs[this.smokePuffs.length-1].position.set(x,y,z);
-    this.scene.add( this.smokePuffs[this.smokePuffs.length-1] );
+    smokePuff.position.set(x,y,z);
+    this.scene.add(smokePuff);
     this.smokeBirthTimes.push(t);
 }
 
