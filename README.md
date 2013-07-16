@@ -1,9 +1,9 @@
-skog
+skog (aka TUNL-MNTN-WTER by Ninjadev)
 ====
 
+This demo is now finished: <http://pouet.net/prod.php?which=61584>
+
 This project uses [http://threejs.org/](Three.js)
-
-
 
 Elements we want:
 * A train. Toy/Brio-style. We would like to use this model: http://www.the3dstudio.com/product_details.aspx?id_product=578770
