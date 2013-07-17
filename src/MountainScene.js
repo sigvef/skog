@@ -224,8 +224,13 @@ MountainScene.prototype.initTrees = function() {
 };
 
 MountainScene.prototype.initSmokePuffs = function() {
-    this.smokePuffs = new Array();
-    this.smokeBirthTimes = new Array();
+    this.smokePuffs = [];
+    this.particleTexture = THREE.ImageUtils.loadTexture('res/smoke.png');
+    this.spriteMaterial = new THREE.SpriteMaterial({
+        map: this.particleTexture,
+        useScreenCoordinates: false,
+        color: 0xffffff
+    });
 };
 
 MountainScene.prototype.reset = function(){
@@ -242,8 +247,8 @@ MountainScene.prototype.update = function(){
 
     this.updateCamera(relativeT);
 
-    for(var i=0;i<this.smokePuffs.length; i++) {
-        this.updateSmoke(this.smokePuffs[i]);
+    for(var i=0;i<this.smokePuffs.length;i++) {
+        this.updateSmoke(this.smokePuffs[i], i);
     }
 
     var timeToStartMovingTrain = 30500;
@@ -270,18 +275,20 @@ MountainScene.prototype.update = function(){
     		this.train.grouped.position.z = 2485*Math.cos((relativeT-timeToStartMovingTrain+300)*0.0002);
     		this.train.rotateWheels(0.314);
     	}
-        if (relativeT > 32250) {
-        	this.train.partytime();
+
+        if(relativeT > 32250){
+            this.train.partytime();
         }
 
-        if(t%500==0) {
-            this.addSmokePuff(2700*Math.sin((relativeT-timeToStartMovingTrain+750)*0.0002),this.train.grouped.position.y+100,2700*Math.cos((relativeT-timeToStartMovingTrain+750)*0.0002));
+        if(t%500 == 0) {
+            var radius = 2700;
+            var angleInRadians = (relativeT-timeToStartMovingTrain+750)*0.0002;
+            var x = radius * Math.sin(angleInRadians);
+            var y = this.train.grouped.position.y+100;
+            var z = radius * Math.cos(angleInRadians);
+            this.addSmokePuff(x, y, z);
         }
-        if(relativeT > 32250)
-            this.train.partytime();
     }
-    if(relativeT==30630) this.addSmokePuff(2700*Math.sin((relativeT-timeToStartMovingTrain+440)*0.0002),this.train.grouped.position.y+100,2700*Math.cos((relativeT-timeToStartMovingTrain+440)*0.0002));
-    if(relativeT==31130) this.addSmokePuff(2700*Math.sin((relativeT-timeToStartMovingTrain+440)*0.0002),this.train.grouped.position.y+100,2700*Math.cos((relativeT-timeToStartMovingTrain+440)*0.0002));
 
     this.uniforms.time.value = t/1500;
     this.uniforms.time2.value = t/1500;
@@ -301,15 +308,12 @@ MountainScene.prototype.update = function(){
         }
     }
     for(var i=0;i<this.smokePuffs.length; i++) {
-        if(t-this.smokeBirthTimes[i]>5500) {
-            this.scene.remove(this.smokePuffs[i])
-            delete this.smokePuffs[i];
-            this.smokePuffs.splice(i,1);
-            this.smokeBirthTimes.splice(i,1);
+        var smokePuff = this.smokePuffs[i];
+        this.updateSmoke(smokePuff, i);
+        if(t - smokePuff.birthTime > 5500) {
+            this.scene.remove(smokePuff);
+            Array.remove(this.smokePuffs, i--);
         }
-    }
-    for(var i=0;i<this.smokePuffs.length; i++) {
-        this.updateSmoke(this.smokePuffs[i], i);
     }
 
     this.noiseShaderEffect.uniforms.width.value = (16*GU)/4;
@@ -333,14 +337,6 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         this.camera.position.y = smoothstep(70, 1450, camTime);
         this.camera.position.z = smoothstep(2500, -3500, camTime);
         this.camera.lookAt(new THREE.Vector3(0, 500, 0));
-        /*
-    } else if (relativeT < 10500) {
-        var camTime = (relativeT-8000)/2500;
-        this.camera.position.x = smoothstep(3000, 2000, camTime);
-        this.camera.position.y = smoothstep(900, 700, camTime);
-        this.camera.position.z = smoothstep(-1500, -2000, camTime);
-        this.camera.fov = smoothstep(45, 25, camTime);
-        this.camera.updateProjectionMatrix();*/
     } else if (relativeT < 20000) {
         this.camera.fov = 45;
         this.camera.updateProjectionMatrix();
@@ -423,6 +419,7 @@ MountainScene.prototype.updateCamera = function(relativeT) {
         this.camera.position.y = this.train.grouped.position.y + 100 + smoothstep(-50, 100, (relativeT - 80000) / 6000 );
         this.camera.position.z = 2700*Math.cos((relativeT + 3000)*0.0002);
 
+        /* wtf? */
         var hackyPos = this.train.grouped.position.clone();
         hackyPos.x += 150;
         this.camera.lookAt(hackyPos);
@@ -468,53 +465,49 @@ MountainScene.prototype.updateCamera = function(relativeT) {
     }
 };
 
-MountainScene.prototype.updateSmoke = function(updateParticleGroup, age){
-    
-    for ( var c = 0; c < updateParticleGroup.children.length; c ++ ) {
-        updateParticleGroup.children[ c ];
+MountainScene.prototype.updateSmoke = function(smokePuff, particleIndex){
+     
+    var particleWiggleScale = 2;
 
-            // particle wiggle
-             var wiggleScale = 2;
-             updateParticleGroup.children[ c ].position.x += wiggleScale * (Math.random() - 0.5);
-             updateParticleGroup.children[ c ].position.y += wiggleScale * (Math.random() - 0.5);
-             updateParticleGroup.children[ c ].position.z += wiggleScale * (Math.random() - 0.5);
+    for(var i=0;i<smokePuff.children.length;i++) {
+        var particle = smokePuff.children[i]; 
 
-        var a = particleAttributes.randomness[c] + 1;
-        var pulseFactor = Math.sin(a * 0.01 * t) * 0.1 + 0.9;
-        updateParticleGroup.children[ c ].position.x = particleAttributes.startPosition[c].x * pulseFactor;
-        updateParticleGroup.children[ c ].position.y = particleAttributes.startPosition[c].y * pulseFactor + (t - this.smokeBirthTimes[age])*0.1
-        updateParticleGroup.children[ c ].position.z = particleAttributes.startPosition[c].z * pulseFactor;
+        var pulseFactor = Math.sin((particle.randomness + 1) * 0.01 * t) * 0.1 + 0.9;
+        particle.position.x = particle.startPosition.x * pulseFactor;
+        particle.position.y = particle.startPosition.y * pulseFactor + (t - smokePuff.birthTime) * 0.1;
+        particle.position.z = particle.startPosition.z * pulseFactor;
+
+        particle.position.x += particleWiggleScale * (Math.random() - 0.5);
+        particle.position.y += particleWiggleScale * (Math.random() - 0.5);
+        particle.position.z += particleWiggleScale * (Math.random() - 0.5);
     }
-
-    updateParticleGroup.rotation.y = t * 0.00075;
+    smokePuff.rotation.y = t * 0.00075;
 }
 
-MountainScene.prototype.addSmokePuff = function(x,y,z) {
-    var particleTexture = THREE.ImageUtils.loadTexture( 'res/smokeparticle.png' );
-    
-    this.smokePuffs.push( new THREE.Object3D() );
-    particleAttributes = { startSize: [], startPosition: [], randomness: [] };
 
-    var totalParticles = 200;
+MountainScene.prototype.addSmokePuff = function(x, y, z) {
+    var smokePuff = new THREE.Object3D();
+    this.smokePuffs.push(smokePuff);
+    var totalParticles = 40;
     var radiusRange = 40;
-    for( var i = 0; i < totalParticles; i++ ) 
-    {
-        var spriteMaterial = new THREE.SpriteMaterial( { map: particleTexture, useScreenCoordinates: false, color: 0xffffff } );
-
-        this.smokePuffs[this.smokePuffs.length-1].add( new THREE.Sprite( spriteMaterial ));
-        this.smokePuffs[this.smokePuffs.length-1].children[i].scale.set( 64, 64, 1.0 ); // imageWidth, imageHeight
-        this.smokePuffs[this.smokePuffs.length-1].children[i].position.set( Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5 );
-        this.smokePuffs[this.smokePuffs.length-1].children[i].position.setLength( radiusRange * (Math.random() * 0.1 + 0.9) );
-
-        this.smokePuffs[this.smokePuffs.length-1].children[i].material.color.setHSL( 120, 0, 0.2 ); 
-        this.smokePuffs[this.smokePuffs.length-1].children[i].material.blending = THREE.AdditiveBlending; // "glowing" particles
-        particleAttributes.startPosition.push( this.smokePuffs[this.smokePuffs.length-1].children[i].position.clone() );
-        particleAttributes.randomness.push( Math.random() );
+    for(var i=0;i<totalParticles;i++){
+        var sprite = new THREE.Sprite(this.spriteMaterial)
+        smokePuff.add(sprite);
+        var particle = smokePuff.children[i];
+        particle.scale.set(64, 64, 1);
+        particle.position.set(
+            Math.random() - 0.5,
+            Math.random() - 0.5,
+            Math.random() - 0.5);
+        particle.position.setLength(radiusRange * (Math.random() * 0.1 + 0.9));
+        particle.material.blending = THREE.AdditiveAlphaBlending;
+        particle.startPosition = particle.position.clone();
+        particle.randomness = Math.random();
     }
-
-    this.smokePuffs[this.smokePuffs.length-1].position.set(x,y,z);
-    this.scene.add( this.smokePuffs[this.smokePuffs.length-1] );
-    this.smokeBirthTimes.push(t);
+    smokePuff.position.set(x, y, z);
+    smokePuff.birthTime = t;
+d = smokePuff;
+    this.scene.add(smokePuff);
 }
 
 MountainScene.prototype.render = function(){
@@ -615,7 +608,7 @@ MountainScene.prototype.generateTexture = function(data, width, height) {
     Math.seedrandom(".theterrain");
     for (var i=0, l = imageData.length; i<l; i+=4) {
 
-        var v = ~~ (Math.random() * 5);
+        var v = (Math.random() * 5) |0;
 
         imageData[i] += v;
         imageData[i + 1] += v;
