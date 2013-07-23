@@ -227,6 +227,12 @@ MountainScene.prototype.initSmokePuffs = function() {
     this.smokePuffs = new Array();
     this.smokeBirthTimes = new Array();
     this.particleTexture = THREE.ImageUtils.loadTexture( 'res/smoke.png' );
+    this.spriteMaterial = new THREE.SpriteMaterial({
+        map: this.particleTexture,
+        useScreenCoordinates: false,
+        color: 0xffffff,
+        sizeAttenuation: true
+    });
 };
 
 MountainScene.prototype.reset = function(){
@@ -511,13 +517,8 @@ MountainScene.prototype.addSmokePuff = function(x,y,z) {
 
     var totalParticles = 40;
     var radiusRange = 40;
-    var spriteMaterial = new THREE.SpriteMaterial({
-        map: this.particleTexture,
-        useScreenCoordinates: false,
-        color: 0xffffff
-    });
     for(var i=0; i < totalParticles; i++) {
-        smokePuff.add(new THREE.Sprite(spriteMaterial));
+        smokePuff.add(new THREE.Sprite(this.spriteMaterial));
         smokePuff.children[i].scale.set(64, 64, 1.0); // imageWidth, imageHeight
         smokePuff.children[i].position.set(
             Math.random() - 0.5,
